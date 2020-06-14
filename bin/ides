@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+#set -x
+
+# Find the java binary
+if [ -n "${JAVA_HOME}" ]; then
+  RUNNER="${JAVA_HOME}/bin/java"
+else
+  if [ "$(command -v java)" ]; then
+    RUNNER="java"
+  else
+    echo "JAVA_HOME is not set" >&2
+    exit 1
+  fi
+fi
+
+
+SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
+
+if [ -f "$SHELL_FOLDER/ides.sh" -o -f "$SHELL_FOLDER/ides" ]; then
+  IDES_JARS_DIR=$(cd $(dirname "$SHELL_FOLDER")/jars; pwd)
+fi
+
+if [ ! -d "$IDES_JARS_DIR" ]; then
+  echo "Failed to find IDES jars directory ($IDES_JARS_DIR)." 1>&2
+  exit 1
+else
+  LAUNCH_CLASSPATH="$IDES_JARS_DIR/*"
+fi
+
+build_command() {
+  "$RUNNER" -Xmx1280m -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+}
+
+build_command
