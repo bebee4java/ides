@@ -292,6 +292,11 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     }
 
     this.settings = settings
+
+    // change shell repl prompt from scala to ides
+    import scala.sys.Prop
+    Prop[String]("scala.repl.prompt").set("%nides> ") // reference class ReplProps's promptString
+
     startup() match {
       case null => false
       case line =>
