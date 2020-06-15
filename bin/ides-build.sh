@@ -10,7 +10,7 @@ cd $PROJECT_ROOT_DIR
 rm -rf jars
 
 mvn -DskipTests clean package \
-  -pl repl -am  \
+  -pl repl,assembly -am  \
   -Pscala-2.11 \
   -Pspark-2.4.x \
   -Plocal \

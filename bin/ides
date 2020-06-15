@@ -28,8 +28,11 @@ else
   LAUNCH_CLASSPATH="$IDES_JARS_DIR/*"
 fi
 
+JAVA_OPTS="-Xmx1280m"
+PROGRESS_NAME="ides-shell"
+
 build_command() {
-  "$RUNNER" -Xmx1280m -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+  exec -a "$PROGRESS_NAME" "$RUNNER" "$JAVA_OPTS" -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
 }
 
 build_command

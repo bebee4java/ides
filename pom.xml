@@ -7,7 +7,7 @@
     <groupId>tech.ides</groupId>
     <artifactId>DataLinked</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>IDES Parent POM</name>
     <url>https://github.com/bebee4java/ides</url>
@@ -48,6 +48,8 @@
         <common-utils-version>1.0.2</common-utils-version>
         <project.root.dir>${basedir}</project.root.dir> <!--注意不是项目的根路径，在子模块下就是当前模块的根路径-->
         <session.root.dir>${user.dir}</session.root.dir> <!--用户执行mvn的session根路径，在项目根路径下执行mvn命令该值就是项目根路径，用于多模块下定位项目的根路径使用-->
+        <hadoop.version>2.7.4</hadoop.version>
+        <hadoop.big.version>2.7</hadoop.big.version>
     </properties>
 
     <repositories>
@@ -164,8 +166,19 @@
 
         <profile>
             <id>build</id>
+            <modules>
+                <module>assembly</module>
+            </modules>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <configuration>
+                            <tarLongFileMode>posix</tarLongFileMode>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-dependency-plugin</artifactId>
