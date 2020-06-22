@@ -10,16 +10,16 @@ import org.apache.spark.IdesConf._
 class IdesConfSuite extends FunSuite {
   test("test default conf value") {
     val conf = new IdesConf()
-    val value = conf.get(IDES_DRIVER_PORT)
+    val value = conf.get(IDES_SERVER_PORT)
 
-    assert(IDES_DRIVER_PORT.defaultValue.get == value)
+    assert(IDES_SERVER_PORT.defaultValue.get == value)
 
   }
 
   test("test set conf value") {
     val conf = new IdesConf()
-    conf.set(IDES_DRIVER_PORT.key, "9009")
-    val value = conf.get(IDES_DRIVER_PORT)
+    conf.set(IDES_SERVER_PORT.key, "9009")
+    val value = conf.get(IDES_SERVER_PORT)
 
     assert(9009 == value)
 

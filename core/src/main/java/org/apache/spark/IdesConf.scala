@@ -75,12 +75,12 @@ class IdesConf {
 }
 
 object IdesConf {
-  private[this] val entrys = new java.util.HashMap[String, ConfigEntry[_]]()
+  private[this] val entries = new java.util.HashMap[String, ConfigEntry[_]]()
 
   private[this] def register(entry: ConfigEntry[_]): Unit = {
-    require(!entrys.containsKey(entry.key),
+    require(!entries.containsKey(entry.key),
       s"Duplicate ConfigEntry. ${entry.key} has been registered")
-    entrys.put(entry.key, entry)
+    entries.put(entry.key, entry)
   }
 
   private[this] object IdesConfigBuilder {
@@ -92,7 +92,31 @@ object IdesConf {
       |Run IDES as service and without quit.
     """.stripMargin).booleanConf.createWithDefault(false)
 
-  val IDES_DRIVER_PORT = IdesConfigBuilder("ides.driver.port").doc("The port of rest api").intConf.createWithDefault(9003)
+  val IDES_SERVER_HOST = IdesConfigBuilder("ides.server.host").doc("The host of rest api").stringConf.createWithDefault("0.0.0.0")
+  val IDES_SERVER_PORT = IdesConfigBuilder("ides.server.port").doc("The port of rest api").intConf.createWithDefault(9003)
+
+  val REQUEST_HEADER_SIZE = IdesConfigBuilder("ides.server.request-header.size").doc("request header Size").intConf.createWithDefault(131072)
+  val RESPONSE_HEADER_SIZE = IdesConfigBuilder("ides.server.response-header.size").doc("response header size").intConf.createWithDefault(131072)
+
+  val SSL_KEYSTORE = IdesConfigBuilder("ides.keystore").doc("ides keystore path").stringConf.createOptional
+  val SSL_KEYSTORE_PASSWORD = IdesConfigBuilder("ides.keystore.password").doc("ides keystore password").stringConf.createOptional
+  val SSL_KEY_PASSWORD = IdesConfigBuilder("ides.key-password").doc("ides key password").stringConf.createOptional
+
+  val IDES_HTTP_MIN_THREADS = IdesConfigBuilder("ides.server.http.threads.min").doc(
+    "Set the minimum number of ides server threads"
+  ).intConf.createWithDefault(30)
+  val IDES_HTTP_MAX_THREADS = IdesConfigBuilder("ides.server.http.threads.max").doc(
+    "Set the maximum number of ides server threads"
+  ).intConf.createWithDefault(100)
+  val IDES_HTTP_THREAD_IDLETIMEOUT = IdesConfigBuilder("ides.server.http.thread.idleTimeout").doc(
+    "Set the maximum thread idle time.Threads that are idle for longer than this period may be stopped. Max idle time in ms"
+  ).intConf.createWithDefault(10 * 60 * 1000)
+
+  val IDES_REQUEST_LOG = IdesConfigBuilder("ides.server.request-log.enable").doc(
+    "Whether to enable ides server request log."
+  ).booleanConf.createWithDefaultString("false")
+  val REQUEST_LOG_RETAIN_DAYS = IdesConfigBuilder("ides.server.request-log-retain.days").doc(
+    "Days to keep ides server request logs.").intConf.createWithDefault(5)
 
 }
 

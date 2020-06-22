@@ -11,6 +11,11 @@
 
     <artifactId>ides-core_${scala.binary.version}</artifactId>
 
+    <properties>
+        <jetty.version>9.3.24.v20180605</jetty.version>
+        <scalatra.version>2.6.5</scalatra.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -20,7 +25,43 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>json4s-core_2.11</artifactId>
+                    <groupId>org.json4s</groupId>
+                </exclusion>
+            </exclusions>
             <scope>${scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+            <scope>${scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra_${scala.binary.version}</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-scalate_${scala.binary.version}</artifactId>
+            <version>${scalatra.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra-swagger_${scala.binary.version}</artifactId>
+            <version>${scalatra.version}</version>
         </dependency>
     </dependencies>
 

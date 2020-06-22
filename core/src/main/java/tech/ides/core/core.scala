@@ -54,4 +54,16 @@ package object core {
   val IDES_REPO_URL = IdesBuildInfo.ides_repo_url
   val IDES_BUILD_DATE = IdesBuildInfo.ides_build_date
 
+  val BANNER =
+    """Welcome to
+     ___  ________  _______   ________
+    |\  \|\   ___ \|\  ___ \ |\   ____\
+    \ \  \ \  \_|\ \ \   __/|\ \  \___|_
+     \ \  \ \  \ \\ \ \  \_|/_\ \_____  \
+      \ \  \ \  \_\\ \ \  \_|\ \|____|\  \
+       \ \__\ \_______\ \_______\____\_\  \
+        \|__|\|_______|\|_______|\_________\  version %s
+                                \|_________|
+    """.format(IDES_VERSION)
+
 }
