@@ -7,7 +7,7 @@
     <groupId>tech.ides</groupId>
     <artifactId>DataLinked</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>${global.version}</version>
 
     <name>IDES Parent POM</name>
     <url>https://github.com/bebee4java/ides</url>
@@ -32,10 +32,12 @@
     <modules>
         <module>core</module>
         <module>repl</module>
+        <module>common</module>
     </modules>
 
 
     <properties>
+        <global.version>1.0.0</global.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -229,16 +231,6 @@
         <resources>
             <resource>
                 <directory>src/main/resources-${mode}</directory>
-                <excludes>
-                    <exclude>ides-version-info.properties</exclude>
-                </excludes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>src/main/resources-${mode}</directory>
-                <includes>
-                    <include>ides-version-info.properties</include>
-                </includes>
                 <filtering>true</filtering>
             </resource>
         </resources>

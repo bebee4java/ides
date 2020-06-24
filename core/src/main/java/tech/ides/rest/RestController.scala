@@ -16,7 +16,7 @@ class RestController(implicit val swagger: Swagger) extends ScalatraServlet with
     description "welcome page"
   )) {
     contentType="text/html"
-    import tech.ides.core.BANNER
+    import tech.ides.BANNER
     <html>
       <head><title>IDES</title></head>
       <body><pre>{BANNER}</pre></body>

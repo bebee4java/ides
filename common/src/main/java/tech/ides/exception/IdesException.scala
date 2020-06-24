@@ -1,4 +1,4 @@
-package tech.ides.core
+package tech.ides.exception
 
 /**
   *

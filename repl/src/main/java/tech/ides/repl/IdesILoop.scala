@@ -125,7 +125,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   /______/_____/______/ /_____/
   */
   override def printWelcome(){
-    import tech.ides.core.BANNER
+    import tech.ides.BANNER
     echo(BANNER)
     val welcomeMsg = "Using Scala %s (%s, Java %s)".format(
       versionString, javaVmName, javaVersion)

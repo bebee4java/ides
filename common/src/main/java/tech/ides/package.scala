@@ -1,8 +1,10 @@
-package tech.ides
+package tech
 
 import java.util.Properties
 
-package object core {
+import tech.ides.exception.IdesException
+
+package object ides {
   private object IdesBuildInfo {
 
     val (
@@ -65,5 +67,6 @@ package object core {
         \|__|\|_______|\|_______|\_________\  version %s
                                 \|_________|
     """.format(IDES_VERSION)
+
 
 }
