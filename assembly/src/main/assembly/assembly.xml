@@ -24,7 +24,7 @@
   <files>
     <file>
       <source>${session.root.dir}/README.md</source>
-      <outputDirectory>ides-${project.version}-bin</outputDirectory>
+      <outputDirectory>${assembly.package.name}</outputDirectory>
       <destName>README.md</destName>
       <filtered>true</filtered>
     </file>
@@ -35,7 +35,7 @@
       <directory>
         ${session.root.dir}/bin/
       </directory>
-      <outputDirectory>ides-${project.version}-bin/bin</outputDirectory>
+      <outputDirectory>${assembly.package.name}/bin</outputDirectory>
       <includes>
         <include>**/*</include>
       </includes>
@@ -43,9 +43,18 @@
     </fileSet>
     <fileSet>
       <directory>
+        ${session.root.dir}/conf/
+      </directory>
+      <outputDirectory>${assembly.package.name}/conf</outputDirectory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>
         ${session.root.dir}/jars/
       </directory>
-      <outputDirectory>ides-${project.version}-bin/jars</outputDirectory>
+      <outputDirectory>${assembly.package.name}/jars</outputDirectory>
       <includes>
         <include>**/*</include>
       </includes>
@@ -54,7 +63,7 @@
       <directory>
         ${session.root.dir}/python/
       </directory>
-      <outputDirectory>ides-${project.version}-bin/python</outputDirectory>
+      <outputDirectory>${assembly.package.name}/python</outputDirectory>
       <includes>
         <include>**/*</include>
       </includes>

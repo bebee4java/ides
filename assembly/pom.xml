@@ -12,6 +12,10 @@
 
     <artifactId>ides-assembly_${scala.binary.version}</artifactId>
 
+    <properties>
+        <assembly.package.name>ides-${project.version}-bin-hadoop${hadoop.big.version}</assembly.package.name>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -35,7 +39,7 @@
                             <!-- 最终输出目录 -->
                             <outputDirectory>${session.root.dir}</outputDirectory>
                             <!-- 最终的包名称 -->
-                            <finalName>ides-${project.version}-bin-hadoop${hadoop.big.version}</finalName>
+                            <finalName>${assembly.package.name}</finalName>
                         </configuration>
                     </execution>
                 </executions>
