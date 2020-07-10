@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# This script loads ides-env.sh if it exists, and ensures it is only loaded once.
+# ides-env.sh is loaded from IDES_CONF_DIR if set, or within the current directory's
+# conf/ subdirectory.
+
+# Figure out where IDES is installed
+if [ -z "${IDES_HOME}" ]; then
+  source "$(dirname "$0")"/find-ides-home
+fi
+
+if [ -z "$IDES_ENV_LOADED" ]; then
+  export IDES_ENV_LOADED=1
+
+  export IDES_CONF_DIR="${IDES_CONF_DIR:-"${IDES_HOME}"/conf}"
+
+  if [ -d "${IDES_CONF_DIR}" ]; then
+    # Promote all variable declarations to environment (exported) variables
+    shells=$(find $IDES_CONF_DIR -name "*.sh" -type f)
+    for shell in ${shells};do
+      set -a
+      . "${shell}"
+      set +a
+    done
+  fi
+
+fi

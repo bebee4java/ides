@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Short circuit if the user already has this set.
+if [ ! -z "${IDES_HOME}" ]; then
+   exit 0
+else
+  export IDES_HOME="$(cd "$(dirname "$0")"/..; pwd)"
+fi

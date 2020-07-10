@@ -2,6 +2,12 @@
 
 #set -x
 
+if [ -z "${IDES_HOME}" ]; then
+  source "$(dirname "$0")"/find-ides-home
+fi
+
+. "${IDES_HOME}"/bin/load-ides-env
+
 # Find the java binary
 if [ -n "${JAVA_HOME}" ]; then
   RUNNER="${JAVA_HOME}/bin/java"
@@ -14,11 +20,9 @@ else
   fi
 fi
 
-
-SHELL_FOLDER=$(cd "$(dirname "$0")";pwd)
-
-if [ -f "$SHELL_FOLDER/ides.sh" -o -f "$SHELL_FOLDER/ides" ]; then
-  IDES_JARS_DIR=$(cd $(dirname "$SHELL_FOLDER")/jars; pwd)
+# Find Spark jars.
+if [ -d "${IDES_HOME}/jars" ]; then
+  IDES_JARS_DIR="${IDES_HOME}/jars"
 fi
 
 if [ ! -d "$IDES_JARS_DIR" ]; then
@@ -28,11 +32,48 @@ else
   LAUNCH_CLASSPATH="$IDES_JARS_DIR/*"
 fi
 
-JAVA_OPTS="-Xmx1280m"
-PROGRESS_NAME="ides-shell"
+#DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8888"
 
-build_command() {
-  exec -a "$PROGRESS_NAME" "$RUNNER" "$JAVA_OPTS" -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+JAVA_OPTS="-Xmx1280m $DEBUG_OPTS"
+
+build_envs() {
+    export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-""}"
+    export YARN_CONF_DIR="${YARN_CONF_DIR:-""}"
+    export SPARK_DIST_CLASSPATH="${SPARK_DIST_CLASSPATH:-""}"
+    export IDES_CONF_DIR="${IDES_CONF_DIR:-"${IDES_HOME}"/conf}"
+
+    printf "%s:" $IDES_CONF_DIR $HADOOP_CONF_DIR $YARN_CONF_DIR $SPARK_DIST_CLASSPATH
 }
 
-build_command
+build_command() {
+#  echo "$RUNNER" $JAVA_OPTS -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+
+  printf "%s\0" $RUNNER $JAVA_OPTS -cp $(build_envs)"$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+  printf "%d\0" $?
+}
+
+# Turn off posix mode since it does not allow process substitution
+set +o posix
+CMD=()
+while IFS= read -d '' -r ARG; do
+  CMD+=("$ARG")
+done < <(build_command "$@")
+
+COUNT=${#CMD[@]}
+LAST=$((COUNT - 1))
+LAUNCHER_EXIT_CODE=${CMD[$LAST]}
+
+# Certain JVM failures result in errors being printed to stdout (instead of stderr), which causes
+# the code that parses the output of the launcher to get confused. In those cases, check if the
+# exit code is an integer, and if it's not, handle it as a special error case.
+if ! [[ $LAUNCHER_EXIT_CODE =~ ^[0-9]+$ ]]; then
+  echo "${CMD[@]}" | head -n-1 1>&2
+  exit 1
+fi
+
+if [ $LAUNCHER_EXIT_CODE != 0 ]; then
+  exit $LAUNCHER_EXIT_CODE
+fi
+
+CMD=("${CMD[@]:0:$LAST}")
+exec "${CMD[@]}"
