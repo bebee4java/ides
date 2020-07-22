@@ -19,6 +19,10 @@ package tech.ides.repl
 
 import java.io.BufferedReader
 
+import org.apache.commons.lang3.StringUtils
+import tech.ides.exception.ExceptionUtil
+import tech.sqlclub.common.log.Logging
+
 // scalastyle:off println
 import scala.Predef.{println => _, _}
 // scalastyle:on println
@@ -40,7 +44,7 @@ import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, vers
   * Created by songgr on 2020/06/08.
   */
 class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
-  extends ILoop(in0, out) {
+  extends ILoop(in0, out) with Logging {
   def this(in0: BufferedReader, out: JPrintWriter) = this(Some(in0), out)
   def this() = this(None, new JPrintWriter(Console.out, true))
 
@@ -300,6 +304,23 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     }
   }
 
+  override def command(line: String): Result = {
+    if (StringUtils.isNotBlank(line)) logInfo(s"run script: $line")
+    if (line startsWith "select" ) {
+      try {
+        val index = line.lastIndexOf("as")
+        val (sql, tablename) = (line.substring(0, index).trim, line.substring(index+2).trim)
+        Main.sparkSession.sql(sql).createOrReplaceTempView(tablename)
+        val lastCommand = s"""val $tablename=spark.table("$tablename")"""
+        super.command(lastCommand)
+      } catch {
+        case e:Exception =>
+          logError(e.getMessage, e)
+          echo(ExceptionUtil.format_full_exception(e))
+          Result(true, None)
+      }
+    } else super.command(line)
+  }
 }
 
 object IdesILoop {

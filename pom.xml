@@ -74,6 +74,12 @@
             <groupId>tech.sqlclub</groupId>
             <artifactId>common-utils_${scala.binary.version}</artifactId>
             <version>${common-utils-version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.scalatest</groupId>

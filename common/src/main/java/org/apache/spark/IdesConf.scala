@@ -2,6 +2,7 @@ package org.apache.spark
 
 import org.apache.spark.internal.config._
 import org.apache.spark.SparkConf.getDeprecatedConfig
+import scala.collection.JavaConverters._
 
 /**
   * IDES 配置类(参考SparkConf)
@@ -51,6 +52,10 @@ class IdesConf {
     entry.readFrom(reader)
   }
 
+  def getAll():Map[String,String] = {
+    settings.entrySet().asScala.map(e => (e.getKey, e.getValue)).toMap
+  }
+
   def set(key: String, value: String): IdesConf = {
     if (key == null) {
       throw new NullPointerException("null key")
@@ -87,10 +92,24 @@ object IdesConf {
     def apply(key: String): ConfigBuilder = ConfigBuilder(key).onCreate(register)
   }
 
+  val IDES_RUN_PLATFORM = IdesConfigBuilder("ides.run.platform").doc(
+    "ides running platform"
+  ).stringConf.createWithDefault("spark")
+
   val IDES_SPARK_SERVICE = IdesConfigBuilder("ides.spark.service").doc(
     """
       |Run IDES as service and without quit.
     """.stripMargin).booleanConf.createWithDefault(false)
+
+
+  val IDES_SERVICE_RUNTIME_AWAITTERMINATION = IdesConfigBuilder("ides.service.runtime.awaitTermination").doc(
+    """
+      |Run IDES service and await termination.
+    """.stripMargin).booleanConf.createWithDefault(true)
+
+  val IDES_ENABLE_HIVE_SUPPORT = IdesConfigBuilder("ides.enableHiveSupport").doc(
+    "enable hive support"
+  ).booleanConf.createWithDefault(false)
 
   val IDES_SERVER_HOST = IdesConfigBuilder("ides.server.host").doc("The host of rest api").stringConf.createWithDefault("0.0.0.0")
   val IDES_SERVER_PORT = IdesConfigBuilder("ides.server.port").doc("The port of rest api").intConf.createWithDefault(9003)

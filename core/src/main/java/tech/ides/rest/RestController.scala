@@ -4,6 +4,8 @@ import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.ScalatraServlet
 import org.scalatra.json.JacksonJsonSupport
 import org.scalatra.swagger.{Parameter, _}
+import tech.ides.core.PlatformManager
+import tech.ides.runtime.SparkRuntime
 
 /**
   *
@@ -35,12 +37,25 @@ class RestController(implicit val swagger: Swagger) extends ScalatraServlet with
   )) {
     contentType="application/json"
     val sql = params("sql")
+    val owner = params("owner")
+
+    val session = getSession
+
+    session.sql(sql).show()
 
     s"""
-       |"sql" : $sql
+       "sql" : $sql
+       "owner" : $owner
     """.stripMargin
 
   }
+
+  def runtime = PlatformManager.getRuntime
+
+  def getSession = {
+    runtime.asInstanceOf[SparkRuntime].sparkSession
+  }
+
 
 
   override protected def applicationDescription: String = "The IDES REST API"

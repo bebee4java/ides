@@ -20,6 +20,8 @@ package tech.ides.repl
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
+import tech.ides.core.PlatformManager
+import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 
 object Main extends Logging {
@@ -28,6 +30,10 @@ object Main extends Logging {
   Signaling.cancelOnInterrupt()
 
   val conf = new IdesConf()
+  conf.set("spark.app.name", "ides")
+  conf.set("spark.master", "local[*]")
+  PlatformManager.getOrCreate.run(conf)
+  val runtime = PlatformManager.getRuntime
 //  val rootDir = conf.getOption("ides.repl.classdir").getOrElse(Utils.getLocalDir(conf))
 //  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
 
@@ -77,7 +83,8 @@ object Main extends Logging {
 
   def createSparkSession(): SparkSession = {
     try {
-      sparkSession = SparkSession.builder().appName("ides shell").master("local[*]").getOrCreate()
+      sparkSession = runtime.asInstanceOf[SparkRuntime].sparkSession
+      sparkSession.sessionState // 解决Error while instantiating 'org.apache.spark.sql.internal.SessionStateBuilder'
       sparkContext = sparkSession.sparkContext
       sparkSession
     } catch {
