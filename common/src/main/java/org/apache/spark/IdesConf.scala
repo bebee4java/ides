@@ -101,6 +101,10 @@ object IdesConf {
       |Run IDES as service and without quit.
     """.stripMargin).booleanConf.createWithDefault(false)
 
+  val IDES_SHELL_MODE = IdesConfigBuilder("ides.shell.mode").doc(
+    """
+      |Run IDES as shell Repl.
+    """.stripMargin).booleanConf.createWithDefault(false)
 
   val IDES_SERVICE_RUNTIME_AWAITTERMINATION = IdesConfigBuilder("ides.service.runtime.awaitTermination").doc(
     """

@@ -32,7 +32,7 @@ else
   LAUNCH_CLASSPATH="$IDES_JARS_DIR/*"
 fi
 
-#DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8888"
+# DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8888"
 
 JAVA_OPTS="-Xmx1280m $DEBUG_OPTS"
 
@@ -48,7 +48,7 @@ build_envs() {
 build_command() {
 #  echo "$RUNNER" $JAVA_OPTS -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
 
-  printf "%s\0" $RUNNER $JAVA_OPTS -cp $(build_envs)"$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
+  printf "%s\0" $RUNNER $JAVA_OPTS -cp $(build_envs)"$LAUNCH_CLASSPATH" org.apache.spark.deploy.IdesSubmit "$@"
   printf "%d\0" $?
 }
 

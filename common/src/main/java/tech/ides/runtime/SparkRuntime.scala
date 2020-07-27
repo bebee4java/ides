@@ -18,7 +18,7 @@ class SparkRuntime(val conf: IdesConf) extends SQLRuntime with Logging {
   val sparkSession = createSession
 
   override def awaitTermination: Unit = {
-    if (conf.get(IDES_SPARK_SERVICE)){
+    if (conf.get(IDES_SPARK_SERVICE) && !conf.get(IDES_SHELL_MODE)){
       Thread.currentThread().join()
     }
   }
@@ -42,7 +42,7 @@ class SparkRuntime(val conf: IdesConf) extends SQLRuntime with Logging {
 
     val session = sparkSession.getOrCreate()
 
-    ConfigUtils.showConf(params)
+    if (params.nonEmpty) ConfigUtils.showConf(params)
 
     session
   }

@@ -29,7 +29,7 @@ class PlatformManager extends Logging {
 
     val runtime = PlatformManager.getRuntime
 
-    if (conf.get(IDES_SPARK_SERVICE) && !reRun) {
+    if (conf.get(IDES_SPARK_SERVICE) && !reRun && !conf.get(IDES_SHELL_MODE)) {
       startRestServer
     }
 

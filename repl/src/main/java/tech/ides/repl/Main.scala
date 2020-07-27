@@ -21,19 +21,16 @@ import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
 import tech.ides.core.PlatformManager
-import tech.ides.runtime.SparkRuntime
+import tech.ides.runtime.{SQLRuntime, SparkRuntime}
 import tech.sqlclub.common.log.Logging
+import tech.sqlclub.common.utils.ParamsUtils
+import org.apache.spark.IdesConf.IDES_SHELL_MODE
 
 object Main extends Logging {
 
 //  initializeLogIfNecessary(true)
   Signaling.cancelOnInterrupt()
-
-  val conf = new IdesConf()
-  conf.set("spark.app.name", "ides")
-  conf.set("spark.master", "local[*]")
-  PlatformManager.getOrCreate.run(conf)
-  val runtime = PlatformManager.getRuntime
+  var runtime:SQLRuntime = _
 //  val rootDir = conf.getOption("ides.repl.classdir").getOrElse(Utils.getLocalDir(conf))
 //  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
 
@@ -54,7 +51,15 @@ object Main extends Logging {
 
   def main(args: Array[String]) {
     isShellSession = true
-    doMain(args, new IdesILoop)
+    val params = new ParamsUtils(args)
+    val idesConf = new IdesConf()
+    if (isShellSession) {
+      idesConf.set(IDES_SHELL_MODE, true)
+    }
+    params.getParamsMap.foreach(kv => idesConf.set(kv._1, kv._2))
+    PlatformManager.getOrCreate.run(idesConf)
+    runtime = PlatformManager.getRuntime
+    doMain(Array[String](), new IdesILoop)
   }
 
   // Visible for testing
