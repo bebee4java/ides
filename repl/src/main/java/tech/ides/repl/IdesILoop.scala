@@ -305,21 +305,28 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   }
 
   override def command(line: String): Result = {
-    if (StringUtils.isNotBlank(line)) logInfo(s"run script: $line")
-    if (line startsWith "select" ) {
-      try {
+    try {
+      if (StringUtils.isNotBlank(line)) logDebug(s"run script: $line")
+      if (line startsWith "select" ) {
         val index = line.lastIndexOf("as")
         val (sql, tablename) = (line.substring(0, index).trim, line.substring(index+2).trim)
         Main.sparkSession.sql(sql).createOrReplaceTempView(tablename)
-        val lastCommand = s"""val $tablename=spark.table("$tablename")"""
-        super.command(lastCommand)
-      } catch {
-        case e:Exception =>
-          logError(e.getMessage, e)
-          echo(ExceptionUtil.format_full_exception(e))
-          Result(true, None)
+        val lastCommands = Seq(s"""val $tablename=spark.table("$tablename")""", s"$tablename.show()")
+        lastCommands.dropRight(1).map(command => super.command(command))
+        super.command(lastCommands.last)
+      } else if (line startsWith "!") {
+        Main.sparkSession.sql(line.substring(1)).createOrReplaceTempView("output")
+        val lastCommands = Seq(s"""val output=spark.table("output")""", s"if(output.schema.size > 0) output.show()")
+        lastCommands.dropRight(1).map(command => super.command(command))
+        super.command(lastCommands.last)
       }
-    } else super.command(line)
+      else super.command(line)
+    } catch {
+      case e:Throwable =>
+        //          logError(e.getMessage, e)
+        echo(ExceptionUtil.format_throwable(e))
+        Result(true, None)
+    }
   }
 }
 

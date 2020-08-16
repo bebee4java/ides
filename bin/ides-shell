@@ -61,7 +61,7 @@ if [[ ! $? ]]; then
   saved_stty=""
 fi
 
-main "$@" bin/ides-shell
+main "$@" $IDES_HOME/bin/ides-shell
 
 
 # record the exit status lest it be overwritten:

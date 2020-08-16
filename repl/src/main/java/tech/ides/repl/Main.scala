@@ -90,6 +90,7 @@ object Main extends Logging {
     try {
       sparkSession = runtime.asInstanceOf[SparkRuntime].sparkSession
       sparkSession.sessionState // 解决Error while instantiating 'org.apache.spark.sql.internal.SessionStateBuilder'
+      sparkSession.sharedState.externalCatalog // 解决caused by: java.lang.NoSuchMethodException: org.apache.spark.sql.catalyst.catalog.InMemoryCatalog.<init>(org.apache.spark.SparkConf, org.apache.hadoop.conf.Configuration)
       sparkContext = sparkSession.sparkContext
       sparkSession
     } catch {

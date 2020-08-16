@@ -13,7 +13,8 @@ object LocalIdesServiceApp {
       "-spark.master", "local[*]",
       "-spark.driver.memory", "512m",
       "-ides.spark.service", "true",
-      "-ides.server.port", "9009"
+      "-ides.server.port", "9009",
+      "-ides.enableHiveSupport", "true"
     ))
   }
 

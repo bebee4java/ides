@@ -50,7 +50,7 @@
         <common-utils-version>1.0.2</common-utils-version>
         <project.root.dir>${basedir}</project.root.dir> <!--注意不是项目的根路径，在子模块下就是当前模块的根路径-->
         <session.root.dir>${user.dir}</session.root.dir> <!--用户执行mvn的session根路径，在项目根路径下执行mvn命令该值就是项目根路径，用于多模块下定位项目的根路径使用-->
-        <hadoop.version>2.7.4</hadoop.version>
+        <hadoop.client.version>2.7.4</hadoop.client.version>
         <hadoop.big.version>2.7</hadoop.big.version>
     </properties>
 
@@ -111,6 +111,11 @@
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
                 <version>${scala.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>${hadoop.client.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
