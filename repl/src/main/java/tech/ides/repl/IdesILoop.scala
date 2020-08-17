@@ -22,6 +22,7 @@ import java.io.BufferedReader
 import org.apache.commons.lang3.StringUtils
 import tech.ides.exception.ExceptionUtil
 import tech.sqlclub.common.log.Logging
+import scala.util.control.ControlThrowable
 
 // scalastyle:off println
 import scala.Predef.{println => _, _}
@@ -106,7 +107,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     "import spark.implicits._",
     "import spark.sql",
     "import org.apache.spark.sql.functions._"
-  )
+  ) ++ importCmds
 
   def initializeSpark(): Unit = {
     if (!intp.reporter.hasErrors) {
@@ -304,24 +305,49 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     }
   }
 
+  def importCmds = Seq(
+    "import tech.ides.repl.Main"
+  )
+
   override def command(line: String): Result = {
     try {
       if (StringUtils.isNotBlank(line)) logDebug(s"run script: $line")
       if (line startsWith "select" ) {
         val index = line.lastIndexOf("as")
         val (sql, tablename) = (line.substring(0, index).trim, line.substring(index+2).trim)
-        Main.sparkSession.sql(sql).createOrReplaceTempView(tablename)
-        val lastCommands = Seq(s"""val $tablename=spark.table("$tablename")""", s"$tablename.show()")
-        lastCommands.dropRight(1).map(command => super.command(command))
-        super.command(lastCommands.last)
+
+        val cmds = Seq(
+          s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
+          s"""val $tablename=spark.table("$tablename")""",
+          s"$tablename.show()"
+
+        )
+
+        cmds.map{
+          command =>
+            val result = super.command(command)
+            if (!result.keepRunning || result.lineToRecord.isEmpty) {
+              return result
+            } else result
+        }.last
       } else if (line startsWith "!") {
-        Main.sparkSession.sql(line.substring(1)).createOrReplaceTempView("output")
-        val lastCommands = Seq(s"""val output=spark.table("output")""", s"if(output.schema.size > 0) output.show()")
-        lastCommands.dropRight(1).map(command => super.command(command))
-        super.command(lastCommands.last)
+        val (sql, tablename) = (line.substring(1), "output")
+        val cmds = Seq(
+          s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
+          """val output=spark.table("output")""",
+          "if(output.schema.size > 0) output.show()"
+        )
+        cmds.map{
+          command =>
+            val result = super.command(command)
+            if (!result.keepRunning || result.lineToRecord.isEmpty) {
+              return result
+            } else result
+        }.last
       }
       else super.command(line)
     } catch {
+      case e:ControlThrowable => Result(true, None)
       case e:Throwable =>
         //          logError(e.getMessage, e)
         echo(ExceptionUtil.format_throwable(e))
