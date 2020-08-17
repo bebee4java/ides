@@ -22,7 +22,6 @@ import java.io.BufferedReader
 import org.apache.commons.lang3.StringUtils
 import tech.ides.exception.ExceptionUtil
 import tech.sqlclub.common.log.Logging
-import scala.util.control.ControlThrowable
 
 // scalastyle:off println
 import scala.Predef.{println => _, _}
@@ -322,14 +321,16 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           s"$tablename.show()"
 
         )
-
-        cmds.map{
+        var flag = true
+        val results = cmds.iterator.takeWhile(_ => flag).map {
           command =>
             val result = super.command(command)
             if (!result.keepRunning || result.lineToRecord.isEmpty) {
-              return result
+              flag = false
+              Result(true, None)
             } else result
-        }.last
+        }
+        results.toList.last
       } else if (line startsWith "!") {
         val (sql, tablename) = (line.substring(1), "output")
         val cmds = Seq(
@@ -337,17 +338,19 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           """val output=spark.table("output")""",
           "if(output.schema.size > 0) output.show()"
         )
-        cmds.map{
+        var flag = true
+        val results = cmds.iterator.takeWhile(_ => flag).map {
           command =>
             val result = super.command(command)
             if (!result.keepRunning || result.lineToRecord.isEmpty) {
-              return result
+              flag = false
+              Result(true, None)
             } else result
-        }.last
+        }
+        results.toList.last
       }
       else super.command(line)
     } catch {
-      case e:ControlThrowable => Result(true, None)
       case e:Throwable =>
         //          logError(e.getMessage, e)
         echo(ExceptionUtil.format_throwable(e))
