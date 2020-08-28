@@ -17,8 +17,8 @@ class PlatformManager extends Logging {
 
   def startRestServer = {
     Class.forName("tech.ides.rest.IdesServer").
-      getMethod("start").
-      invoke(null)
+      getMethod("start", classOf[IdesConf]).
+      invoke(null, config.get())
   }
 
 

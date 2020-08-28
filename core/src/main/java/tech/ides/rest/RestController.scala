@@ -3,6 +3,7 @@ package tech.ides.rest
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.ScalatraServlet
 import org.scalatra.json.JacksonJsonSupport
+import org.scalatra.scalate.ScalateSupport
 import org.scalatra.swagger.{Parameter, _}
 import tech.ides.core.PlatformManager
 import tech.ides.runtime.SparkRuntime
@@ -11,7 +12,7 @@ import tech.ides.runtime.SparkRuntime
   *
   * Created by songgr on 2020/06/16.
   */
-class RestController(implicit val swagger: Swagger) extends ScalatraServlet with JacksonJsonSupport with SwaggerSupport {
+class RestController(implicit val swagger: Swagger) extends ScalatraServlet with ScalateSupport with JacksonJsonSupport with SwaggerSupport {
 
   get("/", operation(apiOperation[String]("/")
     summary "/"
@@ -19,11 +20,7 @@ class RestController(implicit val swagger: Swagger) extends ScalatraServlet with
   )) {
     contentType="text/html"
     import tech.ides.BANNER
-    <html>
-      <head><title>IDES</title></head>
-      <body><pre>{BANNER}</pre></body>
-    </html>
-
+    ssp("/index",  "BANNER" -> BANNER)
   }
 
   post("/run/script", operation(apiOperation[String]("runScript")

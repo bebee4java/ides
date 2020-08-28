@@ -22,14 +22,10 @@ object IdesServer extends Logging {
   private var server: WebServer = _
   private var _serverUrl: Option[String] = None
 
-  private[ides] var idesConf: IdesConf = _
-
-  def start(): Unit = {
-    idesConf = new IdesConf()
-
-    val host = idesConf.get(IDES_SERVER_HOST)
-    val port = idesConf.get(IDES_SERVER_PORT)
-    server = new WebServer(idesConf, host, port)
+  def start(conf:IdesConf): Unit = {
+    val host = conf.get(IDES_SERVER_HOST)
+    val port = conf.get(IDES_SERVER_PORT)
+    server = new WebServer(conf, host, port)
 
     val handlers = new HandlerCollection
 
@@ -41,7 +37,7 @@ object IdesServer extends Logging {
     context.setInitParameter(ScalatraListener.LifeCycleKey, classOf[ScalatraBootstrap].getName)
     handlers.addHandler(context)
 
-    if (idesConf.get(IDES_REQUEST_LOG)) {
+    if (conf.get(IDES_REQUEST_LOG)) {
       // Configure the access log
       val requestLogHandler = new RequestLogHandler
       val requestLog = new NCSARequestLog(sys.env.getOrElse("IDES_LOG_DIR",
@@ -49,7 +45,7 @@ object IdesServer extends Logging {
       requestLog.setAppend(true)
       requestLog.setExtended(false)
       requestLog.setLogTimeZone("GMT+8")
-      requestLog.setRetainDays(idesConf.get(IdesConf.REQUEST_LOG_RETAIN_DAYS))
+      requestLog.setRetainDays(conf.get(IdesConf.REQUEST_LOG_RETAIN_DAYS))
       requestLogHandler.setRequestLog(requestLog)
       val logFile = new File(requestLog.getFilename)
       if (!logFile.getParentFile.exists()) {
