@@ -13,7 +13,7 @@
     <artifactId>ides-assembly_${scala.binary.version}</artifactId>
 
     <properties>
-        <assembly.package.name>ides-${project.version}-bin-hadoop${hadoop.big.version}</assembly.package.name>
+        <assembly.package.name>ides-${project.version}-bin-spark${spark.big.version}</assembly.package.name>
     </properties>
 
     <build>
@@ -36,6 +36,8 @@
                                 <!-- 描述文件路径 -->
                                 <descriptor>src/main/assembly/assembly.xml</descriptor>
                             </descriptors>
+                            <!--压缩包名称不追加id，默认下追加-->
+                            <appendAssemblyId>false</appendAssemblyId>
                             <!-- 最终输出目录 -->
                             <outputDirectory>${session.root.dir}</outputDirectory>
                             <!-- 最终的包名称 -->
