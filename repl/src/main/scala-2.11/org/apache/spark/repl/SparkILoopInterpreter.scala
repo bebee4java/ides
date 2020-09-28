@@ -17,11 +17,14 @@
 
 package org.apache.spark.repl
 
+import tech.ides.repl.Main
+import tech.sqlclub.common.log.Logging
+
 import scala.collection.mutable
 import scala.tools.nsc.Settings
 import scala.tools.nsc.interpreter._
 
-class SparkILoopInterpreter(settings: Settings, out: JPrintWriter) extends IMain(settings, out) {
+class SparkILoopInterpreter(settings: Settings, out: JPrintWriter) extends IMain(settings, out) with Logging {
   self =>
 
   override lazy val memberHandlers = new {
@@ -103,6 +106,30 @@ class SparkILoopInterpreter(settings: Settings, out: JPrintWriter) extends IMain
 
 
   import global.Name
+
+  override def interpret(line: String): Results.Result = {
+    if (Main.initialized.get()) {
+      var flag = true
+      val results = line.split("\n").filter(it => it.nonEmpty).iterator.takeWhile(_ => flag).map {
+        command =>
+          import tech.sqlclub.common.regex.RegexOp._
+          if (command matching "^(select|!).*") {
+            val res = tech.ides.repl.Main.interp.command(command)
+            if (!res.keepRunning || res.lineToRecord.isEmpty) {
+              flag = false
+              Results.Error
+            } else Results.Success
+          } else super.interpret(command)
+
+      }.toList
+
+      if (results.nonEmpty) {
+        results.last
+      } else Results.Success
+
+    } else super.interpret(line)
+  }
+
   override def importsCode(wanted: Set[Name], wrapper: Request#Wrapper,
                            definesClass: Boolean, generousImports: Boolean): ComputedImports = {
 

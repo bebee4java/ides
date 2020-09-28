@@ -38,6 +38,7 @@ object Main extends Logging {
   var sparkSession: SparkSession = _
   // this is a public var because tests reset it.
   var interp: IdesILoop = _
+  val initialized:ThreadLocal[Boolean] = new ThreadLocal[Boolean]()
 
   private var hasErrors = false
   private var isShellSession = false

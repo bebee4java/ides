@@ -274,6 +274,8 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           loopPostInit()
           printWelcome()
           splash.start()
+          // 初始化完成
+          Main.initialized.set(true)
 
           val line = splash.line           // what they typed in while they were waiting
           if (line == null) {              // they ^D
@@ -311,45 +313,63 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   override def command(line: String): Result = {
     try {
       if (StringUtils.isNotBlank(line)) logDebug(s"run script: $line")
-      if (line startsWith "select" ) {
-        val index = line.lastIndexOf("as")
-        val (sql, tablename) = (line.substring(0, index).trim, line.substring(index+2).trim)
 
-        val cmds = Seq(
-          s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-          s"""val $tablename=spark.table("$tablename")""",
-          s"$tablename.show()"
+      var continue = true
+      def exec_command(command: String):Result = {
+        if ( command startsWith "select" ) {
+          val index = command.lastIndexOf("as")
+          val (sql, tablename) = (command.substring(0, index).trim, command.substring(index+2).trim)
 
-        )
-        var flag = true
-        val results = cmds.iterator.takeWhile(_ => flag).map {
-          command =>
-            val result = super.command(command)
-            if (!result.keepRunning || result.lineToRecord.isEmpty) {
-              flag = false
-              Result(true, None)
-            } else result
+          val cmds = Seq(
+            s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
+            s"""val $tablename=spark.table("$tablename")""",
+            s"$tablename.show()"
+
+          )
+          var flag = true
+          val results = cmds.iterator.takeWhile(_ => flag).map {
+            code =>
+              val result = super.command(code)
+              if (!result.keepRunning || result.lineToRecord.isEmpty) {
+                flag = false
+                Result(true, None)
+              } else result
+          }
+          results.toList.last
+        } else if (command startsWith "!") {
+          val (sql, tablename) = (command.substring(1), "output")
+          val cmds = Seq(
+            s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
+            """val output=spark.table("output")""",
+            "if(output.schema.size > 0) output.show()"
+          )
+          var flag = true
+          val results = cmds.iterator.takeWhile(_ => flag).map {
+            code =>
+              val result = super.command(code)
+              if (!result.keepRunning || result.lineToRecord.isEmpty) {
+                flag = false
+                Result(true, None)
+              } else result
+          }
+          results.toList.last
         }
-        results.toList.last
-      } else if (line startsWith "!") {
-        val (sql, tablename) = (line.substring(1), "output")
-        val cmds = Seq(
-          s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-          """val output=spark.table("output")""",
-          "if(output.schema.size > 0) output.show()"
-        )
-        var flag = true
-        val results = cmds.iterator.takeWhile(_ => flag).map {
-          command =>
-            val result = super.command(command)
-            if (!result.keepRunning || result.lineToRecord.isEmpty) {
-              flag = false
-              Result(true, None)
-            } else result
-        }
-        results.toList.last
+        else super.command(command)
       }
-      else super.command(line)
+
+      val results = line.split(";").filter(it => it.nonEmpty).iterator.takeWhile(_ => continue).map {
+        command =>
+          val res = exec_command(command)
+          if (!res.keepRunning || res.lineToRecord.isEmpty){
+            continue = false
+          }
+          res
+      }.toList
+
+      if (results.nonEmpty) {
+        results.last
+      } else Result(true, None)
+
     } catch {
       case e:Throwable =>
         //          logError(e.getMessage, e)
