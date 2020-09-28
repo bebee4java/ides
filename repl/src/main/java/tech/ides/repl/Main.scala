@@ -30,7 +30,7 @@ object Main extends Logging {
 
 //  initializeLogIfNecessary(true)
   Signaling.cancelOnInterrupt()
-  var runtime:SQLRuntime = _
+  val idesConf = new IdesConf()
 //  val rootDir = conf.getOption("ides.repl.classdir").getOrElse(Utils.getLocalDir(conf))
 //  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
 
@@ -52,13 +52,11 @@ object Main extends Logging {
   def main(args: Array[String]) {
     isShellSession = true
     val params = new ParamsUtils(args)
-    val idesConf = new IdesConf()
     if (isShellSession) {
       idesConf.set(IDES_SHELL_MODE, true)
     }
     params.getParamsMap.foreach(kv => idesConf.set(kv._1, kv._2))
-    PlatformManager.getOrCreate.run(idesConf)
-    runtime = PlatformManager.getRuntime
+
     doMain(Array[String](), new IdesILoop)
   }
 
@@ -88,6 +86,8 @@ object Main extends Logging {
 
   def createSparkSession(): SparkSession = {
     try {
+      PlatformManager.getOrCreate.run(idesConf)
+      val runtime = PlatformManager.getRuntime
       sparkSession = runtime.asInstanceOf[SparkRuntime].sparkSession
 //      sparkSession.sessionState // 解决Error while instantiating 'org.apache.spark.sql.internal.SessionStateBuilder'
 //      sparkSession.sharedState.externalCatalog // 解决caused by: java.lang.NoSuchMethodException: org.apache.spark.sql.catalyst.catalog.InMemoryCatalog.<init>(org.apache.spark.SparkConf, org.apache.hadoop.conf.Configuration)
