@@ -20,8 +20,8 @@ package tech.ides.repl
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
-import tech.ides.core.PlatformManager
-import tech.ides.runtime.{SQLRuntime, SparkRuntime}
+import tech.ides.platform.PlatformManager
+import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ParamsUtils
 import org.apache.spark.IdesConf.IDES_SHELL_MODE

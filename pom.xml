@@ -30,14 +30,16 @@
     </developers>
 
     <modules>
-        <module>core</module>
-        <module>repl</module>
         <module>common</module>
+        <module>core</module>
+        <module>dsl</module>
+        <module>engine</module>
+        <module>repl</module>
     </modules>
 
 
     <properties>
-        <global.version>1.0.0</global.version>
+        <global.version>1.0.0</global.version> <!--定义整个项目的主version-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>

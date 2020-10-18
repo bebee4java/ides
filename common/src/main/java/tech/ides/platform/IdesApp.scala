@@ -1,4 +1,4 @@
-package tech.ides.core
+package tech.ides.platform
 
 import org.apache.spark.IdesConf
 import tech.sqlclub.common.utils.ParamsUtils

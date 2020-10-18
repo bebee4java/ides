@@ -3,7 +3,6 @@ package tech.ides.runtime
 import java.util
 import java.util.{Map => JMap}
 import java.util.concurrent.atomic.AtomicReference
-
 import org.apache.spark.{IdesConf, SparkConf}
 import org.apache.spark.IdesConf._
 import org.apache.spark.sql.SparkSession

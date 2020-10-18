@@ -1,4 +1,7 @@
-package tech.ides.core
+package tech.ides.local
+
+import tech.ides.platform.IdesApp
+
 
 /**
   *

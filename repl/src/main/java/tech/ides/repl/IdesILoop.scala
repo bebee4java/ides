@@ -322,7 +322,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
 
           val cmds = Seq(
             s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-            s"""val $tablename=spark.table("$tablename")""",
+            s"""val $tablename = spark.table("$tablename")""",
             s"$tablename.show()"
 
           )
@@ -340,7 +340,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           val (sql, tablename) = (command.substring(1), "output")
           val cmds = Seq(
             s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-            """val output=spark.table("output")""",
+            """val output = spark.table("output")""",
             "if(output.schema.size > 0) output.show()"
           )
           var flag = true

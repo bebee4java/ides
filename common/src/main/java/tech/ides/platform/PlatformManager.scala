@@ -1,4 +1,4 @@
-package tech.ides.core
+package tech.ides.platform
 
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 

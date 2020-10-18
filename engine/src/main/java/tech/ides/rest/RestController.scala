@@ -5,7 +5,7 @@ import org.scalatra.ScalatraServlet
 import org.scalatra.json.JacksonJsonSupport
 import org.scalatra.scalate.ScalateSupport
 import org.scalatra.swagger.{Parameter, _}
-import tech.ides.core.PlatformManager
+import tech.ides.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 
 /**
