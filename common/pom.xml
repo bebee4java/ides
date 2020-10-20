@@ -5,7 +5,7 @@
     <parent>
         <artifactId>DataLinked</artifactId>
         <groupId>tech.ides</groupId>
-        <version>${global.version}</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
