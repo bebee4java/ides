@@ -5,3 +5,5 @@ jars
 target
 logs
 *.log
+*.tgz
+spark-warehouse
