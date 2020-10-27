@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>IDES</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+        <script src="/static/js/ace.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/mode-sql.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/sql.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/ext-searchbox.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <%@ val BANNER: String %>
+        <div class="banner"><pre><%= BANNER %></pre></div>
+
+        <div class="query_box">
+            <div class="editor">
+                <div id="ace_editor" class="ace_wrap"></div>
+                <div class="button_box">
+                    <button id="runButton">运行</button>
+                    <button id="stopButton">停止</button>
+                </div>
+            </div>
+        </div>
+        <!--
+            ace编辑器
+            官网：https://ace.c9.io/
+            lib库：https://pagecdn.com/lib/ace
+        -->
+        <script>
+
+            var editor = ace.edit("ace_editor");
+            editor.session.setValue("select 1 as id, 'hello ides!' as context as tb1;");
+            editor.resize();
+            editor.setTheme("ace/theme/twilight");
+            editor.session.setMode("ace/mode/sql");
+            <!-- 自动提示 -->
+            ace.require("ace/ext/language_tools");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true
+            });
+
+            <!-- 内容搜索框 -->
+            ace.require("ace/ext/searchbox");
+            editor.commands.addCommand({
+                name: "unfind",
+                bindKey: {
+                    win: "Ctrl-F",
+                    mac: "Command-F"
+                },
+                exec: function(editor, line) {
+                    editor.execCommand('find');
+                    return true;
+                },
+                readOnly: true
+            })
+        </script>
+    </body>
+</html>

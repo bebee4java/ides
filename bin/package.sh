@@ -10,6 +10,7 @@ cd $PROJECT_ROOT_DIR
 function package_2.4 {
   mvn -DskipTests clean package \
   -pl engine -am  \
+  -Ponline \
   -Pscala-2.11 \
   -Pspark-2.4.x \
   -Pshade
@@ -18,6 +19,7 @@ function package_2.4 {
 function package_2.3 {
   mvn -DskipTests clean package \
   -pl engine -am  \
+  -Ponline \
   -Pscala-2.11 \
   -Pspark-2.3.x \
   -Pshade
