@@ -31,7 +31,8 @@ object IdesServer extends Logging {
 
     val context = new WebAppContext()
     context.setContextPath("/")
-    context.setResourceBase("src/main/webapp")
+    val resourceUrl = getClass.getClassLoader.getResource("WEB-INF")
+    context.setResourceBase(resourceUrl.toExternalForm)
     context.addEventListener(new ScalatraListener)
     context.addServlet(classOf[DefaultServlet], "/")
     context.setInitParameter(ScalatraListener.LifeCycleKey, classOf[ScalatraBootstrap].getName)
