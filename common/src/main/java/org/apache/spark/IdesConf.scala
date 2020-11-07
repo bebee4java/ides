@@ -141,6 +141,18 @@ object IdesConf {
   val REQUEST_LOG_RETAIN_DAYS = IdesConfigBuilder("ides.server.request-log-retain.days").doc(
     "Days to keep ides server request logs.").intConf.createWithDefault(5)
 
+  val IDES_PLUGIN_PACKAGES = IdesConfigBuilder("ides.plugin.scan.package.paths").doc(
+    "ides plugin scan package paths, multiple values separated by ','."
+  ).stringConf.createOptional
+
+  val IDES_DATASOURCE_PACKAGES = IdesConfigBuilder("ides.datasource.scan.package.paths").doc(
+    "ides datasource scan package paths, multiple values separated by ','."
+  ).stringConf.createOptional
+
+  val IDES_JOB_RUN_TIMEOUT = IdesConfigBuilder("ides.job.run.timeout").doc(
+    "ides job run timeout(ms). Default is -1, means never timeout."
+  ).longConf.createWithDefault(-1L)
+
 }
 
 private[spark] class IdesConfigProvider(conf: java.util.Map[String, String]) extends ConfigProvider {

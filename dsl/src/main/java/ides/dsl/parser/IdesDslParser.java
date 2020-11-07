@@ -19,41 +19,40 @@ public class IdesDslParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, AS=4, INTO=5, LOAD=6, SAVE=7, OPTIONS=8, WHERE=9, 
-		OVERWRITE=10, APPEND=11, ERRORIfExists=12, IGNORE=13, PARTITIONBY=14, 
-		DOT=15, EOQ=16, MUMERIC=17, IDENTIFIER=18, QUOTED_TEXT=19, STRING_TEXT=20, 
-		BLOCK_STRING_TEXT=21, LINE_COMMENT=22, BLOCK_COMMENT=23, WS=24;
+		T__0=1, T__1=2, AS=3, INTO=4, LOAD=5, SAVE=6, SELECT=7, OPTIONS=8, WHERE=9, 
+		AND=10, OVERWRITE=11, APPEND=12, ERRORIfExists=13, IGNORE=14, PARTITIONBY=15, 
+		DOT=16, EOQ=17, MUMERIC=18, IDENTIFIER=19, QUOTED_TEXT=20, STRING_TEXT=21, 
+		BLOCK_STRING_TEXT=22, LINE_COMMENT=23, BLOCK_COMMENT=24, WS=25, UNRECOGNIZED=26;
 	public static final int
 		RULE_statement = 0, RULE_script = 1, RULE_query = 2, RULE_format = 3, 
 		RULE_path = 4, RULE_col = 5, RULE_colGroup = 6, RULE_whereExpressions = 7, 
 		RULE_partitionbyExpression = 8, RULE_booleanExpression = 9, RULE_expression = 10, 
 		RULE_qualifiedName = 11, RULE_asTableName = 12, RULE_tableName = 13, RULE_identifier = 14, 
-		RULE_quotedIdentifier = 15, RULE_eoq = 16, RULE_dot = 17, RULE_as = 18, 
-		RULE_where = 19, RULE_saveMode = 20;
+		RULE_quotedIdentifier = 15, RULE_where = 16, RULE_saveMode = 17;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"statement", "script", "query", "format", "path", "col", "colGroup", 
 			"whereExpressions", "partitionbyExpression", "booleanExpression", "expression", 
 			"qualifiedName", "asTableName", "tableName", "identifier", "quotedIdentifier", 
-			"eoq", "dot", "as", "where", "saveMode"
+			"where", "saveMode"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "','", "'and'", "'='", "'as'", "'into'", "'load'", "'save'", "'options'", 
-			"'where'", "'overwrite'", "'append'", "'errorIfExists'", "'ignore'", 
-			null, "'.'", "';'"
+			null, "','", "'='", "'as'", "'into'", "'load'", "'save'", "'select'", 
+			"'options'", "'where'", "'and'", "'overwrite'", "'append'", "'errorIfExists'", 
+			"'ignore'", null, "'.'", "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, "AS", "INTO", "LOAD", "SAVE", "OPTIONS", "WHERE", 
-			"OVERWRITE", "APPEND", "ERRORIfExists", "IGNORE", "PARTITIONBY", "DOT", 
-			"EOQ", "MUMERIC", "IDENTIFIER", "QUOTED_TEXT", "STRING_TEXT", "BLOCK_STRING_TEXT", 
-			"LINE_COMMENT", "BLOCK_COMMENT", "WS"
+			null, null, null, "AS", "INTO", "LOAD", "SAVE", "SELECT", "OPTIONS", 
+			"WHERE", "AND", "OVERWRITE", "APPEND", "ERRORIfExists", "IGNORE", "PARTITIONBY", 
+			"DOT", "EOQ", "MUMERIC", "IDENTIFIER", "QUOTED_TEXT", "STRING_TEXT", 
+			"BLOCK_STRING_TEXT", "LINE_COMMENT", "BLOCK_COMMENT", "WS", "UNRECOGNIZED"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -140,17 +139,17 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(45);
+			setState(39);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==LOAD || _la==SAVE) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LOAD) | (1L << SAVE) | (1L << SELECT))) != 0)) {
 				{
 				{
-				setState(42);
+				setState(36);
 				script();
 				}
 				}
-				setState(47);
+				setState(41);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -182,9 +181,7 @@ public class IdesDslParser extends Parser {
 		public QueryContext query() {
 			return getRuleContext(QueryContext.class,0);
 		}
-		public EoqContext eoq() {
-			return getRuleContext(EoqContext.class,0);
-		}
+		public TerminalNode EOQ() { return getToken(IdesDslParser.EOQ, 0); }
 		public SqlContext(ScriptContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -208,10 +205,10 @@ public class IdesDslParser extends Parser {
 			_localctx = new SqlContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(48);
+			setState(42);
 			query();
-			setState(49);
-			eoq();
+			setState(43);
+			match(EOQ);
 			}
 		}
 		catch (RecognitionException re) {
@@ -241,9 +238,7 @@ public class IdesDslParser extends Parser {
 		public FormatContext format() {
 			return getRuleContext(FormatContext.class,0);
 		}
-		public DotContext dot() {
-			return getRuleContext(DotContext.class,0);
-		}
+		public TerminalNode DOT() { return getToken(IdesDslParser.DOT, 0); }
 		public PathContext path() {
 			return getRuleContext(PathContext.class,0);
 		}
@@ -268,6 +263,30 @@ public class IdesDslParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class SelectContext extends QueryContext {
+		public TerminalNode SELECT() { return getToken(IdesDslParser.SELECT, 0); }
+		public AsTableNameContext asTableName() {
+			return getRuleContext(AsTableNameContext.class,0);
+		}
+		public List<TerminalNode> EOQ() { return getTokens(IdesDslParser.EOQ); }
+		public TerminalNode EOQ(int i) {
+			return getToken(IdesDslParser.EOQ, i);
+		}
+		public SelectContext(QueryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterSelect(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitSelect(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitSelect(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class SaveContext extends QueryContext {
 		public TerminalNode SAVE() { return getToken(IdesDslParser.SAVE, 0); }
 		public SaveModeContext saveMode() {
@@ -276,15 +295,11 @@ public class IdesDslParser extends Parser {
 		public TableNameContext tableName() {
 			return getRuleContext(TableNameContext.class,0);
 		}
-		public AsContext as() {
-			return getRuleContext(AsContext.class,0);
-		}
+		public TerminalNode AS() { return getToken(IdesDslParser.AS, 0); }
 		public FormatContext format() {
 			return getRuleContext(FormatContext.class,0);
 		}
-		public DotContext dot() {
-			return getRuleContext(DotContext.class,0);
-		}
+		public TerminalNode DOT() { return getToken(IdesDslParser.DOT, 0); }
 		public PathContext path() {
 			return getRuleContext(PathContext.class,0);
 		}
@@ -315,32 +330,33 @@ public class IdesDslParser extends Parser {
 		enterRule(_localctx, 4, RULE_query);
 		int _la;
 		try {
-			setState(73);
+			int _alt;
+			setState(74);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LOAD:
 				_localctx = new LoadContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(51);
+				setState(45);
 				match(LOAD);
-				setState(52);
+				setState(46);
 				format();
-				setState(53);
-				dot();
-				setState(54);
+				setState(47);
+				match(DOT);
+				setState(48);
 				path();
-				setState(56);
+				setState(50);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==OPTIONS || _la==WHERE) {
 					{
-					setState(55);
+					setState(49);
 					whereExpressions();
 					}
 				}
 
-				setState(58);
+				setState(52);
 				asTableName();
 				}
 				break;
@@ -348,40 +364,78 @@ public class IdesDslParser extends Parser {
 				_localctx = new SaveContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(60);
+				setState(54);
 				match(SAVE);
-				setState(61);
+				setState(55);
 				saveMode();
-				setState(62);
+				setState(56);
 				tableName();
-				setState(63);
-				as();
-				setState(64);
+				setState(57);
+				match(AS);
+				setState(58);
 				format();
-				setState(65);
-				dot();
-				setState(66);
+				setState(59);
+				match(DOT);
+				setState(60);
 				path();
-				setState(68);
+				setState(62);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==OPTIONS || _la==WHERE) {
 					{
-					setState(67);
+					setState(61);
 					whereExpressions();
 					}
 				}
 
-				setState(71);
+				setState(65);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==PARTITIONBY) {
 					{
-					setState(70);
+					setState(64);
 					partitionbyExpression();
 					}
 				}
 
+				}
+				break;
+			case SELECT:
+				_localctx = new SelectContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(67);
+				match(SELECT);
+				setState(69); 
+				_errHandler.sync(this);
+				_alt = 1;
+				do {
+					switch (_alt) {
+					case 1:
+						{
+						{
+						setState(68);
+						_la = _input.LA(1);
+						if ( _la <= 0 || (_la==EOQ) ) {
+						_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						}
+						}
+						break;
+					default:
+						throw new NoViableAltException(this);
+					}
+					setState(71); 
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
+				setState(73);
+				asTableName();
 				}
 				break;
 			default:
@@ -429,20 +483,20 @@ public class IdesDslParser extends Parser {
 		FormatContext _localctx = new FormatContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_format);
 		try {
-			setState(77);
+			setState(78);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(75);
+				setState(76);
 				identifier();
 				}
 				break;
 			case QUOTED_TEXT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(76);
+				setState(77);
 				quotedIdentifier();
 				}
 				break;
@@ -490,7 +544,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79);
+			setState(80);
 			quotedIdentifier();
 			}
 		}
@@ -534,7 +588,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(81);
+			setState(82);
 			identifier();
 			}
 		}
@@ -578,9 +632,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83);
-			match(T__0);
 			setState(84);
+			match(T__0);
+			setState(85);
 			col();
 			}
 		}
@@ -634,21 +688,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86);
-			where();
 			setState(87);
+			where();
+			setState(88);
 			expression();
-			setState(91);
+			setState(92);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while (_la==T__1) {
+			while (_la==AND) {
 				{
 				{
-				setState(88);
+				setState(89);
 				booleanExpression();
 				}
 				}
-				setState(93);
+				setState(94);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -702,21 +756,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(94);
-			match(PARTITIONBY);
 			setState(95);
+			match(PARTITIONBY);
+			setState(96);
 			col();
-			setState(99);
+			setState(100);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(96);
+				setState(97);
 				colGroup();
 				}
 				}
-				setState(101);
+				setState(102);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -734,6 +788,7 @@ public class IdesDslParser extends Parser {
 	}
 
 	public static class BooleanExpressionContext extends ParserRuleContext {
+		public TerminalNode AND() { return getToken(IdesDslParser.AND, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -762,9 +817,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(102);
-			match(T__1);
 			setState(103);
+			match(AND);
+			setState(104);
 			expression();
 			}
 		}
@@ -812,11 +867,11 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
-			qualifiedName();
 			setState(106);
-			match(T__2);
+			qualifiedName();
 			setState(107);
+			match(T__1);
+			setState(108);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MUMERIC) | (1L << STRING_TEXT) | (1L << BLOCK_STRING_TEXT))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -876,21 +931,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(109);
+			setState(110);
 			identifier();
-			setState(114);
+			setState(115);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				setState(110);
-				match(DOT);
 				setState(111);
+				match(DOT);
+				setState(112);
 				identifier();
 				}
 				}
-				setState(116);
+				setState(117);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -908,9 +963,7 @@ public class IdesDslParser extends Parser {
 	}
 
 	public static class AsTableNameContext extends ParserRuleContext {
-		public AsContext as() {
-			return getRuleContext(AsContext.class,0);
-		}
+		public TerminalNode AS() { return getToken(IdesDslParser.AS, 0); }
 		public TableNameContext tableName() {
 			return getRuleContext(TableNameContext.class,0);
 		}
@@ -939,9 +992,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(117);
-			as();
 			setState(118);
+			match(AS);
+			setState(119);
 			tableName();
 			}
 		}
@@ -985,7 +1038,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(120);
+			setState(121);
 			identifier();
 			}
 		}
@@ -1027,7 +1080,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122);
+			setState(123);
 			match(IDENTIFIER);
 			}
 		}
@@ -1069,134 +1122,8 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(124);
+			setState(125);
 			match(QUOTED_TEXT);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class EoqContext extends ParserRuleContext {
-		public TerminalNode EOQ() { return getToken(IdesDslParser.EOQ, 0); }
-		public EoqContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_eoq; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterEoq(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitEoq(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitEoq(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final EoqContext eoq() throws RecognitionException {
-		EoqContext _localctx = new EoqContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_eoq);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(126);
-			match(EOQ);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class DotContext extends ParserRuleContext {
-		public TerminalNode DOT() { return getToken(IdesDslParser.DOT, 0); }
-		public DotContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_dot; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterDot(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitDot(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitDot(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final DotContext dot() throws RecognitionException {
-		DotContext _localctx = new DotContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_dot);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(128);
-			match(DOT);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class AsContext extends ParserRuleContext {
-		public TerminalNode AS() { return getToken(IdesDslParser.AS, 0); }
-		public AsContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_as; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterAs(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitAs(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitAs(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final AsContext as() throws RecognitionException {
-		AsContext _localctx = new AsContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_as);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(130);
-			match(AS);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1234,12 +1161,12 @@ public class IdesDslParser extends Parser {
 
 	public final WhereContext where() throws RecognitionException {
 		WhereContext _localctx = new WhereContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_where);
+		enterRule(_localctx, 32, RULE_where);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(132);
+			setState(127);
 			_la = _input.LA(1);
 			if ( !(_la==OPTIONS || _la==WHERE) ) {
 			_errHandler.recoverInline(this);
@@ -1288,12 +1215,12 @@ public class IdesDslParser extends Parser {
 
 	public final SaveModeContext saveMode() throws RecognitionException {
 		SaveModeContext _localctx = new SaveModeContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_saveMode);
+		enterRule(_localctx, 34, RULE_saveMode);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(134);
+			setState(129);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OVERWRITE) | (1L << APPEND) | (1L << ERRORIfExists) | (1L << IGNORE))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1317,39 +1244,38 @@ public class IdesDslParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\32\u008b\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u0086\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\3\2\7\2.\n\2\f\2\16\2\61\13\2"+
-		"\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\5\4;\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
-		"\3\4\3\4\3\4\5\4G\n\4\3\4\5\4J\n\4\5\4L\n\4\3\5\3\5\5\5P\n\5\3\6\3\6\3"+
-		"\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\t\\\n\t\f\t\16\t_\13\t\3\n\3\n\3\n\7"+
-		"\nd\n\n\f\n\16\ng\13\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\7\r"+
-		"s\n\r\f\r\16\rv\13\r\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3\21\3\22"+
-		"\3\22\3\23\3\23\3\24\3\24\3\25\3\25\3\26\3\26\3\26\2\2\27\2\4\6\b\n\f"+
-		"\16\20\22\24\26\30\32\34\36 \"$&(*\2\5\4\2\23\23\26\27\3\2\n\13\3\2\f"+
-		"\17\2~\2/\3\2\2\2\4\62\3\2\2\2\6K\3\2\2\2\bO\3\2\2\2\nQ\3\2\2\2\fS\3\2"+
-		"\2\2\16U\3\2\2\2\20X\3\2\2\2\22`\3\2\2\2\24h\3\2\2\2\26k\3\2\2\2\30o\3"+
-		"\2\2\2\32w\3\2\2\2\34z\3\2\2\2\36|\3\2\2\2 ~\3\2\2\2\"\u0080\3\2\2\2$"+
-		"\u0082\3\2\2\2&\u0084\3\2\2\2(\u0086\3\2\2\2*\u0088\3\2\2\2,.\5\4\3\2"+
-		"-,\3\2\2\2.\61\3\2\2\2/-\3\2\2\2/\60\3\2\2\2\60\3\3\2\2\2\61/\3\2\2\2"+
-		"\62\63\5\6\4\2\63\64\5\"\22\2\64\5\3\2\2\2\65\66\7\b\2\2\66\67\5\b\5\2"+
-		"\678\5$\23\28:\5\n\6\29;\5\20\t\2:9\3\2\2\2:;\3\2\2\2;<\3\2\2\2<=\5\32"+
-		"\16\2=L\3\2\2\2>?\7\t\2\2?@\5*\26\2@A\5\34\17\2AB\5&\24\2BC\5\b\5\2CD"+
-		"\5$\23\2DF\5\n\6\2EG\5\20\t\2FE\3\2\2\2FG\3\2\2\2GI\3\2\2\2HJ\5\22\n\2"+
-		"IH\3\2\2\2IJ\3\2\2\2JL\3\2\2\2K\65\3\2\2\2K>\3\2\2\2L\7\3\2\2\2MP\5\36"+
-		"\20\2NP\5 \21\2OM\3\2\2\2ON\3\2\2\2P\t\3\2\2\2QR\5 \21\2R\13\3\2\2\2S"+
-		"T\5\36\20\2T\r\3\2\2\2UV\7\3\2\2VW\5\f\7\2W\17\3\2\2\2XY\5(\25\2Y]\5\26"+
-		"\f\2Z\\\5\24\13\2[Z\3\2\2\2\\_\3\2\2\2][\3\2\2\2]^\3\2\2\2^\21\3\2\2\2"+
-		"_]\3\2\2\2`a\7\20\2\2ae\5\f\7\2bd\5\16\b\2cb\3\2\2\2dg\3\2\2\2ec\3\2\2"+
-		"\2ef\3\2\2\2f\23\3\2\2\2ge\3\2\2\2hi\7\4\2\2ij\5\26\f\2j\25\3\2\2\2kl"+
-		"\5\30\r\2lm\7\5\2\2mn\t\2\2\2n\27\3\2\2\2ot\5\36\20\2pq\7\21\2\2qs\5\36"+
-		"\20\2rp\3\2\2\2sv\3\2\2\2tr\3\2\2\2tu\3\2\2\2u\31\3\2\2\2vt\3\2\2\2wx"+
-		"\5&\24\2xy\5\34\17\2y\33\3\2\2\2z{\5\36\20\2{\35\3\2\2\2|}\7\24\2\2}\37"+
-		"\3\2\2\2~\177\7\25\2\2\177!\3\2\2\2\u0080\u0081\7\22\2\2\u0081#\3\2\2"+
-		"\2\u0082\u0083\7\21\2\2\u0083%\3\2\2\2\u0084\u0085\7\6\2\2\u0085\'\3\2"+
-		"\2\2\u0086\u0087\t\3\2\2\u0087)\3\2\2\2\u0088\u0089\t\4\2\2\u0089+\3\2"+
-		"\2\2\13/:FIKO]et";
+		"\4\23\t\23\3\2\7\2(\n\2\f\2\16\2+\13\2\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4"+
+		"\5\4\65\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4A\n\4\3\4\5\4D"+
+		"\n\4\3\4\3\4\6\4H\n\4\r\4\16\4I\3\4\5\4M\n\4\3\5\3\5\5\5Q\n\5\3\6\3\6"+
+		"\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\t]\n\t\f\t\16\t`\13\t\3\n\3\n\3\n\7"+
+		"\ne\n\n\f\n\16\nh\13\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\7\r"+
+		"t\n\r\f\r\16\rw\13\r\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3\21\3\22"+
+		"\3\22\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \""+
+		"$\2\6\3\2\23\23\4\2\24\24\27\30\3\2\n\13\3\2\r\20\2~\2)\3\2\2\2\4,\3\2"+
+		"\2\2\6L\3\2\2\2\bP\3\2\2\2\nR\3\2\2\2\fT\3\2\2\2\16V\3\2\2\2\20Y\3\2\2"+
+		"\2\22a\3\2\2\2\24i\3\2\2\2\26l\3\2\2\2\30p\3\2\2\2\32x\3\2\2\2\34{\3\2"+
+		"\2\2\36}\3\2\2\2 \177\3\2\2\2\"\u0081\3\2\2\2$\u0083\3\2\2\2&(\5\4\3\2"+
+		"\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\3\3\2\2\2+)\3\2\2\2,-\5\6"+
+		"\4\2-.\7\23\2\2.\5\3\2\2\2/\60\7\7\2\2\60\61\5\b\5\2\61\62\7\22\2\2\62"+
+		"\64\5\n\6\2\63\65\5\20\t\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66"+
+		"\67\5\32\16\2\67M\3\2\2\289\7\b\2\29:\5$\23\2:;\5\34\17\2;<\7\5\2\2<="+
+		"\5\b\5\2=>\7\22\2\2>@\5\n\6\2?A\5\20\t\2@?\3\2\2\2@A\3\2\2\2AC\3\2\2\2"+
+		"BD\5\22\n\2CB\3\2\2\2CD\3\2\2\2DM\3\2\2\2EG\7\t\2\2FH\n\2\2\2GF\3\2\2"+
+		"\2HI\3\2\2\2IG\3\2\2\2IJ\3\2\2\2JK\3\2\2\2KM\5\32\16\2L/\3\2\2\2L8\3\2"+
+		"\2\2LE\3\2\2\2M\7\3\2\2\2NQ\5\36\20\2OQ\5 \21\2PN\3\2\2\2PO\3\2\2\2Q\t"+
+		"\3\2\2\2RS\5 \21\2S\13\3\2\2\2TU\5\36\20\2U\r\3\2\2\2VW\7\3\2\2WX\5\f"+
+		"\7\2X\17\3\2\2\2YZ\5\"\22\2Z^\5\26\f\2[]\5\24\13\2\\[\3\2\2\2]`\3\2\2"+
+		"\2^\\\3\2\2\2^_\3\2\2\2_\21\3\2\2\2`^\3\2\2\2ab\7\21\2\2bf\5\f\7\2ce\5"+
+		"\16\b\2dc\3\2\2\2eh\3\2\2\2fd\3\2\2\2fg\3\2\2\2g\23\3\2\2\2hf\3\2\2\2"+
+		"ij\7\f\2\2jk\5\26\f\2k\25\3\2\2\2lm\5\30\r\2mn\7\4\2\2no\t\3\2\2o\27\3"+
+		"\2\2\2pu\5\36\20\2qr\7\22\2\2rt\5\36\20\2sq\3\2\2\2tw\3\2\2\2us\3\2\2"+
+		"\2uv\3\2\2\2v\31\3\2\2\2wu\3\2\2\2xy\7\5\2\2yz\5\34\17\2z\33\3\2\2\2{"+
+		"|\5\36\20\2|\35\3\2\2\2}~\7\25\2\2~\37\3\2\2\2\177\u0080\7\26\2\2\u0080"+
+		"!\3\2\2\2\u0081\u0082\t\4\2\2\u0082#\3\2\2\2\u0083\u0084\t\5\2\2\u0084"+
+		"%\3\2\2\2\f)\64@CILP^fu";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -66,6 +66,18 @@ public class IdesDslBaseListener implements IdesDslListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterSelect(IdesDslParser.SelectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSelect(IdesDslParser.SelectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFormat(IdesDslParser.FormatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -217,42 +229,6 @@ public class IdesDslBaseListener implements IdesDslListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitQuotedIdentifier(IdesDslParser.QuotedIdentifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterEoq(IdesDslParser.EoqContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitEoq(IdesDslParser.EoqContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDot(IdesDslParser.DotContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDot(IdesDslParser.DotContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAs(IdesDslParser.AsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAs(IdesDslParser.AsContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

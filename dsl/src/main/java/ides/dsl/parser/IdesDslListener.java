@@ -56,6 +56,18 @@ public interface IdesDslListener extends ParseTreeListener {
 	 */
 	void exitSave(IdesDslParser.SaveContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Select}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterSelect(IdesDslParser.SelectContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Select}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitSelect(IdesDslParser.SelectContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesDslParser#format}.
 	 * @param ctx the parse tree
 	 */
@@ -185,36 +197,6 @@ public interface IdesDslListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitQuotedIdentifier(IdesDslParser.QuotedIdentifierContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link IdesDslParser#eoq}.
-	 * @param ctx the parse tree
-	 */
-	void enterEoq(IdesDslParser.EoqContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link IdesDslParser#eoq}.
-	 * @param ctx the parse tree
-	 */
-	void exitEoq(IdesDslParser.EoqContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link IdesDslParser#dot}.
-	 * @param ctx the parse tree
-	 */
-	void enterDot(IdesDslParser.DotContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link IdesDslParser#dot}.
-	 * @param ctx the parse tree
-	 */
-	void exitDot(IdesDslParser.DotContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link IdesDslParser#as}.
-	 * @param ctx the parse tree
-	 */
-	void enterAs(IdesDslParser.AsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link IdesDslParser#as}.
-	 * @param ctx the parse tree
-	 */
-	void exitAs(IdesDslParser.AsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IdesDslParser#where}.
 	 * @param ctx the parse tree

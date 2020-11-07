@@ -21,6 +21,8 @@ import java.io.BufferedReader
 
 import org.apache.commons.lang3.StringUtils
 import tech.ides.exception.ExceptionUtil
+import tech.ides.job.ScriptJobManager
+import tech.ides.utils.ScriptUtils
 import tech.sqlclub.common.log.Logging
 
 // scalastyle:off println
@@ -37,6 +39,8 @@ import scala.tools.nsc.interpreter.{NamedParam, SimpleReader, SplashLoop, Splash
 import scala.tools.nsc.interpreter.StdReplTags.tagOfIMain
 import scala.tools.nsc.util.stringFromStream
 import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, versionString}
+import tech.ides.constants.ScriptConstants.{SHELL_USER, BATCH_JOB}
+import org.apache.spark.IdesConf.IDES_JOB_RUN_TIMEOUT
 
 /**
   * Ides interactive shell.
@@ -101,6 +105,11 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
       println("Spark session available as 'spark'.")
       _sc
     }
+    """,
+    s"""
+      @transient val listener = new tech.ides.dsl.listener.ScriptQueryExecListener(spark, "", "$SHELL_USER")
+        println("Ides ScriptQueryExecListener available as 'listener'.")
+        listener
     """,
     "import org.apache.spark.SparkContext._",
     "import spark.implicits._",
@@ -307,7 +316,8 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   }
 
   def importCmds = Seq(
-    "import tech.ides.repl.Main"
+    "import tech.ides.core.ScriptQueryExecute",
+    "import tech.ides.core.ScriptQueryExecuteContext"
   )
 
   override def command(line: String): Result = {
@@ -316,15 +326,25 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
 
       var continue = true
       def exec_command(command: String):Result = {
-        if ( command startsWith "select" ) {
-          val index = command.lastIndexOf("as")
-          val (sql, tablename) = (command.substring(0, index).trim, command.substring(index+2).trim)
-
+        if ( ScriptUtils.isScript(command) ) {
+          val script = if (!command.endsWith(";")) command + ";" else command
+          val tableName = try {
+            script.dropRight(1).split("\\s+").last
+          } catch {
+            case e:Exception =>
+              logError("tableName parse error! " + e.getMessage, e)
+              "<unknown>"
+          }
+          // todo 设置shell jobName
+          val jobName = if (script.length > 30) script.substring(0, 30) + " ..." else script
+          val job = ScriptJobManager.newJob(SHELL_USER, BATCH_JOB, jobName, script, Main.idesConf.get(IDES_JOB_RUN_TIMEOUT))
           val cmds = Seq(
-            s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-            s"""val $tablename = spark.table("$tablename")""",
-            s"$tablename.show()"
-
+            // 设置Context
+            s""" ScriptQueryExecute.setContext(ScriptQueryExecuteContext(listener, "$SHELL_USER", listener.ownerPath(None), "${job.groupId}")) """,
+            // 执行脚本
+            s""" ScriptQueryExecute.exec("$script", listener) """,
+            // 如果有table则以表名变量返回
+            s""" val $tableName = if (listener.getLastTableName.isDefined) { val tableName = listener.getLastTableName.get; if ("$tableName" != tableName) null else spark.table(tableName) } else null """
           )
           var flag = true
           val results = cmds.iterator.takeWhile(_ => flag).map {
@@ -336,27 +356,9 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
               } else result
           }
           results.toList.last
-        } else if (command startsWith "!") {
-          val (sql, tablename) = (command.substring(1), "output")
-          val cmds = Seq(
-            s"""Main.sparkSession.sql("$sql").createOrReplaceTempView("$tablename")""",
-            """val output = spark.table("output")""",
-            "if(output.schema.size > 0) output.show()"
-          )
-          var flag = true
-          val results = cmds.iterator.takeWhile(_ => flag).map {
-            code =>
-              val result = super.command(code)
-              if (!result.keepRunning || result.lineToRecord.isEmpty) {
-                flag = false
-                Result(true, None)
-              } else result
-          }
-          results.toList.last
-        }
-        else super.command(command)
+        } else super.command(command)
       }
-
+      // todo 按;切分不合理 双引号内有;
       val results = line.split(";").filter(it => it.nonEmpty).iterator.takeWhile(_ => continue).map {
         command =>
           val res = exec_command(command)

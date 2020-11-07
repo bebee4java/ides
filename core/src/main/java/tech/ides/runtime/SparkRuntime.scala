@@ -14,14 +14,14 @@ import tech.sqlclub.common.utils.ConfigUtils
   *
   * Created by songgr on 2020/07/10.
   */
-class SparkRuntime(val conf: IdesConf, val _params:JMap[Any,Any]= new util.HashMap[Any,Any]()) extends SQLRuntime with Logging {
+class SparkRuntime(conf: IdesConf, _params:JMap[Any,Any]= new util.HashMap[Any,Any]()) extends SQLRuntime with Logging {
   val _conf = conf.getAll()
 
   _conf.map(kv => _params.put(kv._1.asInstanceOf[Any], kv._2.asInstanceOf[Any]))
 
-  val sparkSession = createSession
+  private[this] val session = new AtomicReference[SparkSession]()
 
-  postInit()
+  def sparkSession = session.get()
 
   override def awaitTermination: Unit = {
     if (conf.get(IDES_SPARK_SERVICE) && !conf.get(IDES_SHELL_MODE)){
@@ -29,11 +29,13 @@ class SparkRuntime(val conf: IdesConf, val _params:JMap[Any,Any]= new util.HashM
     }
   }
 
-  override def createRuntime: Unit = {
-
+  override private[runtime] def createRuntime: SQLRuntime = {
+    session.set(createSession)
+    postInit()
+    this
   }
 
-  def createSession = {
+  private def createSession = {
     logInfo("create session ......")
     val sparkConf = new SparkConf()
     _conf.filter(_._1.startsWith("spark.")).foreach { f =>
@@ -56,16 +58,16 @@ class SparkRuntime(val conf: IdesConf, val _params:JMap[Any,Any]= new util.HashM
     session
   }
 
-  def postInit() = {
+  private def postInit() = {
     params.put("_session_", sparkSession)
     createCommandTable
   }
 
-  def createCommandTable = sparkSession.sql("select 1").createOrReplaceTempView("command")
+  private def createCommandTable = sparkSession.sql("select 1").createOrReplaceTempView("command")
 
   override def params: JMap[Any, Any] = _params
 
-  SparkRuntime.setLastInstantiatedContext(this)
+  SparkRuntime.setLastInstantiatedContext(createRuntime.asInstanceOf[SparkRuntime])
 }
 
 object SparkRuntime {

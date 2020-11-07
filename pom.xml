@@ -48,7 +48,7 @@
         <scala.binary.version>2.11</scala.binary.version>
         <scope>provided</scope>
         <plugin.maven.scala.version>3.1.3</plugin.maven.scala.version>
-        <common-utils-version>1.0.2</common-utils-version>
+        <common-utils-version>1.0.4</common-utils-version>
         <project.root.dir>${basedir}</project.root.dir> <!--注意不是项目的根路径，在子模块下就是当前模块的根路径-->
         <session.root.dir>${user.dir}</session.root.dir> <!--用户执行mvn的session根路径，在项目根路径下执行mvn命令该值就是项目根路径，用于多模块下定位项目的根路径使用-->
         <hadoop.client.version>2.7.4</hadoop.client.version>

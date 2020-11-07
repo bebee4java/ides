@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 import org.apache.spark.IdesConf
 import org.apache.spark.IdesConf._
 import tech.ides.runtime.SQLRuntime
+import tech.sqlclub.common.annotation.Explanation
 import tech.sqlclub.common.log.Logging
 
 /**
@@ -83,6 +84,16 @@ object PlatformManager {
     Class.forName(platformNameMapping(platform)).
       getMethod("getOrCreate", classOf[IdesConf]).
       invoke(null, conf).asInstanceOf[SQLRuntime]
+  }
+
+  @Explanation(attention = "available after executed platformManager run method")
+  def getConf = {
+    val conf = getOrCreate.config
+    if (conf.get() == null) {
+      new IdesConf()
+    } else {
+      conf.get()
+    }
   }
 
   def SPARK = "spark"

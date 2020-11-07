@@ -18,6 +18,7 @@
 package org.apache.spark.repl
 
 import tech.ides.repl.Main
+import tech.ides.utils.ScriptUtils
 import tech.sqlclub.common.log.Logging
 
 import scala.collection.mutable
@@ -112,8 +113,7 @@ class SparkILoopInterpreter(settings: Settings, out: JPrintWriter) extends IMain
       var flag = true
       val results = line.split("\n").filter(it => it.nonEmpty).iterator.takeWhile(_ => flag).map {
         command =>
-          import tech.sqlclub.common.regex.RegexOp._
-          if (command matching "^(select|!).*") {
+          if ( ScriptUtils.isScript(command) ) {
             val res = tech.ides.repl.Main.interp.command(command)
             if (!res.keepRunning || res.lineToRecord.isEmpty) {
               flag = false

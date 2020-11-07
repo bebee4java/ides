@@ -10,13 +10,14 @@ statement
     ;
 
 script
-    : query eoq # Sql
+    : query EOQ # Sql
     ;
 
 // query语句规则
 query
-    : LOAD format dot path whereExpressions? asTableName # Load
-    | SAVE saveMode tableName as format dot path whereExpressions? partitionbyExpression? # Save
+    : LOAD format DOT path whereExpressions? asTableName # Load
+    | SAVE saveMode tableName AS format DOT path whereExpressions? partitionbyExpression? # Save
+    | SELECT ~(EOQ)+ asTableName # Select
     ;
 
 format
@@ -45,7 +46,7 @@ partitionbyExpression
     ;
 
 booleanExpression
-    : 'and' expression
+    : AND expression
     ;
 
 expression
@@ -57,7 +58,7 @@ qualifiedName
     ;
 
 asTableName
-    : as tableName
+    : AS tableName
     ;
 
 tableName
@@ -72,9 +73,6 @@ quotedIdentifier
     : QUOTED_TEXT
     ;
 
-eoq: EOQ;
-dot: DOT;
-as: AS;
 where: OPTIONS|WHERE;
 saveMode: (OVERWRITE|APPEND|ERRORIfExists|IGNORE);
 
@@ -86,13 +84,15 @@ AS: 'as';
 INTO: 'into';
 LOAD: 'load';
 SAVE: 'save';
+SELECT: 'select';
 OPTIONS:'options';
-WHERE:'where';
-OVERWRITE:'overwrite';
-APPEND:'append';
-ERRORIfExists:'errorIfExists';
-IGNORE:'ignore';
-PARTITIONBY:'partitionBy'|'partitionby';
+WHERE: 'where';
+AND: 'and';
+OVERWRITE: 'overwrite';
+APPEND: 'append';
+ERRORIfExists: 'errorIfExists';
+IGNORE: 'ignore';
+PARTITIONBY: 'partitionBy'|'partitionby';
 //============================
 // End of the keywords list
 //============================
@@ -160,4 +160,11 @@ BLOCK_COMMENT
 // channel(HIDDEN) 隐藏通道会 忽略却保留 匹配的词法符号
 WS
     : [ \r\n\t]+ -> channel(HIDDEN)    // 匹配一个或者多个空白字符
+    ;
+
+// Catch-all for anything we can't recognize.
+// We use this to be able to ignore and recover all the text
+// when splitting statements with DelimiterLexer
+UNRECOGNIZED
+    : .
     ;

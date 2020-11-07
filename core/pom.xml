@@ -19,6 +19,11 @@
             <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
+            <groupId>tech.ides</groupId>
+            <artifactId>ides-dsl_${scala.binary.version}</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
             <version>${spark.version}</version>

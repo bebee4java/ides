@@ -40,6 +40,13 @@ public interface IdesDslVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSave(IdesDslParser.SaveContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Select}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSelect(IdesDslParser.SelectContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesDslParser#format}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -117,24 +124,6 @@ public interface IdesDslVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitQuotedIdentifier(IdesDslParser.QuotedIdentifierContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link IdesDslParser#eoq}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEoq(IdesDslParser.EoqContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link IdesDslParser#dot}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDot(IdesDslParser.DotContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link IdesDslParser#as}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAs(IdesDslParser.AsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link IdesDslParser#where}.
 	 * @param ctx the parse tree

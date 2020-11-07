@@ -10,7 +10,7 @@ trait SQLRuntime {
 
   def awaitTermination
 
-  def createRuntime
+  private[runtime] def createRuntime:SQLRuntime
 
   def params:util.Map[Any, Any]
 
