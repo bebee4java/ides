@@ -12,7 +12,7 @@
     <artifactId>ides-engine-spark${spark.big.version}_${scala.binary.version}</artifactId>
 
     <properties>
-        <jetty.version>9.3.24.v20180605</jetty.version>
+        <jetty.version>9.4.34.v20201102</jetty.version>
         <scalatra.version>2.6.5</scalatra.version>
     </properties>
 
