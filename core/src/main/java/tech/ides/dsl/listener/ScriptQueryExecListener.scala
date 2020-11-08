@@ -6,7 +6,7 @@ import ides.dsl.parser.{IdesDslBaseListener, IdesDslParser}
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.sql.SparkSession
 import tech.ides.core.ScriptStage
-import tech.ides.dsl.adaptor.SelectAdaptor
+import tech.ides.dsl.adaptor.{LoadAdaptor, SelectAdaptor}
 import tech.ides.constants.ScriptConstants.PATH_SEPARATOR
 import tech.sqlclub.common.log.Logging
 
@@ -80,6 +80,7 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
     * load语句的context
     */
   override def exitLoad(ctx: IdesDslParser.LoadContext): Unit = {
+    LoadAdaptor(this).enterContext(ctx)
   }
 
   /**

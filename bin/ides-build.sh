@@ -13,5 +13,5 @@ mvn -DskipTests clean package \
   -pl repl,assembly -am  \
   -Pscala-2.11 \
   -Pspark-2.4.x \
-  -Plocal \
+  -Ponline \
   -Pbuild
