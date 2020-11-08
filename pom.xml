@@ -53,6 +53,8 @@
         <session.root.dir>${user.dir}</session.root.dir> <!--用户执行mvn的session根路径，在项目根路径下执行mvn命令该值就是项目根路径，用于多模块下定位项目的根路径使用-->
         <hadoop.client.version>2.7.4</hadoop.client.version>
         <hadoop.big.version>2.7</hadoop.big.version>
+        <spark.version>2.4.3</spark.version>
+        <spark.big.version>2.4</spark.big.version>
     </properties>
 
     <repositories>
@@ -215,6 +217,7 @@
                                     <goal>copy-dependencies</goal>
                                 </goals>
                                 <configuration>
+                                    <includeScope>compile</includeScope>
                                     <outputDirectory>${session.root.dir}/jars</outputDirectory>
                                 </configuration>
                             </execution>

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ides-repl_${scala.binary.version}</artifactId>
+    <artifactId>ides-repl-${spark.big.version}_${scala.binary.version}</artifactId>
 
     <properties>
         <extra.source.dir>src/main/scala-${scala.binary.version}</extra.source.dir>
@@ -27,8 +27,30 @@
 
         <dependency>
             <groupId>tech.ides</groupId>
-            <artifactId>ides-core_${scala.binary.version}</artifactId>
+            <artifactId>ides-engine-spark-${spark.big.version}_${scala.binary.version}</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jetty-servlet</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jetty-webapp</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scalatra_${scala.binary.version}</artifactId>
+                    <groupId>org.scalatra</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scalatra-scalate_${scala.binary.version}</artifactId>
+                    <groupId>org.scalatra</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scalatra-swagger_${scala.binary.version}</artifactId>
+                    <groupId>org.scalatra</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>

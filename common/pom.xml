@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ides-common_${scala.binary.version}</artifactId>
+    <artifactId>ides-common-${spark.big.version}_${scala.binary.version}</artifactId>
 
     <dependencies>
         <dependency>

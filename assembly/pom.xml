@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <artifactId>ides-assembly_${scala.binary.version}</artifactId>
+    <artifactId>ides-assembly-${spark.big.version}_${scala.binary.version}</artifactId>
 
     <properties>
         <assembly.package.name>ides-${project.version}-bin-spark${spark.big.version}</assembly.package.name>
