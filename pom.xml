@@ -35,6 +35,7 @@
         <module>dsl</module>
         <module>engine</module>
         <module>repl</module>
+        <module>external/ds-spark-excel</module>
     </modules>
 
 
