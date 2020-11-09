@@ -25,6 +25,7 @@ import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ParamsUtils
 import org.apache.spark.IdesConf.IDES_SHELL_MODE
+import tech.ides.dsl.listener.ScriptQueryExecListener
 
 object Main extends Logging {
 
@@ -34,6 +35,8 @@ object Main extends Logging {
 //  val rootDir = conf.getOption("ides.repl.classdir").getOrElse(Utils.getLocalDir(conf))
 //  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
 
+  // ides script query exec listener
+  var listener:ScriptQueryExecListener = _
   var sparkContext: SparkContext = _
   var sparkSession: SparkSession = _
   // this is a public var because tests reset it.

@@ -108,6 +108,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     """,
     s"""
       @transient val listener = new tech.ides.dsl.listener.ScriptQueryExecListener(spark, "", "$SHELL_USER")
+        tech.ides.repl.Main.listener = listener
         println("Ides ScriptQueryExecListener available as 'listener'.")
         listener
     """,
@@ -328,13 +329,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
       def exec_command(command: String):Result = {
         if ( ScriptUtils.isScript(command) ) {
           val script = if (!command.endsWith(";")) command + ";" else command
-          val tableName = try {
-            script.dropRight(1).split("\\s+").last
-          } catch {
-            case e:Exception =>
-              logError("tableName parse error! " + e.getMessage, e)
-              "<unknown>"
-          }
+
           // todo 设置shell jobName
           val jobName = if (script.length > 30) script.substring(0, 30) + " ..." else script
           val job = ScriptJobManager.newJob(SHELL_USER, BATCH_JOB, jobName, script, Main.idesConf.get(IDES_JOB_RUN_TIMEOUT))
@@ -342,9 +337,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
             // 设置Context
             s""" ScriptQueryExecute.setContext(ScriptQueryExecuteContext(listener, "$SHELL_USER", listener.ownerPath(None), "${job.groupId}")) """,
             // 执行脚本
-            s""" ScriptQueryExecute.exec("$script", listener) """,
-            // 如果有table则以表名变量返回
-            s""" val $tableName = if (listener.getLastTableName.isDefined) { val tableName = listener.getLastTableName.get; if ("$tableName" != tableName) null else spark.table(tableName) } else null """
+            s""" ScriptQueryExecute.exec("${script.replaceAll("\"", "\\\\\"")}", listener) """
           )
           var flag = true
           val results = cmds.iterator.takeWhile(_ => flag).map {
@@ -355,7 +348,16 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
                 Result(true, None)
               } else result
           }
-          results.toList.last
+          // 执行上面的代码行
+          val resultList = results.toList
+
+          Main.listener.getLastTableName match {
+            case Some(table) =>
+              val getLastTable = s""" val $table = spark.table("$table") """
+              super.command(getLastTable)
+            case None =>
+              resultList.last
+          }
         } else super.command(command)
       }
       // todo 按;切分不合理 双引号内有;
