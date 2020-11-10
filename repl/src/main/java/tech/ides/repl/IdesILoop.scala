@@ -338,7 +338,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
             // 设置Context
             s""" ScriptQueryExecute.setContext(ScriptQueryExecuteContext(listener, "$SHELL_USER", listener.ownerPath(None), "${job.groupId}")) """,
             // 执行脚本
-            s""" ScriptQueryExecute.exec("${script.replaceAll("\"", "\\\\\"")}", listener) """
+            s""" ScriptQueryExecute.exec("${script.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\\\"")}", listener) """
           )
           var flag = true
           val results = cmds.iterator.takeWhile(_ => flag).map {
@@ -352,7 +352,9 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           // 执行上面的代码行
           val resultList = results.toList
 
-          // todo 如果上面有错误就不取
+          if (resultList.last.lineToRecord.isEmpty) {
+            return resultList.last
+          }
 
           Main.listener.getLastTableName match {
             case Some(table) =>

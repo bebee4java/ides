@@ -49,35 +49,37 @@ object ScriptUtils {
     val stack = new mutable.Stack[Char]()
     var i = 0
 
-    def reset(addIndex: Int) = {
+    // 是否是string块开头
+    def strBlock(i: Int) = (chars(i) == '"' && chars(i + 1) == '"' && chars(i + 2) == '"') ||
+      (chars(i) == ''' && chars(i + 1) == ''' && chars(i + 2) == ''')
+
+    // 是否是string开头
+    def str(i: Int) = chars(i) == '`' || chars(i) == ''' || chars(i) == '"'
+
+    // 是否是单行注释
+    def line_comment(i: Int) = chars(i) == '-' && chars(i + 1) == '-'
+
+    // 多行注释开始
+    def block_comment_left(i: Int) = chars(i) == '/' && chars(i + 1) == '*'
+
+    def reset= {
       lines += line.toString
       line.setLength(0)
-      i += addIndex
     }
 
-    while (i < chars.length) {
-      if (chars(i) == ';') {
-        line.append(';')
-        reset(1)
-      }
+    def escape(index:Int):Int = {
+      if (chars(index) != '\\') return index
+      line.append('\\').append(chars(index+1))
+      index + 2
+    }
 
-      // 是否是string块开头
-      def strBlock(i: Int) = (chars(i) == '"' && chars(i + 1) == '"' && chars(i + 2) == '"') ||
-        (chars(i) == ''' && chars(i + 1) == ''' && chars(i + 2) == ''')
-
-      // 是否是string开头
-      def str(i: Int) = chars(i) == '`' || chars(i) == ''' || chars(i) == '"'
-
-      // 是否是单行注释
-      def line_comment(i: Int) = chars(i) == '-' && chars(i + 1) == '-'
-
-      // 多行注释开始
-      def block_comment_left(i: Int) = chars(i) == '/' && chars(i + 1) == '*'
-
-      def wholeStack(index: Int, quoteSize: Int, EOF:Option[Char]): Int = {
-        var pos = index // 当前位置
-        var whole = true // 是否是完整的引用
-        while (pos < totalSize && (stack.size < quoteSize * 2 || !whole) && (EOF.isEmpty || EOF.get != chars(pos) ) ) {
+    def wholeStack(index: Int, quoteSize: Int, EOF:Option[Char]): Int = {
+      var pos = index // 当前位置
+      var whole = true // 是否是完整的引用
+      while (pos < totalSize && (stack.size < quoteSize * 2 || !whole) && (EOF.isEmpty || EOF.get != chars(pos) ) ) {
+        if(chars(pos) == '\\') {
+          pos = escape(pos)
+        } else {
           line.append(chars(pos))
           stack.push(chars(pos))
           if (EOF.isEmpty) {
@@ -93,12 +95,22 @@ object ScriptUtils {
           }
           pos += 1
         }
-        stack.clear()
-        pos
       }
+      stack.clear()
+      pos
+    }
 
+    while (i < chars.length) {
+      if (chars(i) == ';') {
+        line.append(';')
+        i +=1
+        reset
+      }
       if (i < totalSize)
         i match {
+            // 转义字符
+          case _ if chars(i) == '\\' =>
+            i = escape(i)
           case _ if strBlock(i) =>
             // 字符块
             i = wholeStack(i, 3, None)
@@ -108,19 +120,19 @@ object ScriptUtils {
           case _ if block_comment_left(i) =>
             // 多行注释
             i = wholeStack(i, 2, None)
-            reset(0)
+            reset
           case _ if line_comment(i) =>
             // 单行注释
             // 设置引用标识len等于总字符数 遇到终止符'\n'就是完整的stack
             i = wholeStack(i, totalSize, Some('\n'))
-            reset(0)
+            reset
           case _ =>
             line.append(chars(i))
             i += 1
         }
     }
 
-    if (line.length() > 0) reset(0)
+    if (line.length() > 0) reset
     lines.toList
   }
 

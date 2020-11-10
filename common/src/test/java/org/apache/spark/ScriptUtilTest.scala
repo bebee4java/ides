@@ -36,6 +36,8 @@ object ScriptUtilTest {
     println(readLines("val a=1;/*;;;*/ val a=3;").mkString("\n"))
 
     println(readLines("--val a=1;/*;;;*/ val a=3;").mkString("\n"))
+
+    println(readLines("select \\s \"\"\"llllkkkkk;;;\"\"\" as tl as tl;").mkString("\n"))
   }
 
 }
