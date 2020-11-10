@@ -41,6 +41,7 @@ import scala.tools.nsc.util.stringFromStream
 import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, versionString}
 import tech.ides.constants.ScriptConstants.{SHELL_USER, BATCH_JOB}
 import org.apache.spark.IdesConf.IDES_JOB_RUN_TIMEOUT
+import tech.ides.utils.ScriptUtils.readLines
 
 /**
   * Ides interactive shell.
@@ -351,6 +352,8 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           // 执行上面的代码行
           val resultList = results.toList
 
+          // todo 如果上面有错误就不取
+
           Main.listener.getLastTableName match {
             case Some(table) =>
               val getLastTable = s""" val $table = spark.table("$table") """
@@ -360,8 +363,8 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           }
         } else super.command(command)
       }
-      // todo 按;切分不合理 双引号内有;
-      val results = line.split(";").filter(it => it.nonEmpty).iterator.takeWhile(_ => continue).map {
+
+      val results = readLines(line).map(_.trim).filter(_.nonEmpty).iterator.takeWhile(_ => continue).map {
         command =>
           val res = exec_command(command)
           if (!res.keepRunning || res.lineToRecord.isEmpty){

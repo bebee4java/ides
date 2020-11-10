@@ -19,6 +19,7 @@ package org.apache.spark.repl
 
 import tech.ides.repl.Main
 import tech.ides.utils.ScriptUtils
+import tech.ides.utils.ScriptUtils.readLines
 import tech.sqlclub.common.log.Logging
 
 import scala.collection.mutable
@@ -111,7 +112,7 @@ class SparkILoopInterpreter(settings: Settings, out: JPrintWriter) extends IMain
   override def interpret(line: String): Results.Result = {
     if (Main.initialized.get()) {
       var flag = true
-      val results = line.split("\n").filter(it => it.nonEmpty).iterator.takeWhile(_ => flag).map {
+      val results = readLines(line).map(_.trim).filter(_.nonEmpty).iterator.takeWhile(_ => flag).map {
         command =>
           if ( ScriptUtils.isScript(command) ) {
             val res = tech.ides.repl.Main.interp.command(command)
