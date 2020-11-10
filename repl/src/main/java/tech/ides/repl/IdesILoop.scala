@@ -359,6 +359,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
           Main.listener.getLastTableName match {
             case Some(table) =>
               val getLastTable = s""" val $table = spark.table("$table") """
+              Main.listener.setLastTableName(null)  // 取完table，重置成null
               super.command(getLastTable)
             case None =>
               resultList.last
