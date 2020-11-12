@@ -25,11 +25,11 @@ function main() {
     # (see https://github.com/sbt/sbt/issues/562).
     stty -icanon min 1 -echo > /dev/null 2>&1
     export IDES_SUBMIT_OPTS="$IDES_SUBMIT_OPTS -Djline.terminal=unix"
-    "${IDES_HOME}"/bin/ides-submit --class tech.ides.repl.Main --name "IDES shell" "$@"
+    "${IDES_HOME}"/bin/ides-submit --class tech.ides.repl.Main --name "Ides-shell" "$@"
     stty icanon echo > /dev/null 2>&1
   else
     export IDES_SUBMIT_OPTS
-    "${IDES_HOME}"/bin/ides-submit --class tech.ides.repl.Main --name "IDES shell" "$@"
+    "${IDES_HOME}"/bin/ides-submit --class tech.ides.repl.Main --name "Ides-shell" "$@"
   fi
 }
 
