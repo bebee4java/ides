@@ -153,6 +153,10 @@ object IdesConf {
     "ides job run timeout(ms). Default is -1, means never timeout."
   ).longConf.createWithDefault(-1L)
 
+  val IDES_SHELL_REPL_CODE_MULTI_LINE = IdesConfigBuilder("ides.shell.repl.code.multi-line").doc(
+    "ides shell repl code support multi-line input"
+  ).booleanConf.createWithDefault(true)
+
 }
 
 private[spark] class IdesConfigProvider(conf: java.util.Map[String, String]) extends ConfigProvider {
