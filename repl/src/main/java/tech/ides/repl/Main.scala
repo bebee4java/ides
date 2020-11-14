@@ -24,7 +24,7 @@ import tech.ides.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ParamsUtils
-import org.apache.spark.IdesConf.IDES_SHELL_MODE
+import org.apache.spark.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 
 object Main extends Logging {
@@ -45,6 +45,9 @@ object Main extends Logging {
 
   private var hasErrors = false
   private var isShellSession = false
+
+  def offMultiLineInput = idesConf.set(IDES_SHELL_REPL_CODE_MULTI_LINE, false)
+  def onMultiLineInput = idesConf.set(IDES_SHELL_REPL_CODE_MULTI_LINE, true)
 
   private def scalaOptionError(msg: String): Unit = {
     hasErrors = true

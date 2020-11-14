@@ -24,6 +24,7 @@ import tech.ides.exception.ExceptionUtil
 import tech.ides.job.ScriptJobManager
 import tech.ides.utils.ScriptUtils
 import tech.sqlclub.common.log.Logging
+import scala.tools.nsc.interpreter.{Pasted, Results}
 
 // scalastyle:off println
 import scala.Predef.{println => _, _}
@@ -40,7 +41,7 @@ import scala.tools.nsc.interpreter.StdReplTags.tagOfIMain
 import scala.tools.nsc.util.stringFromStream
 import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, versionString}
 import tech.ides.constants.ScriptConstants.{SHELL_USER, BATCH_JOB}
-import org.apache.spark.IdesConf.IDES_JOB_RUN_TIMEOUT
+import org.apache.spark.IdesConf.{IDES_JOB_RUN_TIMEOUT, IDES_SHELL_REPL_CODE_MULTI_LINE}
 import tech.ides.utils.ScriptUtils.readLines
 
 /**
@@ -108,6 +109,7 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
     }
     """,
     s"""
+      println("Ides shell support multi-line code input, you can use offMultiLineInput command to close, use onMultiLineInput will re-enable!")
       @transient val listener = new tech.ides.dsl.listener.ScriptQueryExecListener(spark, "", "$SHELL_USER")
         tech.ides.repl.Main.listener = listener
         println("Ides ScriptQueryExecListener available as 'listener'.")
@@ -318,56 +320,91 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   }
 
   def importCmds = Seq(
+    "import tech.ides.repl.Main._",
     "import tech.ides.core.ScriptQueryExecute",
     "import tech.ides.core.ScriptQueryExecuteContext"
   )
 
-  override def command(line: String): Result = {
+  lazy val pasted = new Pasted(prompt) {
+    override def interpret(line: String): Results.Result = null
+    override def echo(message: String): Unit = {}
+  }
+
+  def interpretCompleteCode(code:String):Option[String] = {
+    val saved = intp.partialInput
+    if (saved == code) return Some(saved)
+    intp.partialInput = code + "\n"
     try {
-      if (StringUtils.isNotBlank(line)) logDebug(s"run script: $line")
+      in.readLine(pasted.ContinuePrompt) match {
+        case null =>
+          // we know compilation is going to fail since we're at EOF and the
+          // parser thinks the input is still incomplete, but since this is
+          // a file being read non-interactively we want to fail.  So we send
+          // it straight to the compiler for the nice error message.
+          intp.compileString(code)
+          None
+        case line => interpretCompleteCode(s"$code\n$line")
+      }
+    } finally intp.partialInput = saved
+  }
 
-      var continue = true
-      def exec_command(command: String):Result = {
-        if ( ScriptUtils.isScript(command) ) {
-          val script = if (!command.endsWith(";")) command + ";" else command
+  def exec_command(command: String):Result = {
+    if ( ScriptUtils.isScript(command) ) {
+      val compressedCode = command.replaceAll("\n", " ")
+      val script = if (!compressedCode.endsWith(";")) compressedCode + ";" else compressedCode
 
-          // todo 设置shell jobName
-          val jobName = if (script.length > 30) script.substring(0, 30) + " ..." else script
-          val job = ScriptJobManager.newJob(SHELL_USER, BATCH_JOB, jobName, script, Main.idesConf.get(IDES_JOB_RUN_TIMEOUT))
-          val cmds = Seq(
-            // 设置Context
-            s""" ScriptQueryExecute.setContext(ScriptQueryExecuteContext(listener, "$SHELL_USER", listener.ownerPath(None), "${job.groupId}")) """,
-            // 执行脚本
-            s""" ScriptQueryExecute.exec("${script.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\\\"")}", listener) """
-          )
-          var flag = true
-          val results = cmds.iterator.takeWhile(_ => flag).map {
-            code =>
-              val result = super.command(code)
-              if (!result.keepRunning || result.lineToRecord.isEmpty) {
-                flag = false
-                Result(true, None)
-              } else result
-          }
-          // 执行上面的代码行
-          val resultList = results.toList
+      // todo 设置shell jobName
+      val jobName = if (script.length > 30) script.substring(0, 30) + " ..." else script
+      val job = ScriptJobManager.newJob(SHELL_USER, BATCH_JOB, jobName, script, Main.idesConf.get(IDES_JOB_RUN_TIMEOUT))
+      val cmds = Seq(
+        // 设置Context
+        s""" ScriptQueryExecute.setContext(ScriptQueryExecuteContext(listener, "$SHELL_USER", listener.ownerPath(None), "${job.groupId}")) """,
+        // 执行脚本
+        s""" ScriptQueryExecute.exec("${script.replaceAll("\\\\","\\\\\\\\").replaceAll("\"", "\\\\\"")}", listener) """
+      )
+      var flag = true
+      val results = cmds.iterator.takeWhile(_ => flag).map {
+        code =>
+          val result = super.command(code)
+          if (!result.keepRunning || result.lineToRecord.isEmpty) {
+            flag = false
+            Result(true, None)
+          } else result
+      }
+      // 执行上面的代码行
+      val resultList = results.toList
 
-          if (resultList.last.lineToRecord.isEmpty) {
-            return resultList.last
-          }
-
-          Main.listener.getLastTableName match {
-            case Some(table) =>
-              val getLastTable = s""" val $table = spark.table("$table") """
-              Main.listener.setLastTableName(null)  // 取完table，重置成null
-              super.command(getLastTable)
-            case None =>
-              resultList.last
-          }
-        } else super.command(command)
+      // 如果最后结果是失败的 直接返回
+      if (resultList.last.lineToRecord.isEmpty) {
+        return resultList.last
       }
 
-      val results = readLines(line).map(_.trim).filter(_.nonEmpty).iterator.takeWhile(_ => continue).map {
+      Main.listener.getLastTableName match {
+        case Some(table) =>
+          val getLastTable = s""" val $table = spark.table("$table") """
+          Main.listener.setLastTableName(null)  // 取完table，重置成null
+          super.command(getLastTable)
+        case None =>
+          resultList.last
+      }
+    } else super.command(command)
+  }
+
+  override def command(line: String): Result = {
+    try {
+      // todo 判断是否结束了
+      val codes = if (Main.idesConf.get(IDES_SHELL_REPL_CODE_MULTI_LINE)) {
+        val completeCode = interpretCompleteCode(line)
+        if (completeCode.isEmpty) {
+          return Result(true, None)
+        }
+        completeCode.get
+      } else line
+
+      if (StringUtils.isNotBlank(codes)) logDebug(s"run script: $codes")
+
+      var continue = true
+      val results = readLines(codes).map(_.trim).filter(_.nonEmpty).iterator.takeWhile(_ => continue).map {
         command =>
           val res = exec_command(command)
           if (!res.keepRunning || res.lineToRecord.isEmpty){
