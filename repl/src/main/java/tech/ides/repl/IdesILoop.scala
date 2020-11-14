@@ -43,6 +43,7 @@ import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, vers
 import tech.ides.constants.ScriptConstants.{SHELL_USER, BATCH_JOB}
 import org.apache.spark.IdesConf.{IDES_JOB_RUN_TIMEOUT, IDES_SHELL_REPL_CODE_MULTI_LINE}
 import tech.ides.utils.ScriptUtils.readLines
+import org.apache.log4j.{Level, LogManager}
 
 /**
   * Ides interactive shell.
@@ -79,6 +80,8 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
   }
 
   private val isScala2_11 = versionNumberString.startsWith("2.11")
+  val replLogger = LogManager.getLogger(logName)
+  val replLevel = Option(replLogger.getLevel).getOrElse(Level.WARN)
 
   val initializationCommands: Seq[String] = Seq(
     """
@@ -108,6 +111,11 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
       _sc
     }
     """,
+    s"""
+       sc.setLogLevel("$replLevel")
+       println("Setting default log level to '$replLevel'.")
+       println("To adjust logging level use sc.setLogLevel(newLevel).")
+     """,
     s"""
       println("Ides shell support multi-line code input, you can use offMultiLineInput command to close, use onMultiLineInput will re-enable!")
       @transient val listener = new tech.ides.dsl.listener.ScriptQueryExecListener(spark, "", "$SHELL_USER")
