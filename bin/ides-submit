@@ -37,7 +37,17 @@ if [ -n "${DEBUG}" ]; then
     PORT=$(echo "$@" | sed 's/.*-debug=\([0-9]*\).*/\1/g')
     DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=$PORT"
 fi
-JAVA_OPTS="-Xmx1280m $DEBUG_OPTS"
+
+# 设置driver jvm的最大堆内存
+if [[ "$@" =~ "--driver-memory" ]]; then
+   DRIVER_MEM=$(echo "$@" | sed 's/.*--driver-memory\([\n \t\s]*\)\([0-9KkBbMmGgTt]*\).*/\2/g' )
+fi
+
+if [[ "$@" =~ "spark.driver.memory" ]]; then
+   DRIVER_MEM=$(echo "$@" | sed 's/.*spark.driver.memory=\([0-9KkBbMmGgTt]*\).*/\1/g' )
+fi
+
+JAVA_OPTS="-Xmx${DRIVER_MEM:-1g} $DEBUG_OPTS"
 
 build_envs() {
     export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-""}"
