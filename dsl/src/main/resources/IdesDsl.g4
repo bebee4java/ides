@@ -16,7 +16,7 @@ script
 // query语句规则
 query
     : LOAD format DOT path whereExpressions? asTableName # Load
-    | SAVE tableName saveMode* INTO format DOT path whereExpressions? partitionbyExpression? # Save
+    | SAVE tableName saveMode? INTO format DOT path whereExpressions? partitionbyExpression? # Save
     | SELECT ~(EOQ)+ asTableName # Select
     ;
 
@@ -74,7 +74,7 @@ quotedIdentifier
     ;
 
 where: OPTIONS|WHERE;
-saveMode: (OVERWRITE|APPEND|ERRORIfExists|IGNORE);
+saveMode: OVERWRITE|APPEND|ERRORIfExists|IGNORE;
 
 
 //============================
