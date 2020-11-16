@@ -16,7 +16,7 @@ script
 // query语句规则
 query
     : LOAD format DOT path whereExpressions? asTableName # Load
-    | SAVE saveMode tableName AS format DOT path whereExpressions? partitionbyExpression? # Save
+    | SAVE tableName saveMode* INTO format DOT path whereExpressions? partitionbyExpression? # Save
     | SELECT ~(EOQ)+ asTableName # Select
     ;
 

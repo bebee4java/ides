@@ -1,4 +1,3 @@
-// Generated from /Users/sgr/develop/ideaProject/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 

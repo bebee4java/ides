@@ -1,4 +1,3 @@
-// Generated from /Users/sgr/develop/ideaProject/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 
@@ -289,19 +288,22 @@ public class IdesDslParser extends Parser {
 	}
 	public static class SaveContext extends QueryContext {
 		public TerminalNode SAVE() { return getToken(IdesDslParser.SAVE, 0); }
-		public SaveModeContext saveMode() {
-			return getRuleContext(SaveModeContext.class,0);
-		}
 		public TableNameContext tableName() {
 			return getRuleContext(TableNameContext.class,0);
 		}
-		public TerminalNode AS() { return getToken(IdesDslParser.AS, 0); }
+		public TerminalNode INTO() { return getToken(IdesDslParser.INTO, 0); }
 		public FormatContext format() {
 			return getRuleContext(FormatContext.class,0);
 		}
 		public TerminalNode DOT() { return getToken(IdesDslParser.DOT, 0); }
 		public PathContext path() {
 			return getRuleContext(PathContext.class,0);
+		}
+		public List<SaveModeContext> saveMode() {
+			return getRuleContexts(SaveModeContext.class);
+		}
+		public SaveModeContext saveMode(int i) {
+			return getRuleContext(SaveModeContext.class,i);
 		}
 		public WhereExpressionsContext whereExpressions() {
 			return getRuleContext(WhereExpressionsContext.class,0);
@@ -331,7 +333,7 @@ public class IdesDslParser extends Parser {
 		int _la;
 		try {
 			int _alt;
-			setState(74);
+			setState(79);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LOAD:
@@ -367,33 +369,45 @@ public class IdesDslParser extends Parser {
 				setState(54);
 				match(SAVE);
 				setState(55);
-				saveMode();
-				setState(56);
 				tableName();
-				setState(57);
-				match(AS);
-				setState(58);
-				format();
 				setState(59);
-				match(DOT);
-				setState(60);
-				path();
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OVERWRITE) | (1L << APPEND) | (1L << ERRORIfExists) | (1L << IGNORE))) != 0)) {
+					{
+					{
+					setState(56);
+					saveMode();
+					}
+					}
+					setState(61);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
 				setState(62);
+				match(INTO);
+				setState(63);
+				format();
+				setState(64);
+				match(DOT);
+				setState(65);
+				path();
+				setState(67);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==OPTIONS || _la==WHERE) {
 					{
-					setState(61);
+					setState(66);
 					whereExpressions();
 					}
 				}
 
-				setState(65);
+				setState(70);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==PARTITIONBY) {
 					{
-					setState(64);
+					setState(69);
 					partitionbyExpression();
 					}
 				}
@@ -404,9 +418,9 @@ public class IdesDslParser extends Parser {
 				_localctx = new SelectContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(67);
+				setState(72);
 				match(SELECT);
-				setState(69); 
+				setState(74); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -414,7 +428,7 @@ public class IdesDslParser extends Parser {
 					case 1:
 						{
 						{
-						setState(68);
+						setState(73);
 						_la = _input.LA(1);
 						if ( _la <= 0 || (_la==EOQ) ) {
 						_errHandler.recoverInline(this);
@@ -430,11 +444,11 @@ public class IdesDslParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(71); 
+					setState(76); 
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-				setState(73);
+				setState(78);
 				asTableName();
 				}
 				break;
@@ -483,20 +497,20 @@ public class IdesDslParser extends Parser {
 		FormatContext _localctx = new FormatContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_format);
 		try {
-			setState(78);
+			setState(83);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(76);
+				setState(81);
 				identifier();
 				}
 				break;
 			case QUOTED_TEXT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(77);
+				setState(82);
 				quotedIdentifier();
 				}
 				break;
@@ -544,7 +558,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80);
+			setState(85);
 			quotedIdentifier();
 			}
 		}
@@ -588,7 +602,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(87);
 			identifier();
 			}
 		}
@@ -632,9 +646,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(89);
 			match(T__0);
-			setState(85);
+			setState(90);
 			col();
 			}
 		}
@@ -688,21 +702,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(87);
-			where();
-			setState(88);
-			expression();
 			setState(92);
+			where();
+			setState(93);
+			expression();
+			setState(97);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(89);
+				setState(94);
 				booleanExpression();
 				}
 				}
-				setState(94);
+				setState(99);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -756,21 +770,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95);
-			match(PARTITIONBY);
-			setState(96);
-			col();
 			setState(100);
+			match(PARTITIONBY);
+			setState(101);
+			col();
+			setState(105);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(97);
+				setState(102);
 				colGroup();
 				}
 				}
-				setState(102);
+				setState(107);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -817,9 +831,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103);
+			setState(108);
 			match(AND);
-			setState(104);
+			setState(109);
 			expression();
 			}
 		}
@@ -867,11 +881,11 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106);
+			setState(111);
 			qualifiedName();
-			setState(107);
+			setState(112);
 			match(T__1);
-			setState(108);
+			setState(113);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MUMERIC) | (1L << STRING_TEXT) | (1L << BLOCK_STRING_TEXT))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -931,21 +945,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110);
-			identifier();
 			setState(115);
+			identifier();
+			setState(120);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				setState(111);
+				setState(116);
 				match(DOT);
-				setState(112);
+				setState(117);
 				identifier();
 				}
 				}
-				setState(117);
+				setState(122);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -992,9 +1006,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(118);
+			setState(123);
 			match(AS);
-			setState(119);
+			setState(124);
 			tableName();
 			}
 		}
@@ -1038,7 +1052,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(121);
+			setState(126);
 			identifier();
 			}
 		}
@@ -1080,7 +1094,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(128);
 			match(IDENTIFIER);
 			}
 		}
@@ -1122,7 +1136,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(125);
+			setState(130);
 			match(QUOTED_TEXT);
 			}
 		}
@@ -1166,7 +1180,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(127);
+			setState(132);
 			_la = _input.LA(1);
 			if ( !(_la==OPTIONS || _la==WHERE) ) {
 			_errHandler.recoverInline(this);
@@ -1220,7 +1234,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(129);
+			setState(134);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OVERWRITE) | (1L << APPEND) | (1L << ERRORIfExists) | (1L << IGNORE))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1244,38 +1258,40 @@ public class IdesDslParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u0086\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u008b\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\3\2\7\2(\n\2\f\2\16\2+\13\2\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4"+
-		"\5\4\65\n\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\5\4A\n\4\3\4\5\4D"+
-		"\n\4\3\4\3\4\6\4H\n\4\r\4\16\4I\3\4\5\4M\n\4\3\5\3\5\5\5Q\n\5\3\6\3\6"+
-		"\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\t]\n\t\f\t\16\t`\13\t\3\n\3\n\3\n\7"+
-		"\ne\n\n\f\n\16\nh\13\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\7\r"+
-		"t\n\r\f\r\16\rw\13\r\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3\21\3\22"+
-		"\3\22\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \""+
-		"$\2\6\3\2\23\23\4\2\24\24\27\30\3\2\n\13\3\2\r\20\2~\2)\3\2\2\2\4,\3\2"+
-		"\2\2\6L\3\2\2\2\bP\3\2\2\2\nR\3\2\2\2\fT\3\2\2\2\16V\3\2\2\2\20Y\3\2\2"+
-		"\2\22a\3\2\2\2\24i\3\2\2\2\26l\3\2\2\2\30p\3\2\2\2\32x\3\2\2\2\34{\3\2"+
-		"\2\2\36}\3\2\2\2 \177\3\2\2\2\"\u0081\3\2\2\2$\u0083\3\2\2\2&(\5\4\3\2"+
-		"\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\3\3\2\2\2+)\3\2\2\2,-\5\6"+
-		"\4\2-.\7\23\2\2.\5\3\2\2\2/\60\7\7\2\2\60\61\5\b\5\2\61\62\7\22\2\2\62"+
-		"\64\5\n\6\2\63\65\5\20\t\2\64\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66"+
-		"\67\5\32\16\2\67M\3\2\2\289\7\b\2\29:\5$\23\2:;\5\34\17\2;<\7\5\2\2<="+
-		"\5\b\5\2=>\7\22\2\2>@\5\n\6\2?A\5\20\t\2@?\3\2\2\2@A\3\2\2\2AC\3\2\2\2"+
-		"BD\5\22\n\2CB\3\2\2\2CD\3\2\2\2DM\3\2\2\2EG\7\t\2\2FH\n\2\2\2GF\3\2\2"+
-		"\2HI\3\2\2\2IG\3\2\2\2IJ\3\2\2\2JK\3\2\2\2KM\5\32\16\2L/\3\2\2\2L8\3\2"+
-		"\2\2LE\3\2\2\2M\7\3\2\2\2NQ\5\36\20\2OQ\5 \21\2PN\3\2\2\2PO\3\2\2\2Q\t"+
-		"\3\2\2\2RS\5 \21\2S\13\3\2\2\2TU\5\36\20\2U\r\3\2\2\2VW\7\3\2\2WX\5\f"+
-		"\7\2X\17\3\2\2\2YZ\5\"\22\2Z^\5\26\f\2[]\5\24\13\2\\[\3\2\2\2]`\3\2\2"+
-		"\2^\\\3\2\2\2^_\3\2\2\2_\21\3\2\2\2`^\3\2\2\2ab\7\21\2\2bf\5\f\7\2ce\5"+
-		"\16\b\2dc\3\2\2\2eh\3\2\2\2fd\3\2\2\2fg\3\2\2\2g\23\3\2\2\2hf\3\2\2\2"+
-		"ij\7\f\2\2jk\5\26\f\2k\25\3\2\2\2lm\5\30\r\2mn\7\4\2\2no\t\3\2\2o\27\3"+
-		"\2\2\2pu\5\36\20\2qr\7\22\2\2rt\5\36\20\2sq\3\2\2\2tw\3\2\2\2us\3\2\2"+
-		"\2uv\3\2\2\2v\31\3\2\2\2wu\3\2\2\2xy\7\5\2\2yz\5\34\17\2z\33\3\2\2\2{"+
-		"|\5\36\20\2|\35\3\2\2\2}~\7\25\2\2~\37\3\2\2\2\177\u0080\7\26\2\2\u0080"+
-		"!\3\2\2\2\u0081\u0082\t\4\2\2\u0082#\3\2\2\2\u0083\u0084\t\5\2\2\u0084"+
-		"%\3\2\2\2\f)\64@CILP^fu";
+		"\5\4\65\n\4\3\4\3\4\3\4\3\4\3\4\7\4<\n\4\f\4\16\4?\13\4\3\4\3\4\3\4\3"+
+		"\4\3\4\5\4F\n\4\3\4\5\4I\n\4\3\4\3\4\6\4M\n\4\r\4\16\4N\3\4\5\4R\n\4\3"+
+		"\5\3\5\5\5V\n\5\3\6\3\6\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\tb\n\t\f\t\16"+
+		"\te\13\t\3\n\3\n\3\n\7\nj\n\n\f\n\16\nm\13\n\3\13\3\13\3\13\3\f\3\f\3"+
+		"\f\3\f\3\r\3\r\3\r\7\ry\n\r\f\r\16\r|\13\r\3\16\3\16\3\16\3\17\3\17\3"+
+		"\20\3\20\3\21\3\21\3\22\3\22\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20\22"+
+		"\24\26\30\32\34\36 \"$\2\6\3\2\23\23\4\2\24\24\27\30\3\2\n\13\3\2\r\20"+
+		"\2\u0084\2)\3\2\2\2\4,\3\2\2\2\6Q\3\2\2\2\bU\3\2\2\2\nW\3\2\2\2\fY\3\2"+
+		"\2\2\16[\3\2\2\2\20^\3\2\2\2\22f\3\2\2\2\24n\3\2\2\2\26q\3\2\2\2\30u\3"+
+		"\2\2\2\32}\3\2\2\2\34\u0080\3\2\2\2\36\u0082\3\2\2\2 \u0084\3\2\2\2\""+
+		"\u0086\3\2\2\2$\u0088\3\2\2\2&(\5\4\3\2\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2"+
+		"\2)*\3\2\2\2*\3\3\2\2\2+)\3\2\2\2,-\5\6\4\2-.\7\23\2\2.\5\3\2\2\2/\60"+
+		"\7\7\2\2\60\61\5\b\5\2\61\62\7\22\2\2\62\64\5\n\6\2\63\65\5\20\t\2\64"+
+		"\63\3\2\2\2\64\65\3\2\2\2\65\66\3\2\2\2\66\67\5\32\16\2\67R\3\2\2\289"+
+		"\7\b\2\29=\5\34\17\2:<\5$\23\2;:\3\2\2\2<?\3\2\2\2=;\3\2\2\2=>\3\2\2\2"+
+		">@\3\2\2\2?=\3\2\2\2@A\7\6\2\2AB\5\b\5\2BC\7\22\2\2CE\5\n\6\2DF\5\20\t"+
+		"\2ED\3\2\2\2EF\3\2\2\2FH\3\2\2\2GI\5\22\n\2HG\3\2\2\2HI\3\2\2\2IR\3\2"+
+		"\2\2JL\7\t\2\2KM\n\2\2\2LK\3\2\2\2MN\3\2\2\2NL\3\2\2\2NO\3\2\2\2OP\3\2"+
+		"\2\2PR\5\32\16\2Q/\3\2\2\2Q8\3\2\2\2QJ\3\2\2\2R\7\3\2\2\2SV\5\36\20\2"+
+		"TV\5 \21\2US\3\2\2\2UT\3\2\2\2V\t\3\2\2\2WX\5 \21\2X\13\3\2\2\2YZ\5\36"+
+		"\20\2Z\r\3\2\2\2[\\\7\3\2\2\\]\5\f\7\2]\17\3\2\2\2^_\5\"\22\2_c\5\26\f"+
+		"\2`b\5\24\13\2a`\3\2\2\2be\3\2\2\2ca\3\2\2\2cd\3\2\2\2d\21\3\2\2\2ec\3"+
+		"\2\2\2fg\7\21\2\2gk\5\f\7\2hj\5\16\b\2ih\3\2\2\2jm\3\2\2\2ki\3\2\2\2k"+
+		"l\3\2\2\2l\23\3\2\2\2mk\3\2\2\2no\7\f\2\2op\5\26\f\2p\25\3\2\2\2qr\5\30"+
+		"\r\2rs\7\4\2\2st\t\3\2\2t\27\3\2\2\2uz\5\36\20\2vw\7\22\2\2wy\5\36\20"+
+		"\2xv\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\31\3\2\2\2|z\3\2\2\2}~\7\5"+
+		"\2\2~\177\5\34\17\2\177\33\3\2\2\2\u0080\u0081\5\36\20\2\u0081\35\3\2"+
+		"\2\2\u0082\u0083\7\25\2\2\u0083\37\3\2\2\2\u0084\u0085\7\26\2\2\u0085"+
+		"!\3\2\2\2\u0086\u0087\t\4\2\2\u0087#\3\2\2\2\u0088\u0089\t\5\2\2\u0089"+
+		"%\3\2\2\2\r)\64=EHNQUckz";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
