@@ -16,5 +16,5 @@ class CSVDataSource extends BaseFileDataSource {
 
   override def fullFormat: String = "csv"
 
-  override def shortFormat: String = "csv"
+  override def shortFormat: String = fullFormat
 }

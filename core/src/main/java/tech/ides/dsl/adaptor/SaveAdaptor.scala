@@ -91,7 +91,7 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
       // todo 没有匹配做提示
     }
 
-    val tempTable = "_" + UUID.randomUUID().toString.replace("-", "")
+    val tempTable = "s_" + UUID.randomUUID().toString.replace("-", "")
     import spark.implicits._
     // 将job作为输出表
     val outputTable = if (job.isDefined) spark.createDataset(Seq(job.get)) else spark.emptyDataFrame
