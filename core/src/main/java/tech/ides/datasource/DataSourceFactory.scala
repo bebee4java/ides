@@ -34,7 +34,7 @@ object DataSourceFactory extends Logging {
     logInfo("look for the DataSource plugin from packages: " + scanPackages.mkString(", "))
 
     val allDataSource = Reflection.allClassWithAnnotation(classOf[DataSource], scanPackages:_*)
-    allDataSource.foreach {
+    val ds = allDataSource.map {
       dataSourceClass =>
         val annotation = Reflection.getAnnotation(dataSourceClass, classOf[DataSource])
         val dataSourceInstace = Reflection(ClassPath.from(dataSourceClass)).instance[BaseDataSource]
@@ -42,8 +42,10 @@ object DataSourceFactory extends Logging {
 
         registry.put(DataSourceKey(dataSourceInstace.aliasFormat, direct), dataSourceInstace)
         registry.put(DataSourceKey(dataSourceInstace.fullFormat, direct), dataSourceInstace)
+        annotation.name()
     }
-    logInfo(s"A total of ${allDataSource.size} dataSource plugins scanned!")
+
+    logInfo(s"""A total of ${allDataSource.size} dataSource plugins scanned: [${ds.mkString(", ")}].""")
   }
 
   def take(name:String, options:Map[String,String]=Map()): Option[BaseDataSource] = {

@@ -5,6 +5,7 @@ import java.util.UUID
 import ides.dsl.parser.IdesDslParser
 import ides.dsl.parser.IdesDslParser.SaveContext
 import org.apache.spark.sql._
+import tech.ides.constants.ScriptConstants.PARTITION_BY_COL
 import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.{DataSinkConfig, DataSourceFactory}
 import tech.ides.dsl.listener.ScriptQueryExecListener
@@ -80,7 +81,7 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     DataSourceFactory.take(format, options).map {
       dataSource =>
         val config = if (partitionByCol.nonEmpty) {
-          options ++ Map("partitionByCol" -> partitionByCol.mkString(","))
+          options ++ Map(PARTITION_BY_COL -> partitionByCol.mkString(","))
         } else options
         val dataSinkConfig = DataSinkConfig(resourcePath, config, saveMode, Option(originalTable))
         dataSource.asInstanceOf[{ def save(writer: DataFrameWriter[Row], config: DataSinkConfig)}]
