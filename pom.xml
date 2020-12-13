@@ -36,6 +36,7 @@
         <module>engine</module>
         <module>repl</module>
         <module>external/ds-spark-excel</module>
+        <module>external/hive-exec</module>
     </modules>
 
 
