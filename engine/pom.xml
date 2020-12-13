@@ -77,6 +77,11 @@
             <artifactId>ds-spark-excel-${spark.big.version}_${scala.binary.version}</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>tech.ides</groupId>
+            <artifactId>hive-exec-${spark.big.version}_${scala.binary.version}</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 

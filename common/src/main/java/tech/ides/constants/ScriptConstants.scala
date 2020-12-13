@@ -12,6 +12,8 @@ object ScriptConstants {
 
   val IMPL_CLASS = "implClass"
 
+  val FILE_FORMAT = "fileFormat"
+
   val PARTITION_BY_COL = "partitionByCol"
 
   def PATH_SEPARATOR = File.pathSeparator
