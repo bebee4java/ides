@@ -13,7 +13,7 @@
 
     <properties>
         <jetty.version>9.4.34.v20201102</jetty.version>
-        <scalatra.version>2.6.5</scalatra.version>
+        <scalatra.version>2.5.4</scalatra.version>
     </properties>
 
     <dependencies>
