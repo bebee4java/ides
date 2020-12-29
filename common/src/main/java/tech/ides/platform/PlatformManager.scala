@@ -35,6 +35,8 @@ class PlatformManager extends Logging {
     Reflection(ClassPath.from("tech.ides.datasource.DataSourceFactory")).callMethodByName("register")
 
     if (conf.get(IDES_SPARK_SERVICE) && !reRun && !conf.get(IDES_SHELL_MODE)) {
+      // 注册所有Rest Controller
+      Reflection(ClassPath.from("tech.ides.rest.ControlHandlerHook")).callMethodByName("registerControllers")
       startRestServer
     }
 

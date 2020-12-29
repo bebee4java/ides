@@ -72,7 +72,7 @@ class WebServer(val idesConf: IdesConf, var host: String, var port: Int) extends
     }
     port = connector.getLocalPort
 
-    logInfo(s"Starting server on $protocol://$host:$port ,api-docs url on $protocol://$host:$port/rest/v1/api-docs")
+    logInfo(s"Starting server on $protocol://$host:$port ,api-docs url on $protocol://$host:$port/api-docs")
   }
 
   def join(): Unit = {

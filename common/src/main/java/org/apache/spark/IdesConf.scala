@@ -149,6 +149,10 @@ object IdesConf {
     "ides datasource scan package paths, multiple values separated by ','."
   ).stringConf.createOptional
 
+  val IDES_CONTROLLER_PACKAGES = IdesConfigBuilder("ides.rest.controller.scan.package.paths").doc(
+    "ides rest controller scan package paths, multiple values separated by ','."
+  ).stringConf.createOptional
+
   val IDES_JOB_RUN_TIMEOUT = IdesConfigBuilder("ides.job.run.timeout").doc(
     "ides job run timeout(ms). Default is -1, means never timeout."
   ).longConf.createWithDefault(-1L)

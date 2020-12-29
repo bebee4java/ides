@@ -21,10 +21,12 @@ object IdesServer extends Logging {
 
   private var server: WebServer = _
   private var _serverUrl: Option[String] = None
+  private[rest] var host:String = _
+  private[rest] var port:Int = _
 
   def start(conf:IdesConf): Unit = {
-    val host = conf.get(IDES_SERVER_HOST)
-    val port = conf.get(IDES_SERVER_PORT)
+    host = conf.get(IDES_SERVER_HOST)
+    port = conf.get(IDES_SERVER_PORT)
     server = new WebServer(conf, host, port)
 
     val handlers = new HandlerCollection
