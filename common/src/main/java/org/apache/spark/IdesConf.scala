@@ -137,7 +137,7 @@ object IdesConf {
 
   val IDES_REQUEST_LOG = IdesConfigBuilder("ides.server.request-log.enable").doc(
     "Whether to enable ides server request log."
-  ).booleanConf.createWithDefaultString("false")
+  ).booleanConf.createWithDefault(false)
   val REQUEST_LOG_RETAIN_DAYS = IdesConfigBuilder("ides.server.request-log-retain.days").doc(
     "Days to keep ides server request logs.").intConf.createWithDefault(5)
 
@@ -160,6 +160,16 @@ object IdesConf {
   val IDES_SHELL_REPL_CODE_MULTI_LINE = IdesConfigBuilder("ides.shell.repl.code.multi-line").doc(
     "ides shell repl code support multi-line input"
   ).booleanConf.createWithDefault(true)
+
+  val ENABLE_MAX_RESULT_SIZE =
+    IdesConfigBuilder("spark.ides.api.enable.max.result.limit")
+      .doc("enable restful max result size limitation. when you enable this configuration. you should pass `outputSize` for your rest request. if not, you take only max 1000 record.")
+      .booleanConf
+      .createWithDefault(false)
+
+  val RESTFUL_API_MAX_RESULT_SIZE =
+    IdesConfigBuilder("spark.ides.restful.api.max.result.size")
+      .doc("the max size of restful api result.").intConf.createWithDefault(1000)
 
 }
 

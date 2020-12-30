@@ -2,12 +2,20 @@
     <head>
         <title>IDES</title>
         <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-table.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+
         <script src="/static/js/ace.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/mode-sql.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/sql.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/ext-searchbox.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/bootstrap-table-zh-CN.min.js" type="text/javascript" charset="utf-8"></script>
+
     </head>
     <body>
         <%@ val BANNER: String %>
@@ -21,6 +29,7 @@
                     <button id="stopButton">停止</button>
                 </div>
             </div>
+            <table id="resultTable"></table>
         </div>
         <!--
             ace编辑器
@@ -28,7 +37,6 @@
             lib库：https://pagecdn.com/lib/ace
         -->
         <script>
-
             var editor = ace.edit("ace_editor");
             editor.session.setValue("select 1 as id, 'hello ides!' as context as tb1;");
             editor.resize();
@@ -55,7 +63,63 @@
                     return true;
                 },
                 readOnly: true
-            })
+            });
+            //请求地址
+            var url = "run/script";
+            $('#runButton').click(function() {
+                $('#resultTable').bootstrapTable('destroy');
+                var selectedCode = editor.session.getTextRange(editor.getSelectionRange());
+                var allCode = editor.getSession().getValue();
+                var queryParams = {
+                    sql : selectedCode !== "" ? selectedCode : allCode
+                };
+                initData(queryParams)
+            });
+
+            function initData(params) {
+                $.ajax({
+                    url: url,
+                    data: params,
+                    dataType: "json",
+                    type: "POST",
+                    async: false,
+                    success: function (data) {
+                        var dataColumn=[];
+                        var result = JSON.parse(data.content);
+                        result.schema.fields.forEach(
+                            function (value) {
+                                dataColumn.push({field: value.name, title: value.name})
+                            }
+                        );
+                        initTable(result.data, dataColumn)
+                    }
+                })
+            }
+
+            function initTable(data, columns) {
+                $('#resultTable').bootstrapTable({
+                    sidePagination: "client",
+                    pageSize: 4, //每页大小
+                    currentPage: 1, //当前页数
+                    numberOfPages: 5, //每次显示页数
+                    totalPages: data.size / 4, //总页数
+                    paginationHAlign: 'right',
+                    paginationVAlign: 'bottom',
+                    paginationDetailHAlign: 'left',
+                    paginationPreText: '&lsaquo;',
+                    paginationNextText: '&rsaquo;',
+                    searchOnEnterKey: false,
+                    strictSearch: false,
+                    searchAlign: 'right',
+                    selectItemName: 'btSelectItem',
+                    //是否显示搜索
+                    search: true,
+                    pagination: true, //是否分页
+                    sortable: true, //是否启用排序
+                    columns: columns,
+                    data: data
+                });
+            }
         </script>
     </body>
 </html>

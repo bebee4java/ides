@@ -26,6 +26,8 @@ abstract class RestController extends ScalatraServlet with ScalateSupport with J
     throw new RuntimeException()
   }
 
+  def requestParam = super.params.toMap[String,String]
+
   def param(key: String) = super.params(key)
 
   def param(key: String, defaultValue:String): String = {

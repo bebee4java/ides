@@ -8,13 +8,14 @@
 }
 
 .query_box {
-    margin: 10px;
-    width: 99%;
-    height: 80%;
+    margin-top: -18px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 218px;
 }
 
 .editor .ace_wrap {
-    height: 360px;
+    height: 348px;
     width: 100%;
     font-size: 14px;
     /*background-color: #141414;*/
