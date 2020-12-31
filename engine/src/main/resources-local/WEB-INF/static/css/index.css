@@ -3,8 +3,11 @@
     justify-content: left;
     padding-left: 1%;
     font-size: 12px;
-    color: #0027ff;
     font-weight: bold;
+}
+
+.banner pre {
+    color: #0027ff;
 }
 
 .query_box {
@@ -23,13 +26,20 @@
 }
 
 .button_box #runButton, .button_box #stopButton  {
-    background-color: #00c851;
     color: #000;
     padding: .42rem 1.07rem;
     margin: .375rem;
     border-radius: .225rem;
-    cursor: pointer;
     border: 0;
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+.runnable {
+    background-color: #00c851;
+    cursor: pointer;
+}
+.disRunnable {
+    background-color: gray;
+    cursor: default;
 }
 

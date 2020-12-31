@@ -1,6 +1,8 @@
 <html>
     <head>
-        <title>IDES</title>
+        <title>IDES:将数据连接起来</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/image/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/image/favicon-16x16.png">
         <link rel="stylesheet" type="text/css" href="/static/css/index.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-table.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
@@ -15,6 +17,7 @@
         <script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/bootstrap-table-zh-CN.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/bootstrapQ.min.js" type="text/javascript" charset="utf-8"></script>
 
     </head>
     <body>
@@ -25,11 +28,14 @@
             <div class="editor">
                 <div id="ace_editor" class="ace_wrap"></div>
                 <div class="button_box">
-                    <button id="runButton">运行</button>
-                    <button id="stopButton">停止</button>
+                    <button id="runButton" class="runnable">运行</button>
+                    <button id="stopButton" class="runnable">停止</button>
                 </div>
             </div>
-            <table id="resultTable"></table>
+            <div id="result">
+                <%--<table id="resultTable"></table>--%>
+                <%--<div id="errorResult" style="color: #ec3a3a; max-height: 380px; overflow: scroll;"></div>--%>
+            </div>
         </div>
         <!--
             ace编辑器
@@ -67,7 +73,7 @@
             //请求地址
             var url = "run/script";
             $('#runButton').click(function() {
-                $('#resultTable').bootstrapTable('destroy');
+                $('#result').html(''); //先清空结果
                 var selectedCode = editor.session.getTextRange(editor.getSelectionRange());
                 var allCode = editor.getSession().getValue();
                 var queryParams = {
@@ -77,21 +83,45 @@
             });
 
             function initData(params) {
+                //runButton禁用，置灰
+                $('#runButton').attr("disabled",'disabled');
+                document.getElementById("runButton").className = "disRunnable";
                 $.ajax({
                     url: url,
                     data: params,
                     dataType: "json",
                     type: "POST",
-                    async: false,
+                    async: true,
                     success: function (data) {
-                        var dataColumn=[];
-                        var result = JSON.parse(data.content);
-                        result.schema.fields.forEach(
-                            function (value) {
-                                dataColumn.push({field: value.name, title: value.name})
-                            }
-                        );
-                        initTable(result.data, dataColumn)
+                        var code = data.code;
+                        var content = data.content;
+                        if (code === 200) {
+                            var dataColumn=[];
+                            var result = JSON.parse(content);
+                            result.schema.fields.forEach(
+                                function (value) {
+                                    dataColumn.push({field: value.name, title: value.name})
+                                }
+                            );
+                            $('#result').append('<table id="resultTable"></table>');
+                            //document.getElementById('errorResult').style.display = 'none';
+                            //document.getElementById('resultTable').style.display = 'table';
+                            initTable(result.data, dataColumn);
+                        } else {
+                            $('#result').append('<div id="errorResult" style="color: #ec3a3a; max-height: 380px; overflow: scroll;"></div>');
+                            //document.getElementById('resultTable').style.display = 'none';
+                            //document.getElementById('errorResult').style.display = 'block';
+                            $('#errorResult').html(content.replace(/\n/g, '<br/>'));
+                        }
+                        //runButton重新启用
+                        $("#runButton").removeAttr("disabled");
+                        document.getElementById("runButton").className = "runnable";
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        //runButton重新启用
+                        $("#runButton").removeAttr("disabled");
+                        document.getElementById("runButton").className = "runnable";
+                        bootstrapQ.msg({msg:'哦～～糟糕，服务异常！<br/> ' + textStatus ,type:'danger', time : 10000});
                     }
                 })
             }
