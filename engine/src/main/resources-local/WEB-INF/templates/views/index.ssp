@@ -142,8 +142,10 @@
 
             function initTable(data, columns) {
                 $('#resultTable').bootstrapTable({
+                    height: 334,
                     sidePagination: "client",
                     pageSize: 4, //每页大小
+                    pageList: [4, 12, 20, 48, 100, 'all'], //页面尺寸选择列表
                     currentPage: 1, //当前页数
                     numberOfPages: 5, //每次显示页数
                     totalPages: data.size / 4, //总页数
@@ -161,7 +163,8 @@
                     sortable: true, //是否启用排序
                     strictSearch: false,		        //是否全局匹配,false模糊匹配
                     showColumns: true,                  //是否显示所有的列
-                    showRefresh: true,                  //是否显示刷新按钮
+                    showRefresh: false,                  //是否显示刷新按钮
+                    cache: false,
                     minimumCountColumns: 0,             //最少允许的列数
                     clickToSelect: false,               //是否启用点击选中行
                     //height:500,                       //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
