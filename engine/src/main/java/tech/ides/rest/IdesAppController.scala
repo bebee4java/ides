@@ -77,7 +77,6 @@ class IdesAppController extends RestController with ControllerUtils {
         outputResult = errorMsg
         render(500, outputResult)
     }
-    logInfo("Congratulations completed!\tPOST\t/run/script")
     render(200, outputResult)
   }
 

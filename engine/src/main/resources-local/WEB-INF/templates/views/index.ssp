@@ -132,6 +132,9 @@
                         document.getElementById("runButton").className = "runnable";
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
                         //runButton重新启用
                         $("#runButton").removeAttr("disabled");
                         document.getElementById("runButton").className = "runnable";
@@ -141,14 +144,18 @@
             }
 
             function initTable(data, columns) {
+                var height = 156;
+                var dataSize = data.length;
+                var size = (dataSize > 4)? 4: dataSize;
+                height = height + 43 * size;
                 $('#resultTable').bootstrapTable({
-                    height: 334,
+                    height: height,
                     sidePagination: "client",
                     pageSize: 4, //每页大小
                     pageList: [4, 12, 20, 48, 100, 'all'], //页面尺寸选择列表
                     currentPage: 1, //当前页数
                     numberOfPages: 5, //每次显示页数
-                    totalPages: data.size / 4, //总页数
+                    totalPages: dataSize / 4, //总页数
                     paginationHAlign: 'right',
                     paginationVAlign: 'bottom',
                     paginationDetailHAlign: 'left',
