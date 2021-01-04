@@ -1,6 +1,6 @@
 package tech.ides.datasource
 
-import tech.ides.platform.PlatformManager
+import tech.ides.core.platform.PlatformManager
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import org.apache.spark.IdesConf.IDES_DATASOURCE_PACKAGES
 import tech.ides.constants.ScriptConstants

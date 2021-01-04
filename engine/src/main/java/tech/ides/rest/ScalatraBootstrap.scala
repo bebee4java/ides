@@ -4,7 +4,7 @@ import javax.servlet.ServletContext
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.{LifeCycle, ScalatraServlet}
 import org.scalatra.swagger.{ApiInfo, JacksonSwaggerBase, Swagger}
-import tech.ides.platform.PlatformManager
+import tech.ides.core.platform.PlatformManager
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import scala.collection.mutable

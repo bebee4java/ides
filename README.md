@@ -25,9 +25,13 @@ Now we got the executable distribution package, like this `ides-1.0.0-bin-spark2
 
 *NOTE: Maven 3.5.4, java 1.8.0_271 in Mac OS X are tested.*
 
-## deploy DataLinked
+## Deploy DataLinked
 - You can use bin/ides-shell.sh to start a Ides serve after unpack the distribution (tgz) package. 
 - We recommend to run it use yarn-client or local mode in spark cluster after packaged jar(can use bin/package.sh).
+
+## Documentation
+The documentation of DataLinked(or IDES) is located on the website: https://www.yuque.com/ides/docs or in the docs/ directory of the source code.
+We recommend that you go to the website: https://www.yuque.com/ides for help. We hosted all the documents on the `yuque` platform.
 
 ## Fork and Contribute
 This is an active open-source project. We are always open to people who want to use the system or contribute to it. 

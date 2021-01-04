@@ -1,6 +1,6 @@
 package tech.ides.local
 
-import tech.ides.platform.IdesApp
+import tech.ides.core.IdesApp
 
 
 /**

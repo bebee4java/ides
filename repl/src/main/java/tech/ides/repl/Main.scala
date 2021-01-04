@@ -20,7 +20,7 @@ package tech.ides.repl
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
-import tech.ides.platform.PlatformManager
+import tech.ides.core.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ParamsUtils

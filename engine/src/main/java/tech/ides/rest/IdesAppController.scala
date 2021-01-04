@@ -6,7 +6,7 @@ import tech.ides.core.{ScriptQueryExecute, ScriptQueryExecuteContext}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.exception.ExceptionUtil
 import tech.ides.job.{ScriptJobManager, ScriptJobType}
-import tech.ides.platform.PlatformManager
+import tech.ides.core.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
 

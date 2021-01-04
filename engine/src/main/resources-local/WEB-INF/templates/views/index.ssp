@@ -6,7 +6,10 @@
         <link rel="stylesheet" type="text/css" href="/static/css/index.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-table.min.css">
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+        <%--按钮图标--%>
+        <link rel="stylesheet" type="text/css" href="/static/css/fontawesome-all.min.css">
 
+        <%--ace编辑器--%>
         <script src="/static/js/ace.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/mode-sql.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/sql.min.js" type="text/javascript" charset="utf-8"></script>
@@ -14,11 +17,22 @@
         <script src="/static/js/ext-searchbox.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="/static/js/popper.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--bootstrap table--%>
         <script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--中文国际化--%>
         <script src="/static/js/bootstrap-table-zh-CN.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--弹窗提示--%>
         <script src="/static/js/bootstrapQ.min.js" type="text/javascript" charset="utf-8"></script>
-
+        <%--表格导出excel--%>
+        <script src="/static/js/bootstrap-table-export.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/tableExport.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/xlsx.core.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/FileSaver.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--按钮图标js--%>
+        <script src="/static/js/fontawesome-all.min.js" type="text/javascript" charset="utf-8"></script>
     </head>
     <body>
         <%@ val BANNER: String %>
@@ -139,13 +153,30 @@
                     paginationPreText: '&lsaquo;',
                     paginationNextText: '&rsaquo;',
                     searchOnEnterKey: false,
-                    strictSearch: false,
                     searchAlign: 'right',
                     selectItemName: 'btSelectItem',
                     //是否显示搜索
                     search: true,
                     pagination: true, //是否分页
                     sortable: true, //是否启用排序
+                    strictSearch: false,		        //是否全局匹配,false模糊匹配
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: true,                  //是否显示刷新按钮
+                    minimumCountColumns: 0,             //最少允许的列数
+                    clickToSelect: false,               //是否启用点击选中行
+                    //height:500,                       //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    //uniqueId:"id",                    //每一行的唯一标识，一般为主键列
+                    showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,                  //是否显示父子表
+                    showExport: true,                   //是否显示导出按钮
+                    exportDataType: "all",              //basic','all','selected'
+                    exportTypes:['excel','xlsx', 'csv'],       //导出类型
+                    exportOptions:{
+                        fileName: '数据导出_' + new Date().getTime(), //文件名称设置
+                        worksheetName: 'Sheet1',                    //表格工作区名称
+                        excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
+                    },
                     columns: columns,
                     data: data
                 });
