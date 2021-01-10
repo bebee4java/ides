@@ -21,7 +21,7 @@ class IdesAppController extends RestController with ControllerUtils {
   )) {
     contentType="text/html"
     import tech.ides.BANNER
-    ssp("/index",  "BANNER" -> BANNER)
+    layoutTemplate("/templates/views/index.ssp",  "BANNER" -> BANNER)
   }
 
   post("/run/script", operation(apiOperation[String]("runScript")

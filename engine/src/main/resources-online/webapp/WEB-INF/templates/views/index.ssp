@@ -1,0 +1,196 @@
+<html>
+    <head>
+        <title>IDES:将数据连接起来</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/image/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/image/favicon-16x16.png">
+        <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-table.min.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+        <%--按钮图标--%>
+        <link rel="stylesheet" type="text/css" href="/static/css/fontawesome-all.min.css">
+
+        <%--ace编辑器--%>
+        <script src="/static/js/ace.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/mode-sql.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/sql.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/ext-language_tools.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/ext-searchbox.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="/static/js/popper.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--bootstrap table--%>
+        <script src="/static/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/bootstrap-table.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--中文国际化--%>
+        <script src="/static/js/bootstrap-table-zh-CN.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--弹窗提示--%>
+        <script src="/static/js/bootstrapQ.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--表格导出excel--%>
+        <script src="/static/js/bootstrap-table-export.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/tableExport.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/xlsx.core.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/FileSaver.min.js" type="text/javascript" charset="utf-8"></script>
+        <%--按钮图标js--%>
+        <script src="/static/js/fontawesome-all.min.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+        <%@ val BANNER: String %>
+        <div class="banner"><pre><%= BANNER %></pre></div>
+
+        <div class="query_box">
+            <div class="editor">
+                <div id="ace_editor" class="ace_wrap"></div>
+                <div class="button_box">
+                    <button id="runButton" class="runnable">运行</button>
+                    <button id="stopButton" class="runnable">停止</button>
+                </div>
+            </div>
+            <div id="result">
+                <%--<table id="resultTable"></table>--%>
+                <%--<div id="errorResult" style="color: #ec3a3a; max-height: 380px; overflow: scroll;"></div>--%>
+            </div>
+        </div>
+        <!--
+            ace编辑器
+            官网：https://ace.c9.io/
+            lib库：https://pagecdn.com/lib/ace
+        -->
+        <script>
+            var editor = ace.edit("ace_editor");
+            editor.session.setValue("select 1 as id, 'hello ides!' as context as tb1;");
+            editor.resize();
+            editor.setTheme("ace/theme/twilight");
+            editor.session.setMode("ace/mode/sql");
+            <!-- 自动提示 -->
+            ace.require("ace/ext/language_tools");
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true
+            });
+
+            <!-- 内容搜索框 -->
+            ace.require("ace/ext/searchbox");
+            editor.commands.addCommand({
+                name: "unfind",
+                bindKey: {
+                    win: "Ctrl-F",
+                    mac: "Command-F"
+                },
+                exec: function(editor, line) {
+                    editor.execCommand('find');
+                    return true;
+                },
+                readOnly: true
+            });
+            //请求地址
+            var url = "run/script";
+            $('#runButton').click(function() {
+                $('#result').html(''); //先清空结果
+                var selectedCode = editor.session.getTextRange(editor.getSelectionRange());
+                var allCode = editor.getSession().getValue();
+                var queryParams = {
+                    sql : selectedCode !== "" ? selectedCode : allCode
+                };
+                initData(queryParams)
+            });
+
+            function initData(params) {
+                //runButton禁用，置灰
+                $('#runButton').attr("disabled",'disabled');
+                document.getElementById("runButton").className = "disRunnable";
+                $.ajax({
+                    url: url,
+                    data: params,
+                    dataType: "json",
+                    type: "POST",
+                    async: true,
+                    success: function (data) {
+                        var code = data.code;
+                        var content = data.content;
+                        if (code === 200) {
+                            var dataColumn=[];
+                            var result = JSON.parse(content);
+                            result.schema.fields.forEach(
+                                function (value) {
+                                    dataColumn.push({field: value.name, title: value.name})
+                                }
+                            );
+                            $('#result').append('<table id="resultTable"></table>');
+                            //document.getElementById('errorResult').style.display = 'none';
+                            //document.getElementById('resultTable').style.display = 'table';
+                            initTable(result.data, dataColumn);
+                        } else {
+                            $('#result').append('<div id="errorResult" style="color: #ec3a3a; max-height: 380px; overflow: scroll;"></div>');
+                            //document.getElementById('resultTable').style.display = 'none';
+                            //document.getElementById('errorResult').style.display = 'block';
+                            $('#errorResult').html(content.replace(/\n/g, '<br/>'));
+                        }
+                        //runButton重新启用
+                        $("#runButton").removeAttr("disabled");
+                        document.getElementById("runButton").className = "runnable";
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        //runButton重新启用
+                        $("#runButton").removeAttr("disabled");
+                        document.getElementById("runButton").className = "runnable";
+                        bootstrapQ.msg({msg:'哦～～糟糕，服务异常！<br/> ' + textStatus ,type:'danger', time : 10000});
+                    }
+                })
+            }
+
+            function initTable(data, columns) {
+                var height = 156;
+                var dataSize = data.length;
+                var size = (dataSize > 4)? 4: dataSize;
+                height = height + 43 * size;
+                $('#resultTable').bootstrapTable({
+                    height: height,
+                    sidePagination: "client",
+                    pageSize: 4, //每页大小
+                    pageList: [4, 12, 20, 48, 100, 'all'], //页面尺寸选择列表
+                    currentPage: 1, //当前页数
+                    numberOfPages: 5, //每次显示页数
+                    totalPages: dataSize / 4, //总页数
+                    paginationHAlign: 'right',
+                    paginationVAlign: 'bottom',
+                    paginationDetailHAlign: 'left',
+                    paginationPreText: '&lsaquo;',
+                    paginationNextText: '&rsaquo;',
+                    searchOnEnterKey: false,
+                    searchAlign: 'right',
+                    selectItemName: 'btSelectItem',
+                    //是否显示搜索
+                    search: true,
+                    pagination: true, //是否分页
+                    sortable: true, //是否启用排序
+                    strictSearch: false,		        //是否全局匹配,false模糊匹配
+                    showColumns: true,                  //是否显示所有的列
+                    showRefresh: false,                  //是否显示刷新按钮
+                    cache: false,
+                    minimumCountColumns: 0,             //最少允许的列数
+                    clickToSelect: false,               //是否启用点击选中行
+                    //height:500,                       //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    //uniqueId:"id",                    //每一行的唯一标识，一般为主键列
+                    showToggle:true,                    //是否显示详细视图和列表视图的切换按钮
+                    cardView: false,                    //是否显示详细视图
+                    detailView: false,                  //是否显示父子表
+                    showExport: true,                   //是否显示导出按钮
+                    exportDataType: "all",              //basic','all','selected'
+                    exportTypes:['excel','xlsx', 'csv'],       //导出类型
+                    exportOptions:{
+                        fileName: '数据导出_' + new Date().getTime(), //文件名称设置
+                        worksheetName: 'Sheet1',                    //表格工作区名称
+                        excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
+                    },
+                    columns: columns,
+                    data: data
+                });
+            }
+        </script>
+    </body>
+</html>

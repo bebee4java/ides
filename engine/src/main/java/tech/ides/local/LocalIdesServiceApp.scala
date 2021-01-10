@@ -17,6 +17,7 @@ object LocalIdesServiceApp {
       "-spark.driver.memory", "512m",
       "-ides.spark.service", "true",
       "-ides.server.port", "9009",
+      "-ides.server.request-log.enable", "true",
       "-ides.enableHiveSupport", "true"
     ))
   }
