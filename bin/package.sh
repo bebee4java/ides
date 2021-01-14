@@ -13,6 +13,7 @@ function package_2.4 {
   -Ponline \
   -Pscala-2.11 \
   -Pspark-2.4.x \
+  -Prestful-server \
   -Pshade
 }
 
@@ -22,6 +23,7 @@ function package_2.3 {
   -Ponline \
   -Pscala-2.11 \
   -Pspark-2.3.x \
+  -Prestful-server \
   -Pshade
 }
 

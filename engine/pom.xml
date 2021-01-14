@@ -11,11 +11,6 @@
 
     <artifactId>ides-engine-spark-${spark.big.version}_${scala.binary.version}</artifactId>
 
-    <properties>
-        <jetty.version>9.4.34.v20201102</jetty.version>
-        <scalatra.version>2.5.4</scalatra.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>tech.ides</groupId>
@@ -46,31 +41,6 @@
             <version>${spark.version}</version>
             <scope>${scope}</scope>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatra</groupId>
-            <artifactId>scalatra_${scala.binary.version}</artifactId>
-            <version>${scalatra.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatra</groupId>
-            <artifactId>scalatra-scalate_${scala.binary.version}</artifactId>
-            <version>${scalatra.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scalatra</groupId>
-            <artifactId>scalatra-swagger_${scala.binary.version}</artifactId>
-            <version>${scalatra.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>tech.ides</groupId>
@@ -96,6 +66,7 @@
                 <scope>compile</scope>
             </properties>
         </profile>
+
         <profile>
             <id>online</id>
             <properties>
@@ -103,6 +74,18 @@
                 <scope>provided</scope>
             </properties>
         </profile>
+
+        <profile>
+            <id>restful-server</id>
+            <dependencies>
+                <dependency>
+                    <groupId>tech.ides</groupId>
+                    <artifactId>ides-restfulserver-${spark.big.version}_${scala.binary.version}</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <id>shade</id>
             <build>
