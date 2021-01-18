@@ -26,7 +26,7 @@ case class LoadAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     val whereExpsContext = loadContext.whereExpressions()
     val options = whereExpressionsToMap(whereExpsContext)
 
-    val tableName = loadContext.asTableName().tableName().getText
+    val tableName = parseAssetName(loadContext.asAsset().assetName())
 
     LoadSqlStatement(sql, format, path, options, tableName)
   }

@@ -1,3 +1,4 @@
+// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 
@@ -20,20 +21,22 @@ public class IdesDslParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, AS=3, INTO=4, LOAD=5, SAVE=6, SELECT=7, OPTIONS=8, WHERE=9, 
 		AND=10, OVERWRITE=11, APPEND=12, ERRORIfExists=13, IGNORE=14, PARTITIONBY=15, 
-		DOT=16, EOQ=17, MUMERIC=18, IDENTIFIER=19, QUOTED_TEXT=20, STRING_TEXT=21, 
-		BLOCK_STRING_TEXT=22, LINE_COMMENT=23, BLOCK_COMMENT=24, WS=25, UNRECOGNIZED=26;
+		CONNECT=16, SET=17, DOT=18, EOQ=19, MUMERIC=20, IDENTIFIER=21, QUOTED_TEXT=22, 
+		STRING_TEXT=23, BLOCK_STRING_TEXT=24, LINE_COMMENT=25, BLOCK_COMMENT=26, 
+		WS=27, UNRECOGNIZED=28;
 	public static final int
 		RULE_statement = 0, RULE_script = 1, RULE_query = 2, RULE_format = 3, 
 		RULE_path = 4, RULE_col = 5, RULE_colGroup = 6, RULE_whereExpressions = 7, 
-		RULE_partitionbyExpression = 8, RULE_booleanExpression = 9, RULE_expression = 10, 
-		RULE_qualifiedName = 11, RULE_asTableName = 12, RULE_tableName = 13, RULE_identifier = 14, 
-		RULE_quotedIdentifier = 15, RULE_where = 16, RULE_saveMode = 17;
+		RULE_partitionbyExpression = 8, RULE_booleanExpression = 9, RULE_keyName = 10, 
+		RULE_valueName = 11, RULE_expression = 12, RULE_qualifiedName = 13, RULE_asAsset = 14, 
+		RULE_assetName = 15, RULE_identifier = 16, RULE_quotedIdentifier = 17, 
+		RULE_where = 18, RULE_saveMode = 19;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"statement", "script", "query", "format", "path", "col", "colGroup", 
-			"whereExpressions", "partitionbyExpression", "booleanExpression", "expression", 
-			"qualifiedName", "asTableName", "tableName", "identifier", "quotedIdentifier", 
-			"where", "saveMode"
+			"whereExpressions", "partitionbyExpression", "booleanExpression", "keyName", 
+			"valueName", "expression", "qualifiedName", "asAsset", "assetName", "identifier", 
+			"quotedIdentifier", "where", "saveMode"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -42,7 +45,7 @@ public class IdesDslParser extends Parser {
 		return new String[] {
 			null, "','", "'='", "'as'", "'into'", "'load'", "'save'", "'select'", 
 			"'options'", "'where'", "'and'", "'overwrite'", "'append'", "'errorIfExists'", 
-			"'ignore'", null, "'.'", "';'"
+			"'ignore'", null, "'connect'", "'set'", "'.'", "';'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -50,8 +53,9 @@ public class IdesDslParser extends Parser {
 		return new String[] {
 			null, null, null, "AS", "INTO", "LOAD", "SAVE", "SELECT", "OPTIONS", 
 			"WHERE", "AND", "OVERWRITE", "APPEND", "ERRORIfExists", "IGNORE", "PARTITIONBY", 
-			"DOT", "EOQ", "MUMERIC", "IDENTIFIER", "QUOTED_TEXT", "STRING_TEXT", 
-			"BLOCK_STRING_TEXT", "LINE_COMMENT", "BLOCK_COMMENT", "WS", "UNRECOGNIZED"
+			"CONNECT", "SET", "DOT", "EOQ", "MUMERIC", "IDENTIFIER", "QUOTED_TEXT", 
+			"STRING_TEXT", "BLOCK_STRING_TEXT", "LINE_COMMENT", "BLOCK_COMMENT", 
+			"WS", "UNRECOGNIZED"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -138,17 +142,17 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(39);
+			setState(43);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LOAD) | (1L << SAVE) | (1L << SELECT))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LOAD) | (1L << SAVE) | (1L << SELECT) | (1L << CONNECT) | (1L << SET))) != 0)) {
 				{
 				{
-				setState(36);
+				setState(40);
 				script();
 				}
 				}
-				setState(41);
+				setState(45);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -204,9 +208,9 @@ public class IdesDslParser extends Parser {
 			_localctx = new SqlContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(42);
+			setState(46);
 			query();
-			setState(43);
+			setState(47);
 			match(EOQ);
 			}
 		}
@@ -241,8 +245,8 @@ public class IdesDslParser extends Parser {
 		public PathContext path() {
 			return getRuleContext(PathContext.class,0);
 		}
-		public AsTableNameContext asTableName() {
-			return getRuleContext(AsTableNameContext.class,0);
+		public AsAssetContext asAsset() {
+			return getRuleContext(AsAssetContext.class,0);
 		}
 		public WhereExpressionsContext whereExpressions() {
 			return getRuleContext(WhereExpressionsContext.class,0);
@@ -262,10 +266,59 @@ public class IdesDslParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class SetContext extends QueryContext {
+		public TerminalNode SET() { return getToken(IdesDslParser.SET, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public WhereExpressionsContext whereExpressions() {
+			return getRuleContext(WhereExpressionsContext.class,0);
+		}
+		public SetContext(QueryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterSet(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitSet(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitSet(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ConnectContext extends QueryContext {
+		public TerminalNode CONNECT() { return getToken(IdesDslParser.CONNECT, 0); }
+		public FormatContext format() {
+			return getRuleContext(FormatContext.class,0);
+		}
+		public WhereExpressionsContext whereExpressions() {
+			return getRuleContext(WhereExpressionsContext.class,0);
+		}
+		public AsAssetContext asAsset() {
+			return getRuleContext(AsAssetContext.class,0);
+		}
+		public ConnectContext(QueryContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterConnect(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitConnect(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitConnect(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 	public static class SelectContext extends QueryContext {
 		public TerminalNode SELECT() { return getToken(IdesDslParser.SELECT, 0); }
-		public AsTableNameContext asTableName() {
-			return getRuleContext(AsTableNameContext.class,0);
+		public AsAssetContext asAsset() {
+			return getRuleContext(AsAssetContext.class,0);
 		}
 		public List<TerminalNode> EOQ() { return getTokens(IdesDslParser.EOQ); }
 		public TerminalNode EOQ(int i) {
@@ -288,8 +341,8 @@ public class IdesDslParser extends Parser {
 	}
 	public static class SaveContext extends QueryContext {
 		public TerminalNode SAVE() { return getToken(IdesDslParser.SAVE, 0); }
-		public TableNameContext tableName() {
-			return getRuleContext(TableNameContext.class,0);
+		public AssetNameContext assetName() {
+			return getRuleContext(AssetNameContext.class,0);
 		}
 		public TerminalNode INTO() { return getToken(IdesDslParser.INTO, 0); }
 		public FormatContext format() {
@@ -330,77 +383,77 @@ public class IdesDslParser extends Parser {
 		int _la;
 		try {
 			int _alt;
-			setState(76);
+			setState(90);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LOAD:
 				_localctx = new LoadContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(45);
+				setState(49);
 				match(LOAD);
-				setState(46);
-				format();
-				setState(47);
-				match(DOT);
-				setState(48);
-				path();
 				setState(50);
+				format();
+				setState(51);
+				match(DOT);
+				setState(52);
+				path();
+				setState(54);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==OPTIONS || _la==WHERE) {
 					{
-					setState(49);
+					setState(53);
 					whereExpressions();
 					}
 				}
 
-				setState(52);
-				asTableName();
+				setState(56);
+				asAsset();
 				}
 				break;
 			case SAVE:
 				_localctx = new SaveContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(54);
+				setState(58);
 				match(SAVE);
-				setState(55);
-				tableName();
-				setState(57);
+				setState(59);
+				assetName();
+				setState(61);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OVERWRITE) | (1L << APPEND) | (1L << ERRORIfExists) | (1L << IGNORE))) != 0)) {
 					{
-					setState(56);
+					setState(60);
 					saveMode();
 					}
 				}
 
-				setState(59);
+				setState(63);
 				match(INTO);
-				setState(60);
-				format();
-				setState(61);
-				match(DOT);
-				setState(62);
-				path();
 				setState(64);
+				format();
+				setState(65);
+				match(DOT);
+				setState(66);
+				path();
+				setState(68);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==OPTIONS || _la==WHERE) {
 					{
-					setState(63);
+					setState(67);
 					whereExpressions();
 					}
 				}
 
-				setState(67);
+				setState(71);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				if (_la==PARTITIONBY) {
 					{
-					setState(66);
+					setState(70);
 					partitionbyExpression();
 					}
 				}
@@ -411,9 +464,9 @@ public class IdesDslParser extends Parser {
 				_localctx = new SelectContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(69);
+				setState(73);
 				match(SELECT);
-				setState(71); 
+				setState(75); 
 				_errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -421,7 +474,7 @@ public class IdesDslParser extends Parser {
 					case 1:
 						{
 						{
-						setState(70);
+						setState(74);
 						_la = _input.LA(1);
 						if ( _la <= 0 || (_la==EOQ) ) {
 						_errHandler.recoverInline(this);
@@ -437,12 +490,46 @@ public class IdesDslParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 					}
-					setState(73); 
+					setState(77); 
 					_errHandler.sync(this);
 					_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
-				setState(75);
-				asTableName();
+				setState(79);
+				asAsset();
+				}
+				break;
+			case CONNECT:
+				_localctx = new ConnectContext(_localctx);
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(80);
+				match(CONNECT);
+				setState(81);
+				format();
+				setState(82);
+				whereExpressions();
+				setState(83);
+				asAsset();
+				}
+				break;
+			case SET:
+				_localctx = new SetContext(_localctx);
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(85);
+				match(SET);
+				setState(86);
+				expression();
+				setState(88);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==OPTIONS || _la==WHERE) {
+					{
+					setState(87);
+					whereExpressions();
+					}
+				}
+
 				}
 				break;
 			default:
@@ -490,20 +577,20 @@ public class IdesDslParser extends Parser {
 		FormatContext _localctx = new FormatContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_format);
 		try {
-			setState(80);
+			setState(94);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(78);
+				setState(92);
 				identifier();
 				}
 				break;
 			case QUOTED_TEXT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(79);
+				setState(93);
 				quotedIdentifier();
 				}
 				break;
@@ -551,7 +638,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(96);
 			quotedIdentifier();
 			}
 		}
@@ -595,7 +682,7 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
+			setState(98);
 			identifier();
 			}
 		}
@@ -639,9 +726,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(86);
+			setState(100);
 			match(T__0);
-			setState(87);
+			setState(101);
 			col();
 			}
 		}
@@ -695,21 +782,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89);
+			setState(103);
 			where();
-			setState(90);
+			setState(104);
 			expression();
-			setState(94);
+			setState(108);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(91);
+				setState(105);
 				booleanExpression();
 				}
 				}
-				setState(96);
+				setState(110);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -763,21 +850,21 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(111);
 			match(PARTITIONBY);
-			setState(98);
+			setState(112);
 			col();
-			setState(102);
+			setState(116);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(99);
+				setState(113);
 				colGroup();
 				}
 				}
-				setState(104);
+				setState(118);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -824,9 +911,9 @@ public class IdesDslParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
+			setState(119);
 			match(AND);
-			setState(106);
+			setState(120);
 			expression();
 			}
 		}
@@ -841,13 +928,111 @@ public class IdesDslParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ExpressionContext extends ParserRuleContext {
+	public static class KeyNameContext extends ParserRuleContext {
 		public QualifiedNameContext qualifiedName() {
 			return getRuleContext(QualifiedNameContext.class,0);
 		}
+		public KeyNameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_keyName; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterKeyName(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitKeyName(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitKeyName(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final KeyNameContext keyName() throws RecognitionException {
+		KeyNameContext _localctx = new KeyNameContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_keyName);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(122);
+			qualifiedName();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ValueNameContext extends ParserRuleContext {
 		public TerminalNode MUMERIC() { return getToken(IdesDslParser.MUMERIC, 0); }
 		public TerminalNode STRING_TEXT() { return getToken(IdesDslParser.STRING_TEXT, 0); }
 		public TerminalNode BLOCK_STRING_TEXT() { return getToken(IdesDslParser.BLOCK_STRING_TEXT, 0); }
+		public TerminalNode QUOTED_TEXT() { return getToken(IdesDslParser.QUOTED_TEXT, 0); }
+		public ValueNameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_valueName; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterValueName(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitValueName(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitValueName(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ValueNameContext valueName() throws RecognitionException {
+		ValueNameContext _localctx = new ValueNameContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_valueName);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(124);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MUMERIC) | (1L << QUOTED_TEXT) | (1L << STRING_TEXT) | (1L << BLOCK_STRING_TEXT))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ExpressionContext extends ParserRuleContext {
+		public KeyNameContext keyName() {
+			return getRuleContext(KeyNameContext.class,0);
+		}
+		public ValueNameContext valueName() {
+			return getRuleContext(ValueNameContext.class,0);
+		}
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -869,25 +1054,16 @@ public class IdesDslParser extends Parser {
 
 	public final ExpressionContext expression() throws RecognitionException {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_expression);
-		int _la;
+		enterRule(_localctx, 24, RULE_expression);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(108);
-			qualifiedName();
-			setState(109);
+			setState(126);
+			keyName();
+			setState(127);
 			match(T__1);
-			setState(110);
-			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MUMERIC) | (1L << STRING_TEXT) | (1L << BLOCK_STRING_TEXT))) != 0)) ) {
-			_errHandler.recoverInline(this);
-			}
-			else {
-				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-				_errHandler.reportMatch(this);
-				consume();
-			}
+			setState(128);
+			valueName();
 			}
 		}
 		catch (RecognitionException re) {
@@ -933,26 +1109,26 @@ public class IdesDslParser extends Parser {
 
 	public final QualifiedNameContext qualifiedName() throws RecognitionException {
 		QualifiedNameContext _localctx = new QualifiedNameContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_qualifiedName);
+		enterRule(_localctx, 26, RULE_qualifiedName);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(112);
+			setState(130);
 			identifier();
-			setState(117);
+			setState(135);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				setState(113);
+				setState(131);
 				match(DOT);
-				setState(114);
+				setState(132);
 				identifier();
 				}
 				}
-				setState(119);
+				setState(137);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -969,40 +1145,40 @@ public class IdesDslParser extends Parser {
 		return _localctx;
 	}
 
-	public static class AsTableNameContext extends ParserRuleContext {
+	public static class AsAssetContext extends ParserRuleContext {
 		public TerminalNode AS() { return getToken(IdesDslParser.AS, 0); }
-		public TableNameContext tableName() {
-			return getRuleContext(TableNameContext.class,0);
+		public AssetNameContext assetName() {
+			return getRuleContext(AssetNameContext.class,0);
 		}
-		public AsTableNameContext(ParserRuleContext parent, int invokingState) {
+		public AsAssetContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_asTableName; }
+		@Override public int getRuleIndex() { return RULE_asAsset; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterAsTableName(this);
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterAsAsset(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitAsTableName(this);
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitAsAsset(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitAsTableName(this);
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitAsAsset(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final AsTableNameContext asTableName() throws RecognitionException {
-		AsTableNameContext _localctx = new AsTableNameContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_asTableName);
+	public final AsAssetContext asAsset() throws RecognitionException {
+		AsAssetContext _localctx = new AsAssetContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_asAsset);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(120);
+			setState(138);
 			match(AS);
-			setState(121);
-			tableName();
+			setState(139);
+			assetName();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1016,37 +1192,55 @@ public class IdesDslParser extends Parser {
 		return _localctx;
 	}
 
-	public static class TableNameContext extends ParserRuleContext {
+	public static class AssetNameContext extends ParserRuleContext {
 		public IdentifierContext identifier() {
 			return getRuleContext(IdentifierContext.class,0);
 		}
-		public TableNameContext(ParserRuleContext parent, int invokingState) {
+		public QuotedIdentifierContext quotedIdentifier() {
+			return getRuleContext(QuotedIdentifierContext.class,0);
+		}
+		public AssetNameContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_tableName; }
+		@Override public int getRuleIndex() { return RULE_assetName; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterTableName(this);
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).enterAssetName(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitTableName(this);
+			if ( listener instanceof IdesDslListener ) ((IdesDslListener)listener).exitAssetName(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitTableName(this);
+			if ( visitor instanceof IdesDslVisitor ) return ((IdesDslVisitor<? extends T>)visitor).visitAssetName(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final TableNameContext tableName() throws RecognitionException {
-		TableNameContext _localctx = new TableNameContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_tableName);
+	public final AssetNameContext assetName() throws RecognitionException {
+		AssetNameContext _localctx = new AssetNameContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_assetName);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(123);
-			identifier();
+			setState(143);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case IDENTIFIER:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(141);
+				identifier();
+				}
+				break;
+			case QUOTED_TEXT:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(142);
+				quotedIdentifier();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1083,11 +1277,11 @@ public class IdesDslParser extends Parser {
 
 	public final IdentifierContext identifier() throws RecognitionException {
 		IdentifierContext _localctx = new IdentifierContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_identifier);
+		enterRule(_localctx, 32, RULE_identifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(125);
+			setState(145);
 			match(IDENTIFIER);
 			}
 		}
@@ -1125,11 +1319,11 @@ public class IdesDslParser extends Parser {
 
 	public final QuotedIdentifierContext quotedIdentifier() throws RecognitionException {
 		QuotedIdentifierContext _localctx = new QuotedIdentifierContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_quotedIdentifier);
+		enterRule(_localctx, 34, RULE_quotedIdentifier);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(127);
+			setState(147);
 			match(QUOTED_TEXT);
 			}
 		}
@@ -1168,12 +1362,12 @@ public class IdesDslParser extends Parser {
 
 	public final WhereContext where() throws RecognitionException {
 		WhereContext _localctx = new WhereContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_where);
+		enterRule(_localctx, 36, RULE_where);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(129);
+			setState(149);
 			_la = _input.LA(1);
 			if ( !(_la==OPTIONS || _la==WHERE) ) {
 			_errHandler.recoverInline(this);
@@ -1222,12 +1416,12 @@ public class IdesDslParser extends Parser {
 
 	public final SaveModeContext saveMode() throws RecognitionException {
 		SaveModeContext _localctx = new SaveModeContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_saveMode);
+		enterRule(_localctx, 38, RULE_saveMode);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(131);
+			setState(151);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OVERWRITE) | (1L << APPEND) | (1L << ERRORIfExists) | (1L << IGNORE))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1251,39 +1445,47 @@ public class IdesDslParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\34\u0088\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\36\u009c\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\3\2\7\2(\n\2\f\2\16\2+\13\2\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4"+
-		"\5\4\65\n\4\3\4\3\4\3\4\3\4\3\4\5\4<\n\4\3\4\3\4\3\4\3\4\3\4\5\4C\n\4"+
-		"\3\4\5\4F\n\4\3\4\3\4\6\4J\n\4\r\4\16\4K\3\4\5\4O\n\4\3\5\3\5\5\5S\n\5"+
-		"\3\6\3\6\3\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\t_\n\t\f\t\16\tb\13\t\3\n\3"+
-		"\n\3\n\7\ng\n\n\f\n\16\nj\13\n\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\r\3\r"+
-		"\3\r\7\rv\n\r\f\r\16\ry\13\r\3\16\3\16\3\16\3\17\3\17\3\20\3\20\3\21\3"+
-		"\21\3\22\3\22\3\23\3\23\3\23\2\2\24\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
-		"\36 \"$\2\6\3\2\23\23\4\2\24\24\27\30\3\2\n\13\3\2\r\20\2\u0081\2)\3\2"+
-		"\2\2\4,\3\2\2\2\6N\3\2\2\2\bR\3\2\2\2\nT\3\2\2\2\fV\3\2\2\2\16X\3\2\2"+
-		"\2\20[\3\2\2\2\22c\3\2\2\2\24k\3\2\2\2\26n\3\2\2\2\30r\3\2\2\2\32z\3\2"+
-		"\2\2\34}\3\2\2\2\36\177\3\2\2\2 \u0081\3\2\2\2\"\u0083\3\2\2\2$\u0085"+
-		"\3\2\2\2&(\5\4\3\2\'&\3\2\2\2(+\3\2\2\2)\'\3\2\2\2)*\3\2\2\2*\3\3\2\2"+
-		"\2+)\3\2\2\2,-\5\6\4\2-.\7\23\2\2.\5\3\2\2\2/\60\7\7\2\2\60\61\5\b\5\2"+
-		"\61\62\7\22\2\2\62\64\5\n\6\2\63\65\5\20\t\2\64\63\3\2\2\2\64\65\3\2\2"+
-		"\2\65\66\3\2\2\2\66\67\5\32\16\2\67O\3\2\2\289\7\b\2\29;\5\34\17\2:<\5"+
-		"$\23\2;:\3\2\2\2;<\3\2\2\2<=\3\2\2\2=>\7\6\2\2>?\5\b\5\2?@\7\22\2\2@B"+
-		"\5\n\6\2AC\5\20\t\2BA\3\2\2\2BC\3\2\2\2CE\3\2\2\2DF\5\22\n\2ED\3\2\2\2"+
-		"EF\3\2\2\2FO\3\2\2\2GI\7\t\2\2HJ\n\2\2\2IH\3\2\2\2JK\3\2\2\2KI\3\2\2\2"+
-		"KL\3\2\2\2LM\3\2\2\2MO\5\32\16\2N/\3\2\2\2N8\3\2\2\2NG\3\2\2\2O\7\3\2"+
-		"\2\2PS\5\36\20\2QS\5 \21\2RP\3\2\2\2RQ\3\2\2\2S\t\3\2\2\2TU\5 \21\2U\13"+
-		"\3\2\2\2VW\5\36\20\2W\r\3\2\2\2XY\7\3\2\2YZ\5\f\7\2Z\17\3\2\2\2[\\\5\""+
-		"\22\2\\`\5\26\f\2]_\5\24\13\2^]\3\2\2\2_b\3\2\2\2`^\3\2\2\2`a\3\2\2\2"+
-		"a\21\3\2\2\2b`\3\2\2\2cd\7\21\2\2dh\5\f\7\2eg\5\16\b\2fe\3\2\2\2gj\3\2"+
-		"\2\2hf\3\2\2\2hi\3\2\2\2i\23\3\2\2\2jh\3\2\2\2kl\7\f\2\2lm\5\26\f\2m\25"+
-		"\3\2\2\2no\5\30\r\2op\7\4\2\2pq\t\3\2\2q\27\3\2\2\2rw\5\36\20\2st\7\22"+
-		"\2\2tv\5\36\20\2us\3\2\2\2vy\3\2\2\2wu\3\2\2\2wx\3\2\2\2x\31\3\2\2\2y"+
-		"w\3\2\2\2z{\7\5\2\2{|\5\34\17\2|\33\3\2\2\2}~\5\36\20\2~\35\3\2\2\2\177"+
-		"\u0080\7\25\2\2\u0080\37\3\2\2\2\u0081\u0082\7\26\2\2\u0082!\3\2\2\2\u0083"+
-		"\u0084\t\4\2\2\u0084#\3\2\2\2\u0085\u0086\t\5\2\2\u0086%\3\2\2\2\r)\64"+
-		";BEKNR`hw";
+		"\4\23\t\23\4\24\t\24\4\25\t\25\3\2\7\2,\n\2\f\2\16\2/\13\2\3\3\3\3\3\3"+
+		"\3\4\3\4\3\4\3\4\3\4\5\49\n\4\3\4\3\4\3\4\3\4\3\4\5\4@\n\4\3\4\3\4\3\4"+
+		"\3\4\3\4\5\4G\n\4\3\4\5\4J\n\4\3\4\3\4\6\4N\n\4\r\4\16\4O\3\4\3\4\3\4"+
+		"\3\4\3\4\3\4\3\4\3\4\3\4\5\4[\n\4\5\4]\n\4\3\5\3\5\5\5a\n\5\3\6\3\6\3"+
+		"\7\3\7\3\b\3\b\3\b\3\t\3\t\3\t\7\tm\n\t\f\t\16\tp\13\t\3\n\3\n\3\n\7\n"+
+		"u\n\n\f\n\16\nx\13\n\3\13\3\13\3\13\3\f\3\f\3\r\3\r\3\16\3\16\3\16\3\16"+
+		"\3\17\3\17\3\17\7\17\u0088\n\17\f\17\16\17\u008b\13\17\3\20\3\20\3\20"+
+		"\3\21\3\21\5\21\u0092\n\21\3\22\3\22\3\23\3\23\3\24\3\24\3\25\3\25\3\25"+
+		"\2\2\26\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(\2\6\3\2\25\25\4\2"+
+		"\26\26\30\32\3\2\n\13\3\2\r\20\2\u0097\2-\3\2\2\2\4\60\3\2\2\2\6\\\3\2"+
+		"\2\2\b`\3\2\2\2\nb\3\2\2\2\fd\3\2\2\2\16f\3\2\2\2\20i\3\2\2\2\22q\3\2"+
+		"\2\2\24y\3\2\2\2\26|\3\2\2\2\30~\3\2\2\2\32\u0080\3\2\2\2\34\u0084\3\2"+
+		"\2\2\36\u008c\3\2\2\2 \u0091\3\2\2\2\"\u0093\3\2\2\2$\u0095\3\2\2\2&\u0097"+
+		"\3\2\2\2(\u0099\3\2\2\2*,\5\4\3\2+*\3\2\2\2,/\3\2\2\2-+\3\2\2\2-.\3\2"+
+		"\2\2.\3\3\2\2\2/-\3\2\2\2\60\61\5\6\4\2\61\62\7\25\2\2\62\5\3\2\2\2\63"+
+		"\64\7\7\2\2\64\65\5\b\5\2\65\66\7\24\2\2\668\5\n\6\2\679\5\20\t\28\67"+
+		"\3\2\2\289\3\2\2\29:\3\2\2\2:;\5\36\20\2;]\3\2\2\2<=\7\b\2\2=?\5 \21\2"+
+		">@\5(\25\2?>\3\2\2\2?@\3\2\2\2@A\3\2\2\2AB\7\6\2\2BC\5\b\5\2CD\7\24\2"+
+		"\2DF\5\n\6\2EG\5\20\t\2FE\3\2\2\2FG\3\2\2\2GI\3\2\2\2HJ\5\22\n\2IH\3\2"+
+		"\2\2IJ\3\2\2\2J]\3\2\2\2KM\7\t\2\2LN\n\2\2\2ML\3\2\2\2NO\3\2\2\2OM\3\2"+
+		"\2\2OP\3\2\2\2PQ\3\2\2\2Q]\5\36\20\2RS\7\22\2\2ST\5\b\5\2TU\5\20\t\2U"+
+		"V\5\36\20\2V]\3\2\2\2WX\7\23\2\2XZ\5\32\16\2Y[\5\20\t\2ZY\3\2\2\2Z[\3"+
+		"\2\2\2[]\3\2\2\2\\\63\3\2\2\2\\<\3\2\2\2\\K\3\2\2\2\\R\3\2\2\2\\W\3\2"+
+		"\2\2]\7\3\2\2\2^a\5\"\22\2_a\5$\23\2`^\3\2\2\2`_\3\2\2\2a\t\3\2\2\2bc"+
+		"\5$\23\2c\13\3\2\2\2de\5\"\22\2e\r\3\2\2\2fg\7\3\2\2gh\5\f\7\2h\17\3\2"+
+		"\2\2ij\5&\24\2jn\5\32\16\2km\5\24\13\2lk\3\2\2\2mp\3\2\2\2nl\3\2\2\2n"+
+		"o\3\2\2\2o\21\3\2\2\2pn\3\2\2\2qr\7\21\2\2rv\5\f\7\2su\5\16\b\2ts\3\2"+
+		"\2\2ux\3\2\2\2vt\3\2\2\2vw\3\2\2\2w\23\3\2\2\2xv\3\2\2\2yz\7\f\2\2z{\5"+
+		"\32\16\2{\25\3\2\2\2|}\5\34\17\2}\27\3\2\2\2~\177\t\3\2\2\177\31\3\2\2"+
+		"\2\u0080\u0081\5\26\f\2\u0081\u0082\7\4\2\2\u0082\u0083\5\30\r\2\u0083"+
+		"\33\3\2\2\2\u0084\u0089\5\"\22\2\u0085\u0086\7\24\2\2\u0086\u0088\5\""+
+		"\22\2\u0087\u0085\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087\3\2\2\2\u0089"+
+		"\u008a\3\2\2\2\u008a\35\3\2\2\2\u008b\u0089\3\2\2\2\u008c\u008d\7\5\2"+
+		"\2\u008d\u008e\5 \21\2\u008e\37\3\2\2\2\u008f\u0092\5\"\22\2\u0090\u0092"+
+		"\5$\23\2\u0091\u008f\3\2\2\2\u0091\u0090\3\2\2\2\u0092!\3\2\2\2\u0093"+
+		"\u0094\7\27\2\2\u0094#\3\2\2\2\u0095\u0096\7\30\2\2\u0096%\3\2\2\2\u0097"+
+		"\u0098\t\4\2\2\u0098\'\3\2\2\2\u0099\u009a\t\5\2\2\u009a)\3\2\2\2\17-"+
+		"8?FIOZ\\`nv\u0089\u0091";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

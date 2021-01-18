@@ -10,7 +10,7 @@ import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.{DataSinkConfig, DataSourceFactory}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SaveSqlStatement, SqlStatement}
-import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, resourceRealPath, whereExpressionsToMap}
+import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, resourceRealPath, whereExpressionsToMap, parseAssetName}
 import tech.ides.job.ScriptJobManager
 
 import scala.collection.mutable.ListBuffer
@@ -26,7 +26,7 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     val saveContext = context.asInstanceOf[SaveContext]
 
     val sql = currentText(saveContext)
-    val inputTableName = saveContext.tableName().getText
+    val inputTableName = parseAssetName(saveContext.assetName())
     val saveModeContext = saveContext.saveMode()
     val saveMode = saveModeContext match {
         case c if c == null => SaveMode.ErrorIfExists

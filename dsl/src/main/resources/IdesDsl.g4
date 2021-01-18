@@ -15,9 +15,11 @@ script
 
 // query语句规则
 query
-    : LOAD format DOT path whereExpressions? asTableName # Load
-    | SAVE tableName saveMode? INTO format DOT path whereExpressions? partitionbyExpression? # Save
-    | SELECT ~(EOQ)+ asTableName # Select
+    : LOAD format DOT path whereExpressions? asAsset # Load
+    | SAVE assetName saveMode? INTO format DOT path whereExpressions? partitionbyExpression? # Save
+    | SELECT ~(EOQ)+ asAsset # Select
+    | CONNECT format whereExpressions asAsset # Connect
+    | SET expression whereExpressions? # Set
     ;
 
 format
@@ -49,20 +51,31 @@ booleanExpression
     : AND expression
     ;
 
+keyName
+    : qualifiedName
+    ;
+valueName
+    : MUMERIC
+    | STRING_TEXT
+    | BLOCK_STRING_TEXT
+    | QUOTED_TEXT
+    ;
+
 expression
-    : qualifiedName '=' (MUMERIC | STRING_TEXT | BLOCK_STRING_TEXT)
+    : keyName '=' valueName
     ;
 
 qualifiedName
     : identifier ('.' identifier)*
     ;
 
-asTableName
-    : AS tableName
+asAsset
+    : AS assetName
     ;
 
-tableName
+assetName
     : identifier
+    | quotedIdentifier
     ;
 
 identifier
@@ -93,6 +106,8 @@ APPEND: 'append';
 ERRORIfExists: 'errorIfExists';
 IGNORE: 'ignore';
 PARTITIONBY: 'partitionBy'|'partitionby';
+CONNECT: 'connect';
+SET: 'set';
 //============================
 // End of the keywords list
 //============================

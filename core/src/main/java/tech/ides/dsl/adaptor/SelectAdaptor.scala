@@ -4,7 +4,7 @@ import ides.dsl.parser.IdesDslParser
 import ides.dsl.parser.IdesDslParser.SelectContext
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SelectSqlStatement, SqlStatement}
-import tech.ides.dsl.utils.DslUtil.currentText
+import tech.ides.dsl.utils.DslUtil.{currentText, parseAssetName}
 
 /**
   *
@@ -16,7 +16,7 @@ case class SelectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) exten
     val selectContext = context.asInstanceOf[SelectContext]
     val sql = currentText(selectContext)
 
-    val tableName = selectContext.asTableName().tableName().getText
+    val tableName = parseAssetName(selectContext.asAsset().assetName())
 
     SelectSqlStatement(sql, tableName)
   }

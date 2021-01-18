@@ -1,3 +1,4 @@
+// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 
@@ -72,6 +73,30 @@ public class IdesDslBaseListener implements IdesDslListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSelect(IdesDslParser.SelectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConnect(IdesDslParser.ConnectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConnect(IdesDslParser.ConnectContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSet(IdesDslParser.SetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSet(IdesDslParser.SetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -161,6 +186,30 @@ public class IdesDslBaseListener implements IdesDslListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterKeyName(IdesDslParser.KeyNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitKeyName(IdesDslParser.KeyNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueName(IdesDslParser.ValueNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueName(IdesDslParser.ValueNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpression(IdesDslParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -185,25 +234,25 @@ public class IdesDslBaseListener implements IdesDslListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsTableName(IdesDslParser.AsTableNameContext ctx) { }
+	@Override public void enterAsAsset(IdesDslParser.AsAssetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsTableName(IdesDslParser.AsTableNameContext ctx) { }
+	@Override public void exitAsAsset(IdesDslParser.AsAssetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTableName(IdesDslParser.TableNameContext ctx) { }
+	@Override public void enterAssetName(IdesDslParser.AssetNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTableName(IdesDslParser.TableNameContext ctx) { }
+	@Override public void exitAssetName(IdesDslParser.AssetNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

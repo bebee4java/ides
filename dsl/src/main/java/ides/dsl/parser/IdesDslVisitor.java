@@ -1,3 +1,4 @@
+// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 
@@ -46,6 +47,20 @@ public interface IdesDslVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelect(IdesDslParser.SelectContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Connect}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConnect(IdesDslParser.ConnectContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Set}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSet(IdesDslParser.SetContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesDslParser#format}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -88,6 +103,18 @@ public interface IdesDslVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBooleanExpression(IdesDslParser.BooleanExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link IdesDslParser#keyName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitKeyName(IdesDslParser.KeyNameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesDslParser#valueName}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueName(IdesDslParser.ValueNameContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesDslParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -100,17 +127,17 @@ public interface IdesDslVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQualifiedName(IdesDslParser.QualifiedNameContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link IdesDslParser#asTableName}.
+	 * Visit a parse tree produced by {@link IdesDslParser#asAsset}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAsTableName(IdesDslParser.AsTableNameContext ctx);
+	T visitAsAsset(IdesDslParser.AsAssetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link IdesDslParser#tableName}.
+	 * Visit a parse tree produced by {@link IdesDslParser#assetName}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitTableName(IdesDslParser.TableNameContext ctx);
+	T visitAssetName(IdesDslParser.AssetNameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link IdesDslParser#identifier}.
 	 * @param ctx the parse tree

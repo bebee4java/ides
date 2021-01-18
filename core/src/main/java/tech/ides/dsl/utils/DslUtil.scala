@@ -1,8 +1,10 @@
 package tech.ides.dsl.utils
 
-import ides.dsl.parser.IdesDslLexer
-import ides.dsl.parser.IdesDslParser.{ExpressionContext, QueryContext, WhereExpressionsContext}
+import ides.dsl.parser.{IdesDslLexer, IdesDslParser}
+import ides.dsl.parser.IdesDslParser._
+import org.antlr.v4.runtime.{ParserRuleContext, Token}
 import org.antlr.v4.runtime.misc.Interval
+import org.antlr.v4.runtime.tree.TerminalNode
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.constants.ScriptConstants.{PATH_SEPARATOR, PATH_SEPARATOR_SIZE}
 import scala.collection.JavaConverters._
@@ -38,24 +40,46 @@ object DslUtil {
     }
   }
 
+  def parserRuleContext(ruleContext: ParserRuleContext):String = {
+    ruleContext.children.asScala.headOption.map {
+      case pt if pt.isInstanceOf[Token] || pt.isInstanceOf[TerminalNode] =>
+        val tTpye = pt match {
+          case t:Token => t.asInstanceOf[Token].getType
+          case t:TerminalNode => t.asInstanceOf[TerminalNode].getSymbol.getType
+          case _ => return pt.getText
+        }
+
+        tTpye match {
+          case IdesDslParser.MUMERIC |
+               IdesDslParser.IDENTIFIER
+          => pt.getText
+          case
+            IdesDslParser.STRING_TEXT |
+            IdesDslParser.BLOCK_STRING_TEXT |
+            IdesDslParser.QUOTED_TEXT
+          => cleanStr(pt.getText)
+          case _
+          => pt.getText
+        }
+      case pt:ParserRuleContext =>
+        parserRuleContext(pt.asInstanceOf[ParserRuleContext])
+      case pt => pt.getText
+    }.getOrElse("")
+  }
+
+  def parseAssetName(assetName:AssetNameContext):String = {
+    if (assetName == null) return ""
+    parserRuleContext(assetName)
+  }
+
   def getExpressionKey(ec: ExpressionContext):String = {
     if ( ec == null ) return null
-
-    ec.qualifiedName().getText
+    ec.keyName().getText
   }
 
   def getExpressionValue(ec: ExpressionContext):String = {
     if ( ec == null ) return null
-
-    if (ec.MUMERIC() != null) {
-      ec.MUMERIC().getText
-    } else if (ec.STRING_TEXT() != null ) {
-      cleanStr(ec.STRING_TEXT().getText)
-    } else if (ec.BLOCK_STRING_TEXT() != null) {
-      cleanStr(ec.BLOCK_STRING_TEXT().getText)
-    } else {
-      null
-    }
+    parserRuleContext(ec.valueName())
   }
 
   def whereExpressionsToMap(ec: WhereExpressionsContext):Map[String,String] = {

@@ -1,3 +1,4 @@
+// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesDsl.g4 by ANTLR 4.7.2
 
     package ides.dsl.parser;
 
@@ -66,6 +67,30 @@ public interface IdesDslListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSelect(IdesDslParser.SelectContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Connect}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterConnect(IdesDslParser.ConnectContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Connect}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitConnect(IdesDslParser.ConnectContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Set}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterSet(IdesDslParser.SetContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Set}
+	 * labeled alternative in {@link IdesDslParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitSet(IdesDslParser.SetContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IdesDslParser#format}.
 	 * @param ctx the parse tree
@@ -137,6 +162,26 @@ public interface IdesDslListener extends ParseTreeListener {
 	 */
 	void exitBooleanExpression(IdesDslParser.BooleanExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link IdesDslParser#keyName}.
+	 * @param ctx the parse tree
+	 */
+	void enterKeyName(IdesDslParser.KeyNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesDslParser#keyName}.
+	 * @param ctx the parse tree
+	 */
+	void exitKeyName(IdesDslParser.KeyNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesDslParser#valueName}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueName(IdesDslParser.ValueNameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesDslParser#valueName}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueName(IdesDslParser.ValueNameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesDslParser#expression}.
 	 * @param ctx the parse tree
 	 */
@@ -157,25 +202,25 @@ public interface IdesDslListener extends ParseTreeListener {
 	 */
 	void exitQualifiedName(IdesDslParser.QualifiedNameContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link IdesDslParser#asTableName}.
+	 * Enter a parse tree produced by {@link IdesDslParser#asAsset}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsTableName(IdesDslParser.AsTableNameContext ctx);
+	void enterAsAsset(IdesDslParser.AsAssetContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link IdesDslParser#asTableName}.
+	 * Exit a parse tree produced by {@link IdesDslParser#asAsset}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsTableName(IdesDslParser.AsTableNameContext ctx);
+	void exitAsAsset(IdesDslParser.AsAssetContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link IdesDslParser#tableName}.
+	 * Enter a parse tree produced by {@link IdesDslParser#assetName}.
 	 * @param ctx the parse tree
 	 */
-	void enterTableName(IdesDslParser.TableNameContext ctx);
+	void enterAssetName(IdesDslParser.AssetNameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link IdesDslParser#tableName}.
+	 * Exit a parse tree produced by {@link IdesDslParser#assetName}.
 	 * @param ctx the parse tree
 	 */
-	void exitTableName(IdesDslParser.TableNameContext ctx);
+	void exitAssetName(IdesDslParser.AssetNameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IdesDslParser#identifier}.
 	 * @param ctx the parse tree
