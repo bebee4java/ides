@@ -63,24 +63,25 @@ object ScriptUtils {
     def block_comment_left(i: Int) = chars(i) == '/' && chars(i + 1) == '*'
 
     def reset= {
+      if (line.charAt(line.length() -1 ) != ';') line.append(";")
       lines += line.toString
       line.setLength(0)
     }
 
-    def escape(index:Int):Int = {
+    def escape(index:Int, append:Boolean = true):Int = {
       if (chars(index) != '\\') return index
-      line.append('\\').append(chars(index+1))
+      if (append) line.append('\\').append(chars(index+1))
       index + 2
     }
 
-    def wholeStack(index: Int, quoteSize: Int, EOF:Option[Char]): Int = {
+    def wholeStack(index: Int, quoteSize: Int, EOF:Option[Char], append:Boolean=true): Int = {
       var pos = index // 当前位置
       var whole = true // 是否是完整的引用
       while (pos < totalSize && (stack.size < quoteSize * 2 || !whole) && (EOF.isEmpty || EOF.get != chars(pos) ) ) {
         if(chars(pos) == '\\') {
-          pos = escape(pos)
+          pos = escape(pos, append)
         } else {
-          line.append(chars(pos))
+          if (append) line.append(chars(pos))
           stack.push(chars(pos))
           if (EOF.isEmpty) {
             val list = stack.toList
@@ -119,13 +120,13 @@ object ScriptUtils {
             i = wholeStack(i, 1, None)
           case _ if block_comment_left(i) =>
             // 多行注释
-            i = wholeStack(i, 2, None)
-            reset
+            i = wholeStack(i, 2, None, false)
+            // reset 注释不需要加入到结果
           case _ if line_comment(i) =>
             // 单行注释
             // 设置引用标识len等于总字符数 遇到终止符'\n'就是完整的stack
-            i = wholeStack(i, totalSize, Some('\n'))
-            reset
+            i = wholeStack(i, totalSize, Some('\n'), false)
+            // reset 注释不需要加入到结果
           case _ =>
             line.append(chars(i))
             i += 1
