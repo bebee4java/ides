@@ -40,7 +40,7 @@ fi
 
 # 设置driver jvm的最大堆内存
 if [[ "$@" =~ "--driver-memory" ]]; then
-   DRIVER_MEM=$(echo "$@" | sed 's/.*--driver-memory\([\n \t\s]*\)\([0-9KkBbMmGgTt]*\).*/\2/g' )
+   DRIVER_MEM=$(echo "$@" | sed 's/.*--driver-memory\([=\n \t\s]*\)\([0-9KkBbMmGgTt]*\).*/\2/g' )
 fi
 
 if [[ "$@" =~ "spark.driver.memory" ]]; then
