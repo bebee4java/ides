@@ -10,7 +10,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 public class VisitorTest {
 
     public static void main(String[] args) {
-        String expr = "load hive.`a.bc` as table1;\n" +
+        String expr =
+                "load hive.`a.bc` as table1;\n" +
                 "\n----注释" +
                 "\n" +
                 "\n/*------*/" +
@@ -21,14 +22,14 @@ public class VisitorTest {
                 "load hive.`a.abc` as table1;\n" +
                 "save a;";
         CodePointCharStream cpcs = CharStreams.fromString(expr);
-        IdesDslLexer helloLexer = new IdesDslLexer(cpcs);
+        IdesLexer helloLexer = new IdesLexer(cpcs);
 
         CommonTokenStream tokenStream = new CommonTokenStream(helloLexer);
 
-        IdesDslParser parser = new IdesDslParser(tokenStream);
+        IdesParser parser = new IdesParser(tokenStream);
 
 
-        IdesDslParser.StatementContext statement = parser.statement();
+        IdesParser.StatementContext statement = parser.statement();
 
         MyVisitor myVisitor = new MyVisitor();
         myVisitor.visit(statement);
@@ -39,12 +40,12 @@ public class VisitorTest {
 
 }
 
-class MyVisitor extends IdesDslBaseVisitor {
+class MyVisitor extends IdesParserBaseVisitor {
     int cnt = 0;
     int loadcnt = 0;
 
     @Override
-    public Object visitSql(IdesDslParser.SqlContext ctx) {
+    public Object visitSql(IdesParser.SqlContext ctx) {
 
         cnt += 1;
         System.out.println(ctx.getText());
@@ -52,7 +53,7 @@ class MyVisitor extends IdesDslBaseVisitor {
     }
 
     @Override
-    public Object visitLoad(IdesDslParser.LoadContext ctx) {
+    public Object visitLoad(IdesParser.LoadContext ctx) {
         loadcnt += 1;
         System.out.println("load ---> " + ctx.format().getText());
         return super.visitLoad(ctx);

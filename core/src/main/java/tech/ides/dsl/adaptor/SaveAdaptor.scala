@@ -2,15 +2,15 @@ package tech.ides.dsl.adaptor
 
 import java.util.UUID
 
-import ides.dsl.parser.IdesDslParser
-import ides.dsl.parser.IdesDslParser.SaveContext
+import ides.dsl.parser.IdesParser
+import ides.dsl.parser.IdesParser.SaveContext
 import org.apache.spark.sql._
 import tech.ides.constants.ScriptConstants.PARTITION_BY_COL
 import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.{DataSinkConfig, DataSourceFactory}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SaveSqlStatement, SqlStatement}
-import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, resourceRealPath, whereExpressionsToMap, parseAssetName}
+import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, parseAssetName, resourceRealPath, whereExpressionsToMap}
 import tech.ides.job.ScriptJobManager
 
 import scala.collection.mutable.ListBuffer
@@ -22,7 +22,7 @@ import scala.collection.JavaConverters._
   */
 case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends ScriptDslAdaptor {
 
-  override def parse(context: IdesDslParser.QueryContext): SqlStatement = {
+  override def parse(context: IdesParser.QueryContext): SqlStatement = {
     val saveContext = context.asInstanceOf[SaveContext]
 
     val sql = currentText(saveContext)
@@ -58,7 +58,7 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
 
   }
 
-  override def enterContext(context: IdesDslParser.QueryContext): Unit = {
+  override def enterContext(context: IdesParser.QueryContext): Unit = {
     val SaveSqlStatement(_, inputTableName, saveMode, format, path, options, partitionByCol) = parse(context)
 
     val spark = scriptQueryExecListener.sparkSession

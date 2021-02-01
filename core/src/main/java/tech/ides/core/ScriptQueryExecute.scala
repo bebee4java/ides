@@ -1,6 +1,6 @@
 package tech.ides.core
 
-import ides.dsl.parser.{IdesDslBaseListener, IdesDslLexer, IdesDslParser}
+import ides.dsl.parser._
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.CommonTokenStream
 import tech.ides.dsl.listener.ScriptQueryExecListener
@@ -77,11 +77,11 @@ object ScriptQueryExecute extends Logging {
   }
 
 
-  private def parse(script: String, listener: IdesDslBaseListener): Unit = {
+  private def parse(script: String, listener: IdesParserBaseListener): Unit = {
     val charStream = new CaseChangeCharStream(script)
-    val idesDslLexer = new IdesDslLexer(charStream)
+    val idesDslLexer = new IdesLexer(charStream)
     val tokenStream = new CommonTokenStream(idesDslLexer)
-    val parser = new IdesDslParser(tokenStream)
+    val parser = new IdesParser(tokenStream)
 
     // add syntax error listener
     parser.addErrorListener(new SyntaxErrorListener)

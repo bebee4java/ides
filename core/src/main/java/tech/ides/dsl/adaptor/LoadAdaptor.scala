@@ -1,7 +1,7 @@
 package tech.ides.dsl.adaptor
 
-import ides.dsl.parser.IdesDslParser
-import ides.dsl.parser.IdesDslParser.LoadContext
+import ides.dsl.parser.IdesParser
+import ides.dsl.parser.IdesParser.LoadContext
 import org.apache.spark.sql.{DataFrame, DataFrameReader}
 import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.{DataSourceConfig, DataSourceFactory}
@@ -15,7 +15,7 @@ import tech.ides.dsl.utils.DslUtil._
   */
 case class LoadAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends ScriptDslAdaptor {
 
-  override def parse(context: IdesDslParser.QueryContext): SqlStatement = {
+  override def parse(context: IdesParser.QueryContext): SqlStatement = {
 
     val loadContext = context.asInstanceOf[LoadContext]
 
@@ -31,7 +31,7 @@ case class LoadAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     LoadSqlStatement(sql, format, path, options, tableName)
   }
 
-  override def enterContext(context: IdesDslParser.QueryContext): Unit = {
+  override def enterContext(context: IdesParser.QueryContext): Unit = {
     val LoadSqlStatement(_, format, path, options, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession
     val reader = sparkSession.read

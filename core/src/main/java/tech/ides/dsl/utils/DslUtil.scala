@@ -1,7 +1,7 @@
 package tech.ides.dsl.utils
 
-import ides.dsl.parser.{IdesDslLexer, IdesDslParser}
-import ides.dsl.parser.IdesDslParser._
+import ides.dsl.parser.{IdesLexer, IdesParser}
+import ides.dsl.parser.IdesParser._
 import org.antlr.v4.runtime.{ParserRuleContext, Token}
 import org.antlr.v4.runtime.misc.Interval
 import org.antlr.v4.runtime.tree.TerminalNode
@@ -18,7 +18,7 @@ object DslUtil {
 
   def currentText(ctx: QueryContext):String = {
     if ( ctx == null ) return null
-    val input = ctx.start.getTokenSource.asInstanceOf[IdesDslLexer]._input
+    val input = ctx.start.getTokenSource.asInstanceOf[IdesLexer]._input
 
     val start = ctx.start.getStartIndex
     val stop = ctx.stop.getStopIndex
@@ -50,13 +50,13 @@ object DslUtil {
         }
 
         tTpye match {
-          case IdesDslParser.MUMERIC |
-               IdesDslParser.IDENTIFIER
+          case IdesParser.MUMERIC |
+               IdesParser.IDENTIFIER
           => pt.getText
           case
-            IdesDslParser.STRING_TEXT |
-            IdesDslParser.BLOCK_STRING_TEXT |
-            IdesDslParser.QUOTED_TEXT
+            IdesParser.STRING_TEXT |
+            IdesParser.BLOCK_STRING_TEXT |
+            IdesParser.QUOTED_TEXT
           => cleanStr(pt.getText)
           case _
           => pt.getText

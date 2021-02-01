@@ -2,7 +2,7 @@ package tech.ides.dsl.listener
 
 import java.util.concurrent.atomic.AtomicReference
 
-import ides.dsl.parser.{IdesDslBaseListener, IdesDslParser}
+import ides.dsl.parser.{IdesParser, IdesParserBaseListener}
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.sql.SparkSession
 import tech.ides.core.ScriptStage
@@ -16,7 +16,7 @@ import scala.collection.mutable
   * 脚本执行监听器类
   * Created by songgr on 2020/10/28.
   */
-class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPrefix:String, val owner:String) extends IdesDslBaseListener with Logging {
+class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPrefix:String, val owner:String) extends IdesParserBaseListener with Logging {
 
   logInfo(s"create ScriptQueryExecListener for $owner.")
 
@@ -69,31 +69,122 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   /**
     * 整个脚本的context
     */
-  override def exitStatement(ctx: IdesDslParser.StatementContext): Unit = {}
+  override def exitStatement(ctx: IdesParser.StatementContext): Unit = {}
 
   /**
-    * 单条sql的context
+    * python 代码的context
+    *
+    * example:
+    * %python
+    * # use table
+    * a=1
+    * print(a)
+    * % > output
     */
-  override def exitSql(ctx: IdesDslParser.SqlContext): Unit = {}
+  override def exitPy(ctx: IdesParser.PyContext): Unit = {
+    // todo 执行python代码
+    val pyMode = ctx.getStart.getText
+    val bracket_l = pyMode.indexOf('(')
+    val bracket_r = pyMode.indexOf(')')
+
+    val table = if ( bracket_l > 0 &&  bracket_r > bracket_l + 1) {
+      Some( pyMode.substring(bracket_l + 1, bracket_r) )
+    } else None
+
+    // todo table需要format
+    if (table.isDefined)
+      println("input table: " + table.get)
+
+    val context = ctx.pythonCode()
+    val pys = context.pyStatement()
+    println("total line: " + pys.size())
+    val s = context.getText
+    println("py: \n" + s)
+
+    // todo table需要format
+    if (ctx.outTable() != null) {
+      val tb = ctx.outTable().assetName()
+      println("py output: \n" + tb.getText)
+    }
+
+  }
+
+  /**
+    * sql脚本（jdbc语句）的context
+    * example:
+    * %sql
+    * # use table
+    * select 1 from test;
+    * % > output
+    */
+  override def exitSql(ctx: IdesParser.SqlContext): Unit = {
+    // todo 执行sql代码
+    val sqlMode = ctx.getStart.getText
+    val bracket_l = sqlMode.indexOf('(')
+    val bracket_r = sqlMode.indexOf(')')
+
+    val connect = if ( bracket_l > 0 &&  bracket_r > bracket_l + 1) {
+      Some( sqlMode.substring(bracket_l + 1, bracket_r) )
+    } else None
+
+    // todo connect需要format
+    if (connect.isDefined)
+      println("sql connect: " + connect.get)
+
+    val context = ctx.sqlCode()
+    val sqls = context.sqlStatement()
+    println("total line: " + sqls.size())
+    val s = context.getText
+    println("sql: \n" + s)
+
+    // todo table需要format
+    if (ctx.outTable() != null) {
+      val tb = ctx.outTable().assetName()
+      println("sql output: \n" + tb.getText)
+    }
+  }
+
+
+  /**
+    * shell脚本的context
+    * example:
+    * %sh
+    * # test
+    * ls -las /;
+    * % > output
+    */
+  override def exitSh(ctx: IdesParser.ShContext): Unit = {
+    val context = ctx.shellCode()
+    val shs = context.shellStatement()
+    println("total line: " + shs.size())
+    val s = context.getText
+    println("shell: \n" + s)
+
+    // todo table需要format
+    if (ctx.outTable() != null) {
+      val tb = ctx.outTable().assetName()
+      println("shell output: \n" + tb.getText)
+    }
+  }
 
   /**
     * load语句的context
     */
-  override def exitLoad(ctx: IdesDslParser.LoadContext): Unit = {
+  override def exitLoad(ctx: IdesParser.LoadContext): Unit = {
     LoadAdaptor(this).enterContext(ctx)
   }
 
   /**
     * select语句的context
     */
-  override def exitSelect(ctx: IdesDslParser.SelectContext): Unit = {
+  override def exitSelect(ctx: IdesParser.SelectContext): Unit = {
     SelectAdaptor(this).enterContext(ctx)
   }
 
   /**
     * save语句的context
     */
-  override def exitSave(ctx: IdesDslParser.SaveContext): Unit = {
+  override def exitSave(ctx: IdesParser.SaveContext): Unit = {
     SaveAdaptor(this).enterContext(ctx)
   }
 }
