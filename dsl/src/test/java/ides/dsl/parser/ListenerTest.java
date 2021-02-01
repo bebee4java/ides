@@ -21,27 +21,27 @@ public class ListenerTest {
                 "load hive.`a.abc` as table1;\n" +
                 "save a;";
         CodePointCharStream cpcs = CharStreams.fromString(expr);
-        IdesDslLexer idesDslLexer = new IdesDslLexer(cpcs);
+        IdesLexer idesDslLexer = new IdesLexer(cpcs);
 
         CommonTokenStream tokenStream = new CommonTokenStream(idesDslLexer);
 
-        IdesDslParser parser = new IdesDslParser(tokenStream);
+        IdesParser parser = new IdesParser(tokenStream);
         MyListener listener = new MyListener();
 
-        IdesDslParser.StatementContext statement = parser.statement();
+        IdesParser.StatementContext statement = parser.statement();
 
         ParseTreeWalker.DEFAULT.walk(listener, statement);
     }
 }
 
-class MyListener extends IdesDslBaseListener {
+class MyListener extends IdesParserBaseListener {
     @Override
-    public void exitSql(IdesDslParser.SqlContext ctx) {
+    public void exitSql(IdesParser.SqlContext ctx) {
         System.out.println(ctx.getText());
     }
 
     @Override
-    public void exitLoad(IdesDslParser.LoadContext ctx) {
+    public void exitLoad(IdesParser.LoadContext ctx) {
         String text = ctx.format().getText();
         System.out.println("load -----> " + text);
 

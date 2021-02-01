@@ -1,6 +1,6 @@
 package tech.ides.dsl.adaptor
 
-import ides.dsl.parser.IdesDslParser.QueryContext
+import ides.dsl.parser.IdesParser.QueryContext
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.SqlStatement
 

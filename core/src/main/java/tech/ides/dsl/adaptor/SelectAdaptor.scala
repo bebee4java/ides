@@ -1,7 +1,7 @@
 package tech.ides.dsl.adaptor
 
-import ides.dsl.parser.IdesDslParser
-import ides.dsl.parser.IdesDslParser.SelectContext
+import ides.dsl.parser.IdesParser
+import ides.dsl.parser.IdesParser.SelectContext
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SelectSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil.{currentText, parseAssetName}
@@ -11,7 +11,7 @@ import tech.ides.dsl.utils.DslUtil.{currentText, parseAssetName}
   * Created by songgr on 2020/11/06.
   */
 case class SelectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends ScriptDslAdaptor {
-  override def parse(context: IdesDslParser.QueryContext): SqlStatement = {
+  override def parse(context: IdesParser.QueryContext): SqlStatement = {
 
     val selectContext = context.asInstanceOf[SelectContext]
     val sql = currentText(selectContext)
@@ -21,7 +21,7 @@ case class SelectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) exten
     SelectSqlStatement(sql, tableName)
   }
 
-  override def enterContext(context: IdesDslParser.QueryContext): Unit = {
+  override def enterContext(context: IdesParser.QueryContext): Unit = {
 
     val SelectSqlStatement(_sql, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession
