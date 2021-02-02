@@ -40,11 +40,13 @@ object ScriptUtils {
     * @return List[String]
     */
   def readLines(script: String): List[String] = {
-    if (script == null || script.isEmpty) return List()
+    if ( script == null ) return List()
+    val sql = script.trim
+    if ( sql.isEmpty ) return List()
 
     val lines = new ListBuffer[String]
     val line = new StringBuffer
-    val chars = script.toCharArray
+    val chars = sql.toCharArray
     val totalSize = chars.length // 总字符数
     val stack = new mutable.Stack[Char]()
     var i = 0
@@ -63,7 +65,6 @@ object ScriptUtils {
     def block_comment_left(i: Int) = chars(i) == '/' && chars(i + 1) == '*'
 
     def reset= {
-      if (line.charAt(line.length() -1 ) != ';') line.append(";")
       lines += line.toString
       line.setLength(0)
     }
