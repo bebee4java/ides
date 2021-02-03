@@ -7,3 +7,6 @@ logs
 *.log
 *.tgz
 spark-warehouse
+metastore_db
+ides-*bin-spark*
+.DS_Store
