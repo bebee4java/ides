@@ -150,11 +150,11 @@ VariableRef
 
 // % 打头认为end
 PY_NonEnd
-    : ~[ \r\n\t]+ '%' .*?
+    : ~[ \r\n\t]+ ( [ \t]* '%' [ \t]* ~[ \r\n\t]+ )+
     ;
 
 PY_TEXT
-    : ( ~('#'|'%'|'"'|'\''|'\r'|'\n') | PY_STRING| PY_NonEnd | VariableRef )+ PY_RETURN?
+    : ( PY_STRING| PY_NonEnd | VariableRef | ~('#'|'%'|'"'|'\''|'\r'|'\n') )+ PY_RETURN?
     ;
 
 PY_COMMENT
