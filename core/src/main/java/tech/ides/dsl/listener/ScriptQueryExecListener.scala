@@ -8,6 +8,7 @@ import org.apache.spark.sql.SparkSession
 import tech.ides.core.ScriptStage
 import tech.ides.dsl.adaptor.{LoadAdaptor, SaveAdaptor, SelectAdaptor}
 import tech.ides.constants.ScriptConstants.PATH_SEPARATOR
+import tech.ides.dsl.utils.DslUtil
 import tech.sqlclub.common.log.Logging
 
 import scala.collection.mutable
@@ -98,7 +99,8 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
     val context = ctx.pythonCode()
     val pys = context.pyStatement()
     println("total line: " + pys.size())
-    val s = context.getText
+//    val s = context.getText
+    val s = DslUtil.currentText(context)
     println("py: \n" + s)
 
     // todo table需要format

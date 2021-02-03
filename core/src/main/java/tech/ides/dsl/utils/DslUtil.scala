@@ -16,7 +16,7 @@ import scala.collection.mutable
   */
 object DslUtil {
 
-  def currentText(ctx: QueryContext):String = {
+  def currentText(ctx: ParserRuleContext):String = {
     if ( ctx == null ) return null
     val input = ctx.start.getTokenSource.asInstanceOf[IdesLexer]._input
 
