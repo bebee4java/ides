@@ -11,7 +11,7 @@ import org.apache.hadoop.io.compress.CompressionCodec;
 import org.apache.hadoop.io.compress.CompressionCodecFactory;
 import org.apache.hadoop.io.compress.SplittableCompressionCodec;
 import org.apache.hadoop.mapred.*;
-import tech.sqlclub.common.utils.StringEscapeUtil;
+import tech.sqlclub.common.utils.StringEscapeUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -52,9 +52,9 @@ public class MultiLineCSVInputFormat extends FileInputFormat<LongWritable, Text>
     public RecordReader<LongWritable, Text> getRecordReader(InputSplit split, JobConf job, Reporter reporter) throws IOException {
         reporter.setStatus(split.toString());
 
-        String separatorChar = StringEscapeUtil.unescapeJava(job.get(OpenCSVSerde.SEPARATORCHAR.toLowerCase(Locale.ROOT)));
-        String quoteChar = StringEscapeUtil.unescapeJava(job.get(OpenCSVSerde.QUOTECHAR.toLowerCase(Locale.ROOT)));
-        String escapeChar = StringEscapeUtil.unescapeJava(job.get(OpenCSVSerde.ESCAPECHAR.toLowerCase(Locale.ROOT)));
+        String separatorChar = StringEscapeUtils.unescapeJava(job.get(OpenCSVSerde.SEPARATORCHAR.toLowerCase(Locale.ROOT)));
+        String quoteChar = StringEscapeUtils.unescapeJava(job.get(OpenCSVSerde.QUOTECHAR.toLowerCase(Locale.ROOT)));
+        String escapeChar = StringEscapeUtils.unescapeJava(job.get(OpenCSVSerde.ESCAPECHAR.toLowerCase(Locale.ROOT)));
 
         // 核心是RecordReader 切分每一行
         return new MultiLineCSVRecordReader(job, (FileSplit) split, separatorChar, quoteChar, escapeChar);

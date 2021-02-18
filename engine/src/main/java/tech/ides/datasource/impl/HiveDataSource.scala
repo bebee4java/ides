@@ -9,7 +9,7 @@ import tech.ides.datasource._
 import tech.ides.datasource.DataSource.Method.{SINK, SOURCE}
 import tech.ides.constants.ScriptConstants.{FILE_FORMAT, IMPL_CLASS, PARTITION_BY_COL}
 import tech.ides.exception.IdesException
-import tech.sqlclub.common.utils.StringEscapeUtil
+import tech.sqlclub.common.utils.StringEscapeUtils
 
 /**
   * Hive 数据源
@@ -47,7 +47,7 @@ class HiveDataSource extends DataReader with DataWriter{
       HiveOptions.delimiterOptions.keys.foreach {
         // 将delimiter options都进行反向转义
         k =>
-          options.get(k).foreach(v => options = options.updated(k, StringEscapeUtil.unescapeJava(v)))
+          options.get(k).foreach(v => options = options.updated(k, StringEscapeUtils.unescapeJava(v)))
       }
     }
 
@@ -70,7 +70,7 @@ class HiveDataSource extends DataReader with DataWriter{
       // 将serde options 进行转义
       HiveOptions.openCSVSerdeOptions.foreach {
         k =>
-          options.get(k).foreach(v => options = options.updated(k, StringEscapeUtil.unescapeJava(v)))
+          options.get(k).foreach(v => options = options.updated(k, StringEscapeUtils.unescapeJava(v)))
       }
     }
 

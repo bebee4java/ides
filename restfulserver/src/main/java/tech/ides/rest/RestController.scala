@@ -9,7 +9,7 @@ import org.scalatra.scalate.ScalateSupport
 import org.scalatra.swagger._
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.net.NetUtils
-import tech.sqlclub.common.utils.CaseClassUtil.{JString => CJString , caseClassFields, SInt, SLong}
+import tech.sqlclub.common.utils.CaseClassUtils.{JString => CJString , caseClassFields, SInt, SLong}
 
 /**
   *
