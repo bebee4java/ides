@@ -76,6 +76,9 @@ class IdesAppController extends RestController with ControllerUtils {
         val errorMsg = ExceptionUtil.format_throwable(e)
         outputResult = errorMsg
         render(500, outputResult)
+    } finally {
+      // todo 请求结束清理session
+      cleanActiveSession
     }
     render(200, outputResult)
   }
@@ -90,6 +93,11 @@ trait ControllerUtils extends Logging {
 
   def getSession = {
     runtime.asInstanceOf[SparkRuntime].sparkSession
+  }
+
+  def cleanActiveSession = {
+    ScriptQueryExecute.reset
+    SparkSession.clearActiveSession()
   }
 
   def runScript(script: String,
