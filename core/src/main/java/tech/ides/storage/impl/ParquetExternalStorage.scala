@@ -34,7 +34,7 @@ class ParquetExternalStorage extends ExternalStorage {
   ))
 
   override def readConfig(configId: String, key: String): Option[String] = {
-    val realPath = PathUtils() / rootPath / configId
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / configId
     val df = spark.read.parquet(realPath.toPath)
     val schema = df.schema
     require(schema.size == 2 && schema(0).dataType == StringType && schema(1).dataType == StringType,
@@ -45,7 +45,7 @@ class ParquetExternalStorage extends ExternalStorage {
   }
 
   override def readConfig(configId: String): Map[String, String] = {
-    val realPath = PathUtils() / rootPath / configId
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / configId
     val df = spark.read.parquet(realPath.toPath)
     val schema = df.schema
     require(schema.size == 2 && schema(0).dataType == StringType && schema(1).dataType == StringType,
@@ -54,7 +54,7 @@ class ParquetExternalStorage extends ExternalStorage {
   }
 
   override def saveConfig(configId: String, key: String, value: String, overwrite:Boolean): Unit = {
-    val realPath = PathUtils() / rootPath / configId
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / configId
     val rows = Seq(Row.fromSeq(Seq(key, value)))
     val df = spark.createDataFrame(spark.sparkContext.parallelize(rows, 1), schema)
     val mode = if (overwrite) SaveMode.Overwrite else SaveMode.Append
@@ -62,7 +62,7 @@ class ParquetExternalStorage extends ExternalStorage {
   }
 
   override def saveConfig(configId: String, configMap: Map[String, String], overwrite: Boolean): Unit = {
-    val realPath = PathUtils() / rootPath / configId
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / configId
     val rows = configMap.map {
       case (k, v) =>
         Row.fromSeq(Seq(k, v))
@@ -73,12 +73,12 @@ class ParquetExternalStorage extends ExternalStorage {
   }
 
   override def readAsTable(tableName: String): DataFrame = {
-    val realPath = PathUtils() / rootPath / tableName
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
     spark.read.parquet(realPath.toPath)
   }
 
   override def saveAsTable(tableName: String, table: DataFrame, overwrite: Boolean): Unit = {
-    val realPath = PathUtils() / rootPath / tableName
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
     val mode = if (overwrite) SaveMode.Overwrite else SaveMode.Append
     table.coalesce(1).write.mode(mode).parquet(realPath.toPath)
   }
