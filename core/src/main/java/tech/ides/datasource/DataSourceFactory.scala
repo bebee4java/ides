@@ -19,6 +19,10 @@ object DataSourceFactory extends Logging {
 
   def listName() = registry.keySet().asScala.map(_.name).toSet
 
+  def findBothNames(name:String) = {
+    registry.asScala.find(_._1.name == name).map(it => Set(it._2.fullFormat, it._2.aliasFormat))
+  }
+
   /**
     * 注册所有数据源
     */

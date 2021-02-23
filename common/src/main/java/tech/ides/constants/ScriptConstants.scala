@@ -16,6 +16,8 @@ object ScriptConstants {
 
   val PARTITION_BY_COL = "partitionByCol"
 
+  val EXTERNAL_STORAGE = "externalStorage"
+
   def PATH_SEPARATOR = File.pathSeparator
 
   def PATH_SEPARATOR_SIZE = PATH_SEPARATOR.length

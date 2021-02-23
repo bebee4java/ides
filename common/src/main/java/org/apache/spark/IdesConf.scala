@@ -171,6 +171,11 @@ object IdesConf {
     IdesConfigBuilder("spark.ides.restful.api.max.result.size")
       .doc("the max size of restful api result.").intConf.createWithDefault(1000)
 
+  val EXTERNAL_STORAGE_IMPL_CLASS_NAME = IdesConfigBuilder("ides.external.storage.impl.class.name")
+    .doc("ides external storage implementation class name")
+    .stringConf
+    .createWithDefault("tech.ides.storage.impl.ParquetExternalStorage")
+
 }
 
 private[spark] class IdesConfigProvider(conf: java.util.Map[String, String]) extends ConfigProvider {

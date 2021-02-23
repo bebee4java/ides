@@ -1,6 +1,7 @@
 package tech.ides.storage.impl
 
 import org.apache.hadoop.fs.Path
+import org.apache.hadoop.hdfs.HdfsOperator
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.apache.spark.sql._
 import tech.ides.core.ScriptQueryExecute
@@ -46,7 +47,11 @@ class ParquetExternalStorage extends ExternalStorage {
 
   override def readConfig(configId: String, storageInfo:StorageInfo, key: String): Option[String] = {
     val realPath = PathUtils() / rootPath / spark.sparkContext.appName / storageInfo.toString / configId
-    val df = spark.read.parquet(realPath.toPath)
+    val path = realPath.toPath
+    if (!HdfsOperator.fileExists(path)) {
+      return None
+    }
+    val df = spark.read.parquet(path)
     val schema = df.schema
     require(schema.size == 4 && !schema.exists(f => f.dataType != StringType),
       "config data schema must be 4 StringType fields!")
@@ -57,7 +62,11 @@ class ParquetExternalStorage extends ExternalStorage {
 
   override def readConfig(configId: String, storageInfo:StorageInfo): Map[String, String] = {
     val realPath = PathUtils() / rootPath / spark.sparkContext.appName / storageInfo.toString / configId
-    val df = spark.read.parquet(realPath.toPath)
+    val path = realPath.toPath
+    if (!HdfsOperator.fileExists(path)) {
+      return Map()
+    }
+    val df = spark.read.parquet(path)
     val schema = df.schema
     require(schema.size == 4 && !schema.exists(f => f.dataType != StringType),
       "config data schema must be 4 StringType fields!")
@@ -67,7 +76,11 @@ class ParquetExternalStorage extends ExternalStorage {
   override def readConfig(storageInfo: StorageInfo): Map[String, Map[String, String]] = {
     val realPath = PathUtils() / rootPath / spark.sparkContext.appName / storageInfo.toString
     val realPathStr = realPath.toPath
-    val df = spark.read.option("basePath", realPathStr).parquet(new Path(realPathStr, "*").toString)
+    val path = new Path(realPathStr, "*")
+    if (!HdfsOperator.fileExists(realPathStr)) {
+      return Map()
+    }
+    val df = spark.read.option("basePath", realPathStr).parquet(path.toString)
     val schema = df.schema
     require(schema.size == 4 && !schema.exists(f => f.dataType != StringType),
       "config data schema must be 4 StringType fields!")

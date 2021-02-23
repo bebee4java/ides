@@ -6,7 +6,7 @@ import ides.dsl.parser.{IdesParser, IdesParserBaseListener}
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.sql.SparkSession
 import tech.ides.core.ScriptStage
-import tech.ides.dsl.adaptor.{LoadAdaptor, SaveAdaptor, SelectAdaptor}
+import tech.ides.dsl.adaptor._
 import tech.ides.constants.ScriptConstants.PATH_SEPARATOR
 import tech.ides.dsl.utils.DslUtil
 import tech.sqlclub.common.log.Logging
@@ -188,5 +188,12 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
     */
   override def exitSave(ctx: IdesParser.SaveContext): Unit = {
     SaveAdaptor(this).enterContext(ctx)
+  }
+
+  /**
+    * connect语句的context
+    */
+  override def exitConnect(ctx: IdesParser.ConnectContext): Unit = {
+    ConnectAdaptor(this).enterContext(ctx)
   }
 }
