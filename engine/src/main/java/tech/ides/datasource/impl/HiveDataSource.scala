@@ -29,6 +29,7 @@ class HiveDataSource extends DataReader with DataWriter{
 
   override def save(writer: DataFrameWriter[Row], config: DataSinkConfig): Unit = {
 
+    val format = config.config.getOrElse(IMPL_CLASS, fullFormat)
     val fileFormat = config.config.getOrElse(FILE_FORMAT, "parquet")
 
     var options = config.config - FILE_FORMAT - IMPL_CLASS
@@ -55,6 +56,7 @@ class HiveDataSource extends DataReader with DataWriter{
       // 先判断所有字段是否是String类型
       val table = config.df.get
       val notStringCols = table.schema.filterNot(_.dataType == StringType)
+      // TextFileFormat只支持StringType可以参考supportDataType方法
       if (notStringCols.nonEmpty) throw new IdesException("All fields must be String type when stored as csv type!")
       // 解决csv中存在换行问题
       options = options.updated("serde", classOf[OpenCSVSerde].getName) // 使用自定义serde
@@ -79,7 +81,7 @@ class HiveDataSource extends DataReader with DataWriter{
       .filterNot(_.length == 0)
       .map(partitionColumns => writer.partitionBy(partitionColumns: _*))
 
-    writer.format(fullFormat).options(options).mode(config.mode).saveAsTable(config.path)
+    writer.format(format).options(options).mode(config.mode).saveAsTable(config.path)
   }
 
   override def fullFormat: String = "hive"
