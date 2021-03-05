@@ -81,6 +81,11 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     DataSourceFactory.take(format, options).map {
       dataSource =>
         val config = if (partitionByCol.nonEmpty) {
+          // 如果需要分区 进行partitionBy
+          val partitionColumns = partitionByCol.filterNot(_.isEmpty)
+          Option(partitionColumns).filterNot(_.isEmpty)
+            .map(partitionColumns => write.partitionBy(partitionColumns: _*))
+
           options ++ Map(PARTITION_BY_COL -> partitionByCol.mkString(","))
         } else options
         val dataSinkConfig = DataSinkConfig(resourcePath, config, saveMode, Option(originalTable))

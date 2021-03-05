@@ -75,12 +75,6 @@ class HiveDataSource extends DataReader with DataWriter{
           options.get(k).foreach(v => options = options.updated(k, StringEscapeUtils.unescapeJava(v)))
       }
     }
-
-    // 如果需要分区 进行partitionBy
-    options.get(PARTITION_BY_COL).map(partitionColumn => partitionColumn.split(",").filterNot(_.isEmpty))
-      .filterNot(_.length == 0)
-      .map(partitionColumns => writer.partitionBy(partitionColumns: _*))
-
     writer.format(format).options(options).mode(config.mode).saveAsTable(config.path)
   }
 
