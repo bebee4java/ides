@@ -89,6 +89,9 @@ LETTER
     : [a-zA-Z]    // 定义字母
     ;
 
+WS  : (' '|'\r'|'\t'|'\n') -> channel(HIDDEN)
+    ;
+
 // ～x 是指除x外的任何字符
 LINE_COMMENT
     : '--' ~[\r\n]* NL?  -> channel(HIDDEN) // 单行注释
@@ -105,9 +108,9 @@ NL
     ;
 
 // channel(HIDDEN) 隐藏通道会 忽略却保留 匹配的词法符号
-WS
-    : [ \r\n\t]+ -> channel(HIDDEN)    // 匹配一个或者多个空白字符
-    ;
+//WS
+//    : [ \r\n\t]+ -> channel(HIDDEN)    // 匹配一个或者多个空白字符
+//    ;
 
 // Catch-all for anything we can't recognize.
 // We use this to be able to ignore and recover all the text

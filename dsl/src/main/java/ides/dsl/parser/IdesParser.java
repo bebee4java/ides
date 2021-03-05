@@ -23,7 +23,7 @@ public class IdesParser extends Parser {
 		OPTIONS=9, WHERE=10, AND=11, OVERWRITE=12, APPEND=13, ERRORIfExists=14, 
 		IGNORE=15, PARTITIONBY=16, CONNECT=17, SET=18, DOT=19, EQ=20, COMMA=21, 
 		OUT=22, EOQ=23, MUMERIC=24, IDENTIFIER=25, QUOTED_TEXT=26, STRING_TEXT=27, 
-		BLOCK_STRING_TEXT=28, LINE_COMMENT=29, BLOCK_COMMENT=30, NL=31, WS=32, 
+		BLOCK_STRING_TEXT=28, WS=29, LINE_COMMENT=30, BLOCK_COMMENT=31, NL=32, 
 		UNRECOGNIZED=33, EXIT_PY=34, PY_RETURN=35, PY_STRING=36, VARIABLE=37, 
 		VariableRef=38, PY_NonEnd=39, PY_TEXT=40, PY_COMMENT=41, PY_WS=42, EXIT_SQL=43, 
 		SQL_RETURN=44, SQL_TEXT=45, DDL=46, DML=47, Profile=48, SQL_COMMENT1=49, 
@@ -67,7 +67,7 @@ public class IdesParser extends Parser {
 			"SELECT", "OPTIONS", "WHERE", "AND", "OVERWRITE", "APPEND", "ERRORIfExists", 
 			"IGNORE", "PARTITIONBY", "CONNECT", "SET", "DOT", "EQ", "COMMA", "OUT", 
 			"EOQ", "MUMERIC", "IDENTIFIER", "QUOTED_TEXT", "STRING_TEXT", "BLOCK_STRING_TEXT", 
-			"LINE_COMMENT", "BLOCK_COMMENT", "NL", "WS", "UNRECOGNIZED", "EXIT_PY", 
+			"WS", "LINE_COMMENT", "BLOCK_COMMENT", "NL", "UNRECOGNIZED", "EXIT_PY", 
 			"PY_RETURN", "PY_STRING", "VARIABLE", "VariableRef", "PY_NonEnd", "PY_TEXT", 
 			"PY_COMMENT", "PY_WS", "EXIT_SQL", "SQL_RETURN", "SQL_TEXT", "DDL", "DML", 
 			"Profile", "SQL_COMMENT1", "SQL_COMMENT2", "SQL_COMMENT_BLOCK", "CreatStatement", 
@@ -2031,19 +2031,19 @@ public class IdesParser extends Parser {
 		"\3\2\2\2.\u00d6\3\2\2\2\60\u00d8\3\2\2\2\62\u00da\3\2\2\2\64\u00dc\3\2"+
 		"\2\2\66\u00de\3\2\2\28:\5\4\3\298\3\2\2\2:=\3\2\2\2;9\3\2\2\2;<\3\2\2"+
 		"\2<\3\3\2\2\2=;\3\2\2\2>?\5\22\n\2?@\7\31\2\2@]\3\2\2\2AB\7\3\2\2BC\5"+
-		"\6\4\2CE\7$\2\2DF\7!\2\2ED\3\2\2\2EF\3\2\2\2FH\3\2\2\2GI\5\66\34\2HG\3"+
-		"\2\2\2HI\3\2\2\2I]\3\2\2\2JK\7\4\2\2KL\5\n\6\2LN\7-\2\2MO\7!\2\2NM\3\2"+
-		"\2\2NO\3\2\2\2OQ\3\2\2\2PR\5\66\34\2QP\3\2\2\2QR\3\2\2\2R]\3\2\2\2ST\7"+
-		"\5\2\2TU\5\16\b\2UW\7K\2\2VX\7!\2\2WV\3\2\2\2WX\3\2\2\2XZ\3\2\2\2Y[\5"+
-		"\66\34\2ZY\3\2\2\2Z[\3\2\2\2[]\3\2\2\2\\>\3\2\2\2\\A\3\2\2\2\\J\3\2\2"+
-		"\2\\S\3\2\2\2]\5\3\2\2\2^`\5\b\5\2_^\3\2\2\2`c\3\2\2\2a_\3\2\2\2ab\3\2"+
-		"\2\2b\7\3\2\2\2ca\3\2\2\2de\7*\2\2e\t\3\2\2\2fh\5\f\7\2gf\3\2\2\2hk\3"+
-		"\2\2\2ig\3\2\2\2ij\3\2\2\2j\13\3\2\2\2ki\3\2\2\2lm\7/\2\2m\r\3\2\2\2n"+
-		"p\5\20\t\2on\3\2\2\2ps\3\2\2\2qo\3\2\2\2qr\3\2\2\2r\17\3\2\2\2sq\3\2\2"+
-		"\2tu\7O\2\2u\21\3\2\2\2vw\7\b\2\2wx\5\24\13\2xy\7\25\2\2y{\5\26\f\2z|"+
-		"\5\34\17\2{z\3\2\2\2{|\3\2\2\2|}\3\2\2\2}~\5*\26\2~\u00a0\3\2\2\2\177"+
-		"\u0080\7\t\2\2\u0080\u0082\5,\27\2\u0081\u0083\5\64\33\2\u0082\u0081\3"+
-		"\2\2\2\u0082\u0083\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0085\7\7\2\2\u0085"+
+		"\6\4\2CE\7$\2\2DF\7\"\2\2ED\3\2\2\2EF\3\2\2\2FH\3\2\2\2GI\5\66\34\2HG"+
+		"\3\2\2\2HI\3\2\2\2I]\3\2\2\2JK\7\4\2\2KL\5\n\6\2LN\7-\2\2MO\7\"\2\2NM"+
+		"\3\2\2\2NO\3\2\2\2OQ\3\2\2\2PR\5\66\34\2QP\3\2\2\2QR\3\2\2\2R]\3\2\2\2"+
+		"ST\7\5\2\2TU\5\16\b\2UW\7K\2\2VX\7\"\2\2WV\3\2\2\2WX\3\2\2\2XZ\3\2\2\2"+
+		"Y[\5\66\34\2ZY\3\2\2\2Z[\3\2\2\2[]\3\2\2\2\\>\3\2\2\2\\A\3\2\2\2\\J\3"+
+		"\2\2\2\\S\3\2\2\2]\5\3\2\2\2^`\5\b\5\2_^\3\2\2\2`c\3\2\2\2a_\3\2\2\2a"+
+		"b\3\2\2\2b\7\3\2\2\2ca\3\2\2\2de\7*\2\2e\t\3\2\2\2fh\5\f\7\2gf\3\2\2\2"+
+		"hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2j\13\3\2\2\2ki\3\2\2\2lm\7/\2\2m\r\3\2\2"+
+		"\2np\5\20\t\2on\3\2\2\2ps\3\2\2\2qo\3\2\2\2qr\3\2\2\2r\17\3\2\2\2sq\3"+
+		"\2\2\2tu\7O\2\2u\21\3\2\2\2vw\7\b\2\2wx\5\24\13\2xy\7\25\2\2y{\5\26\f"+
+		"\2z|\5\34\17\2{z\3\2\2\2{|\3\2\2\2|}\3\2\2\2}~\5*\26\2~\u00a0\3\2\2\2"+
+		"\177\u0080\7\t\2\2\u0080\u0082\5,\27\2\u0081\u0083\5\64\33\2\u0082\u0081"+
+		"\3\2\2\2\u0082\u0083\3\2\2\2\u0083\u0084\3\2\2\2\u0084\u0085\7\7\2\2\u0085"+
 		"\u0086\5\24\13\2\u0086\u0087\7\25\2\2\u0087\u0089\5\26\f\2\u0088\u008a"+
 		"\5\34\17\2\u0089\u0088\3\2\2\2\u0089\u008a\3\2\2\2\u008a\u008c\3\2\2\2"+
 		"\u008b\u008d\5\36\20\2\u008c\u008b\3\2\2\2\u008c\u008d\3\2\2\2\u008d\u00a0"+
