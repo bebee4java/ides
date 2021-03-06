@@ -9,7 +9,6 @@ import tech.ides.constants.ScriptConstants.{IMPL_CLASS, PRIMARY_KEYS}
 import tech.ides.dsl.utils.DslUtil
 import tech.ides.exception.IdesException
 import tech.ides.metastore.{ConnectMappingKey, ConnectMetaStore}
-import tech.sqlclub.common.utils.StringEscapeUtils
 
 /**
   * JDBC 数据源
@@ -29,7 +28,7 @@ class JDBCDataSource extends DataReader with DataWriter {
     var url = config.config.get("url")
 
     if (config.path.contains(pathSeparator)) {
-      val splitPath = StringEscapeUtils.unescapeJava(pathSeparator)
+      val splitPath = "\\."
       val Array(db, table) = config.path.split(splitPath, 2)
       val connectMeta = ConnectMetaStore.options(ConnectMappingKey(format, db))
       if (connectMeta.isEmpty) throw new IdesException(s"Can't find the jdbc mapping of connection name: $db, please re-execute connect")
@@ -64,8 +63,8 @@ class JDBCDataSource extends DataReader with DataWriter {
         val partitionColumn = config.config("partitionColumn")
         // 自动查询分区字段的max/min值
         val boundSql = s"(select max($partitionColumn) as upper, min($partitionColumn) as lower from $dbTable $filter) t1"
-        reader.option("partitionColumn", partitionColumn)
         val bound = reader.jdbc(url.get, boundSql, new Properties()).collect()(0)
+        reader.option("partitionColumn", partitionColumn)
         reader.option("upperBound", bound.getLong(0))
         reader.option("lowerBound", bound.getLong(1))
       }
@@ -92,7 +91,7 @@ class JDBCDataSource extends DataReader with DataWriter {
 
     var options = config.config
     if (dbTable.contains(pathSeparator)) {
-      val splitPath = StringEscapeUtils.unescapeJava(pathSeparator)
+      val splitPath = "\\."
       val Array(db, table) = dbTable.split(splitPath, 2)
       val connectMeta = ConnectMetaStore.options(ConnectMappingKey(format, db))
       if (connectMeta.isEmpty) throw new IdesException(s"Can't find the jdbc mapping of connection name: $db, please re-execute connect")
