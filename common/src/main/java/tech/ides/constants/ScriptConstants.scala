@@ -18,6 +18,8 @@ object ScriptConstants {
 
   val EXTERNAL_STORAGE = "externalStorage"
 
+  val PRIMARY_KEYS = "primaryKeys"
+
   def PATH_SEPARATOR = File.pathSeparator
 
   def PATH_SEPARATOR_SIZE = PATH_SEPARATOR.length
