@@ -15,7 +15,7 @@ import tech.sqlclub.common.utils.FileUtils
   * Ides server
   * Created by songgr on 2020/06/16.
   */
-object IdesServer extends Logging {
+object IdesServer extends RestServer with Logging {
 
   import IdesConf._
 
@@ -24,7 +24,7 @@ object IdesServer extends Logging {
   private[rest] var host:String = _
   private[rest] var port:Int = _
 
-  def start(conf:IdesConf): Unit = {
+  override def start(conf:IdesConf): Unit = {
     host = conf.get(IDES_SERVER_HOST)
     port = conf.get(IDES_SERVER_PORT)
     server = new WebServer(conf, host, port)
@@ -85,7 +85,7 @@ object IdesServer extends Logging {
     }.start()
   }
 
-  def stop(): Unit = {
+  override def stop(): Unit = {
     if (server != null) {
       server.stop()
     }

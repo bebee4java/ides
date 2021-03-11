@@ -43,4 +43,7 @@ object ScriptConstants {
   val ACTION_SET = Set("save", "insert", "train", "run", "predict", "!")
 
 
+  val __SESSION__ = "__session__"
+
+
 }

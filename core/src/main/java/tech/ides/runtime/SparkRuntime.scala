@@ -7,6 +7,7 @@ import org.apache.spark.{IdesConf, SparkConf}
 import org.apache.spark.IdesConf._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.internal.StaticSQLConf.CATALOG_IMPLEMENTATION
+import tech.ides.constants.ScriptConstants
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ConfigUtils
 
@@ -59,7 +60,7 @@ class SparkRuntime(conf: IdesConf, _params:JMap[Any,Any]= new util.HashMap[Any,A
   }
 
   private def postInit() = {
-    params.put("_session_", sparkSession)
+    params.put(ScriptConstants.__SESSION__, sparkSession)
     createCommandTable
   }
 

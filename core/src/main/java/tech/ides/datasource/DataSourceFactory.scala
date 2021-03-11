@@ -1,6 +1,7 @@
 package tech.ides.datasource
 
-import tech.ides.core.platform.PlatformManager
+import org.apache.spark.IdesConf
+import tech.ides.core.platform.PlatformLifecycle
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import org.apache.spark.IdesConf.IDES_DATASOURCE_PACKAGES
 import tech.ides.constants.ScriptConstants
@@ -12,7 +13,7 @@ import scala.collection.JavaConverters._
   * 数据类工厂: 注册/获取 数据源
   * Created by songgr on 2020/10/25.
   */
-object DataSourceFactory extends Logging {
+object DataSourceFactory extends PlatformLifecycle with Logging {
 
   // 数据源注册表
   private val registry = new java.util.HashMap[DataSourceKey, BaseDataSource]()
@@ -26,9 +27,9 @@ object DataSourceFactory extends Logging {
   /**
     * 注册所有数据源
     */
-  def register: Unit = {
+  def register(idesConf: IdesConf): Unit = {
     val dataSourceDefaultPackages = Array("tech.ides.external.datasource", "tech.ides.datasource.impl")
-    val option = PlatformManager.getConf.get(IDES_DATASOURCE_PACKAGES)
+    val option = idesConf.get(IDES_DATASOURCE_PACKAGES)
     val userDatasourcePackages = if (option.isDefined) {
       option.get.split(",").filter(_.nonEmpty).map(_.trim)
     } else {Array[String]()}
@@ -62,4 +63,11 @@ object DataSourceFactory extends Logging {
     }
   }
 
+  override def beforeSQLRuntime(idesConf: IdesConf): Unit = { register(idesConf) }
+
+  override def afterSQLRuntime(idesConf: IdesConf): Unit = {}
+
+  override def beforeService(idesConf: IdesConf): Unit = {}
+
+  override def afterService(idesConf: IdesConf): Unit = {}
 }

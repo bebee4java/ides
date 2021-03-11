@@ -1,0 +1,7 @@
+application:
+  # service 实现类
+  service: tech.ides.rest.IdesServer
+  # platform 生命周期相关类
+  platformLifecycles:
+    - tech.ides.rest.ControlHandlerHook
+    - tech.ides.datasource.DataSourceFactory

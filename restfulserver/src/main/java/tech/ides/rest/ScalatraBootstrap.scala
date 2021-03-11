@@ -1,10 +1,11 @@
 package tech.ides.rest
 
 import javax.servlet.ServletContext
+import org.apache.spark.IdesConf
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.{LifeCycle, ScalatraServlet}
 import org.scalatra.swagger.{ApiInfo, JacksonSwaggerBase, Swagger}
-import tech.ides.core.platform.PlatformManager
+import tech.ides.core.platform.PlatformLifecycle
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import scala.collection.mutable
@@ -45,7 +46,7 @@ class ScalatraBootstrap extends LifeCycle {
   }
 }
 
-object ControlHandlerHook extends Logging {
+object ControlHandlerHook extends PlatformLifecycle with Logging {
 
   import org.scalatra.Handler
   private val _handlers = mutable.Set[Handler]()
@@ -56,9 +57,9 @@ object ControlHandlerHook extends Logging {
 
   def removeHandler(handlers: Handler*) = handlers.foreach(_handlers.remove)
 
-  def registerControllers = {
+  def registerControllers(idesConf: IdesConf) = {
     import org.apache.spark.IdesConf.IDES_CONTROLLER_PACKAGES
-    val option = PlatformManager.getConf.get(IDES_CONTROLLER_PACKAGES)
+    val option = idesConf.get(IDES_CONTROLLER_PACKAGES)
 
     val controllerDefaultPackages = Array("tech.ides.rest")
 
@@ -80,4 +81,12 @@ object ControlHandlerHook extends Logging {
 
     logInfo(s"""A total of ${controllers.size} rest controller scanned: [${controllers.map(_.getClass.getName).mkString(", ")}].""")
   }
+
+  override def beforeSQLRuntime(idesConf: IdesConf): Unit = {}
+
+  override def afterSQLRuntime(idesConf: IdesConf): Unit = {}
+
+  override def beforeService(idesConf: IdesConf): Unit = { registerControllers(idesConf) }
+
+  override def afterService(idesConf: IdesConf): Unit = {}
 }

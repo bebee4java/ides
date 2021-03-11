@@ -4,10 +4,14 @@ import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 
 import org.apache.spark.IdesConf
 import org.apache.spark.IdesConf._
+import tech.ides.core.ApplicationSetting
+import tech.ides.exception.IdesException
+import tech.ides.rest.RestServer
 import tech.ides.runtime.SQLRuntime
 import tech.sqlclub.common.annotation.Explanation
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
+import scala.collection.mutable.ArrayBuffer
 
 /**
   *
@@ -18,9 +22,9 @@ class PlatformManager extends Logging {
   val config = new AtomicReference[IdesConf]()
 
   def startRestServer = {
-    Class.forName("tech.ides.rest.IdesServer").
-      getMethod("start", classOf[IdesConf]).
-      invoke(null, config.get())
+    val serviceImpl = ApplicationSetting.SERVICE_IMPL
+    if (serviceImpl.isEmpty) throw new IdesException("not found service impl class. Please set in application.yml !")
+    Reflection(ClassPath.from(serviceImpl.get)).instance[RestServer].start(config.get())
   }
 
 
@@ -29,17 +33,18 @@ class PlatformManager extends Logging {
       config.set(conf)
     }
 
+    PlatformManager.lifeCycles.foreach( _.beforeSQLRuntime(config.get()))
+    // 创建SQLRuntime
     val runtime = PlatformManager.getRuntime
 
-    // 注册所有数据源插件
-    Reflection(ClassPath.from("tech.ides.datasource.DataSourceFactory")).callMethodByName("register")
-
     if (conf.get(IDES_SPARK_SERVICE) && !reRun && !conf.get(IDES_SHELL_MODE)) {
-      // 注册所有Rest Controller
-      Reflection(ClassPath.from("tech.ides.rest.ControlHandlerHook")).callMethodByName("registerControllers")
+      PlatformManager.lifeCycles.foreach(_.beforeService(config.get()))
+      // 启动rest server
       startRestServer
+      PlatformManager.lifeCycles.foreach(_.afterService(config.get()))
     }
 
+    PlatformManager.lifeCycles.foreach( _.afterSQLRuntime(config.get()))
 
     PlatformManager.RUNTIME_IS_READY.compareAndSet(false, true)
     if (conf.get(IDES_SERVICE_RUNTIME_AWAITTERMINATION)) {
@@ -55,6 +60,12 @@ object PlatformManager {
   private val INSTANTIATION_LOCK = new Object()
 
   val RUNTIME_IS_READY = new AtomicBoolean(false)
+
+  private val lifeCycles = ArrayBuffer[PlatformLifecycle]()
+
+  def registerPlatformLifecycle(platformLifecycle: PlatformLifecycle) = lifeCycles += platformLifecycle
+
+  def removePlatformLifecycle(platformLifecycle: PlatformLifecycle) = lifeCycles -= platformLifecycle
 
   /**
     * Reference to the last created PlatformManager.
