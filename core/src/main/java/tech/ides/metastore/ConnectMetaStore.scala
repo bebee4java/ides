@@ -1,10 +1,11 @@
 package tech.ides.metastore
 
 import java.util.concurrent.ConcurrentHashMap
-
+import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 import tech.ides.core.platform.PlatformManager
 import org.apache.spark.IdesConf.EXTERNAL_STORAGE_IMPL_CLASS_NAME
 import tech.ides.storage.{ExternalStorage, ExternalStorageInfo}
+import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import collection.JavaConverters._
 
@@ -12,11 +13,25 @@ import collection.JavaConverters._
   * 连接元数据存储
   * Created by songgr on 2021/02/23.
   */
-object ConnectMetaStore {
+object ConnectMetaStore extends Logging {
   private val connectMapping = new ConcurrentHashMap[ConnectMappingKey, Map[String, String]]()
-  private[this] val externalStorage: ThreadLocal[ExternalStorage] = new ThreadLocal[ExternalStorage]
-  // 加入持久化的连接信息
-  connectMapping.putAll(initialize)
+  private[this] val externalStorage: AtomicReference[ExternalStorage] = new AtomicReference[ExternalStorage]
+  private[this] val flag = new AtomicBoolean(false)
+  if (!flag.get) {
+    flag.synchronized {
+      if (!flag.get) {
+        try {
+          // 加入持久化的连接信息
+          connectMapping.putAll(initialize)
+          logInfo("ConnectMetaStore initialized successfully! Catalog info: " + catalog.keys.mkString(","))
+        } catch {
+          case e: Exception =>
+            logError(e.getMessage, e)
+        }
+        flag.set(true)
+      }
+    }
+  }
 
   def storage = externalStorage.get()
 
@@ -55,4 +70,6 @@ object ConnectMetaStore {
   def catalog = connectMapping.asScala.toMap
 }
 
-case class ConnectMappingKey(format:String, connectName:String)
+case class ConnectMappingKey(format:String, connectName:String) {
+  override def toString: String = format + "." + connectName
+}
