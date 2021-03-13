@@ -28,6 +28,11 @@ IGNORE: 'ignore';
 PARTITIONBY: 'partitionBy'|'partitionby';
 CONNECT: 'connect';
 SET: 'set';
+CONNECTION: 'connection';
+FUNCTION: 'function';
+CREATE: 'create';
+DROP: 'drop';
+REGISTER: 'register';
 //============================
 // End of the keywords list
 //============================

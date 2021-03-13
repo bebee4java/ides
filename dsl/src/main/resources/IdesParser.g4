@@ -49,6 +49,9 @@ query
     | SELECT ~(EOQ)+ asAsset # Select
     | CONNECT format whereExpressions asAsset # Connect
     | SET expression whereExpressions? # Set
+    | DROP resource=(CONNECTION|FUNCTION) format DOT assetName # Drop
+    | REGISTER format DOT path whereExpressions? asAsset? # Register
+    | CREATE ~(EOQ)+ # Create
     ;
 
 format

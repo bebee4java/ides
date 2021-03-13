@@ -118,6 +118,27 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSet(IdesParser.SetContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Drop}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDrop(IdesParser.DropContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Register}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRegister(IdesParser.RegisterContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreate(IdesParser.CreateContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesParser#format}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

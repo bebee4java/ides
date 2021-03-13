@@ -188,6 +188,42 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitSet(IdesParser.SetContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Drop}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterDrop(IdesParser.DropContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Drop}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitDrop(IdesParser.DropContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Register}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterRegister(IdesParser.RegisterContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Register}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitRegister(IdesParser.RegisterContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreate(IdesParser.CreateContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreate(IdesParser.CreateContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesParser#format}.
 	 * @param ctx the parse tree
 	 */
