@@ -1,7 +1,8 @@
 package tech.ides.core
 
 import org.apache.spark.IdesConf
-import tech.ides.core.platform.{PlatformLifecycle, PlatformManager}
+import org.apache.spark.IdesConf.{IDES_SHELL_MODE, IDES_SPARK_SERVICE}
+import tech.ides.core.platform.{PlatformLifecycle, PlatformManager, ServiceLifecycle}
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import tech.sqlclub.common.utils.ParamsUtils
 
@@ -22,7 +23,18 @@ object IdesApp {
       platformLifecycles.get.foreach {
         clazz =>
           val lifecycle = Reflection(ClassPath.from(clazz)).instance[PlatformLifecycle]
-          PlatformManager.registerPlatformLifecycle(lifecycle)
+          PlatformManager.registerLifecycle(lifecycle)
+      }
+    }
+
+    if (idesConf.get(IDES_SPARK_SERVICE) && !idesConf.get(IDES_SHELL_MODE)) {
+      val serviceLifecycles = ApplicationSetting.SERVICE_LIFECYCLES
+      if (serviceLifecycles.isDefined) {
+        serviceLifecycles.get.foreach {
+          clazz =>
+            val lifecycle = Reflection(ClassPath.from(clazz)).instance[ServiceLifecycle]
+            PlatformManager.registerLifecycle(lifecycle)
+        }
       }
     }
 

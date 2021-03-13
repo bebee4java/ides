@@ -17,15 +17,17 @@
 
 package tech.ides.repl
 
+import java.util
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
 import tech.ides.core.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
-import tech.sqlclub.common.utils.ParamsUtils
 import org.apache.spark.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE}
+import tech.ides.core.IdesApp
 import tech.ides.dsl.listener.ScriptQueryExecListener
+import scala.collection.mutable
 
 object Main extends Logging {
 
@@ -58,24 +60,31 @@ object Main extends Logging {
 
   def main(args: Array[String]) {
     isShellSession = true
-    val params = new ParamsUtils(args)
-    if (isShellSession) {
-      idesConf.set(IDES_SHELL_MODE, true)
-    }
-    params.getParamsMap.foreach(kv => idesConf.set(kv._1, kv._2))
-
-    doMain(Array[String](), new IdesILoop)
+    doMain(args, new IdesILoop)
   }
 
   // Visible for testing
   private[repl] def doMain(args: Array[String], _interp: IdesILoop): Unit = {
+    import scala.collection.JavaConverters._
+    val argsArray = new util.ArrayList[String](args.toList.asJava)
+    for (x <- args.zipWithIndex) {
+      if (x._1.startsWith("-ides.")) {
+        argsArray.remove(x._2)
+        argsArray.remove(x._2)
+      }
+    }
+
     interp = _interp
     val jars = "" // getLocalUserJarsForShell
     val interpArguments = List(
       "-Yrepl-class-based",
       "-Yrepl-outdir", s"",
       "-classpath", jars
-    ) ++ args.toList
+    ) ++ argsArray.asScala
+
+    val idesArgs = new mutable.ArrayBuffer[String]()
+    idesArgs ++=  (args diff argsArray.asScala) += s"-${IDES_SHELL_MODE.key}" += isShellSession.toString
+    IdesApp.main(Array(idesArgs:_*))
 
     val settings = new GenericRunnerSettings(scalaOptionError)
     settings.processArguments(interpArguments, true)
@@ -87,13 +96,13 @@ object Main extends Logging {
     if (!hasErrors) {
       interp.process(settings) // Repl starts and goes in loop of R.E.P.L
       // finish close context
+      initialized.remove()
       Option(sparkContext).foreach(_.stop)
     }
   }
 
   def createSparkSession(): SparkSession = {
     try {
-      PlatformManager.getOrCreate.run(idesConf)
       val runtime = PlatformManager.getRuntime
       sparkSession = runtime.asInstanceOf[SparkRuntime].sparkSession
 //      sparkSession.sessionState // 解决Error while instantiating 'org.apache.spark.sql.internal.SessionStateBuilder'

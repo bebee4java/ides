@@ -5,7 +5,7 @@ import org.apache.spark.IdesConf
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.{LifeCycle, ScalatraServlet}
 import org.scalatra.swagger.{ApiInfo, JacksonSwaggerBase, Swagger}
-import tech.ides.core.platform.PlatformLifecycle
+import tech.ides.core.platform.ServiceLifecycle
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import scala.collection.mutable
@@ -46,7 +46,7 @@ class ScalatraBootstrap extends LifeCycle {
   }
 }
 
-object ControlHandlerHook extends PlatformLifecycle with Logging {
+object ControlHandlerHook extends ServiceLifecycle with Logging {
 
   import org.scalatra.Handler
   private val _handlers = mutable.Set[Handler]()
@@ -81,10 +81,6 @@ object ControlHandlerHook extends PlatformLifecycle with Logging {
 
     logInfo(s"""A total of ${controllers.size} rest controller scanned: [${controllers.map(_.getClass.getName).mkString(", ")}].""")
   }
-
-  override def beforeSQLRuntime(idesConf: IdesConf): Unit = {}
-
-  override def afterSQLRuntime(idesConf: IdesConf): Unit = {}
 
   override def beforeService(idesConf: IdesConf): Unit = { registerControllers(idesConf) }
 

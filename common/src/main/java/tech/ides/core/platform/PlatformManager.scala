@@ -33,18 +33,22 @@ class PlatformManager extends Logging {
       config.set(conf)
     }
 
-    PlatformManager.lifeCycles.foreach( _.beforeSQLRuntime(config.get()))
+    PlatformManager.lifeCycles.filter(_.isInstanceOf[PlatformLifecycle])
+      .foreach( _.asInstanceOf[PlatformLifecycle].beforeSQLRuntime(config.get()))
     // 创建SQLRuntime
     val runtime = PlatformManager.getRuntime
 
     if (conf.get(IDES_SPARK_SERVICE) && !reRun && !conf.get(IDES_SHELL_MODE)) {
-      PlatformManager.lifeCycles.foreach(_.beforeService(config.get()))
+      PlatformManager.lifeCycles.filter(_.isInstanceOf[ServiceLifecycle])
+        .foreach(_.asInstanceOf[ServiceLifecycle].beforeService(config.get()))
       // 启动rest server
       startRestServer
-      PlatformManager.lifeCycles.foreach(_.afterService(config.get()))
+      PlatformManager.lifeCycles.filter(_.isInstanceOf[ServiceLifecycle])
+        .foreach(_.asInstanceOf[ServiceLifecycle].afterService(config.get()))
     }
 
-    PlatformManager.lifeCycles.foreach( _.afterSQLRuntime(config.get()))
+    PlatformManager.lifeCycles.filter(_.isInstanceOf[PlatformLifecycle])
+      .foreach( _.asInstanceOf[PlatformLifecycle].afterSQLRuntime(config.get()))
 
     PlatformManager.RUNTIME_IS_READY.compareAndSet(false, true)
     if (conf.get(IDES_SERVICE_RUNTIME_AWAITTERMINATION)) {
@@ -61,11 +65,11 @@ object PlatformManager {
 
   val RUNTIME_IS_READY = new AtomicBoolean(false)
 
-  private val lifeCycles = ArrayBuffer[PlatformLifecycle]()
+  private val lifeCycles = ArrayBuffer[Lifecycle]()
 
-  def registerPlatformLifecycle(platformLifecycle: PlatformLifecycle) = lifeCycles += platformLifecycle
+  def registerLifecycle(lifecycle: Lifecycle) = lifeCycles += lifecycle
 
-  def removePlatformLifecycle(platformLifecycle: PlatformLifecycle) = lifeCycles -= platformLifecycle
+  def removeLifecycle(lifecycle: Lifecycle) = lifeCycles -= lifecycle
 
   /**
     * Reference to the last created PlatformManager.

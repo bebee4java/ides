@@ -66,8 +66,4 @@ object DataSourceFactory extends PlatformLifecycle with Logging {
   override def beforeSQLRuntime(idesConf: IdesConf): Unit = { register(idesConf) }
 
   override def afterSQLRuntime(idesConf: IdesConf): Unit = {}
-
-  override def beforeService(idesConf: IdesConf): Unit = {}
-
-  override def afterService(idesConf: IdesConf): Unit = {}
 }

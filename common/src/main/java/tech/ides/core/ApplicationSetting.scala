@@ -16,4 +16,6 @@ object ApplicationSetting {
 
   val PLATFORM_LIFECYCLES = setting.get("platformLifecycles").map(_.asInstanceOf[util.List[String]].asScala)
 
+  val SERVICE_LIFECYCLES = setting.get("serviceLifecycles").map(_.asInstanceOf[util.List[String]].asScala)
+
 }
