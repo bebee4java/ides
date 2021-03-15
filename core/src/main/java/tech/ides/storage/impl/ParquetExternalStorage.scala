@@ -108,6 +108,15 @@ class ParquetExternalStorage extends ExternalStorage {
     df.write.mode(mode).parquet(realPath.toPath)
   }
 
+  override def dropConfig(configId: String, storageInfo: StorageInfo): Boolean = {
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / storageInfo.toString / configId
+    val realPathStr = realPath.toPath
+    if (!HdfsOperator.fileExists(realPathStr)) {
+      return true
+    }
+    HdfsOperator.deleteDir(realPathStr)
+  }
+
   override def readAsTable(tableName: String): DataFrame = {
     val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
     spark.read.parquet(realPath.toPath)
@@ -118,4 +127,14 @@ class ParquetExternalStorage extends ExternalStorage {
     val mode = if (overwrite) SaveMode.Overwrite else SaveMode.Append
     table.coalesce(1).write.mode(mode).parquet(realPath.toPath)
   }
+
+  override def dropTable(tableName: String): Boolean = {
+    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
+    val realPathStr = realPath.toPath
+    if (!HdfsOperator.fileExists(realPathStr)) {
+      return true
+    }
+    HdfsOperator.deleteDir(realPathStr)
+  }
+
 }

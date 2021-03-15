@@ -51,15 +51,12 @@ object DslUtil {
 
         tTpye match {
           case IdesParser.MUMERIC |
-               IdesParser.IDENTIFIER
-          => pt.getText
+               IdesParser.IDENTIFIER => pt.getText
           case
             IdesParser.STRING_TEXT |
             IdesParser.BLOCK_STRING_TEXT |
-            IdesParser.QUOTED_TEXT
-          => cleanStr(pt.getText)
-          case _
-          => pt.getText
+            IdesParser.QUOTED_TEXT => cleanStr(pt.getText)
+          case _ => pt.getText
         }
       case pt:ParserRuleContext =>
         parserRuleContext(pt.asInstanceOf[ParserRuleContext])

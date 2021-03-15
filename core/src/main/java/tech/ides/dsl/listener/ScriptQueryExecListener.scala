@@ -196,4 +196,11 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   override def exitConnect(ctx: IdesParser.ConnectContext): Unit = {
     ConnectAdaptor(this).enterContext(ctx)
   }
+
+  /**
+    * drop语句的context
+    */
+  override def exitDrop(ctx: IdesParser.DropContext): Unit = {
+    DropAdaptor(this).enterContext(ctx)
+  }
 }

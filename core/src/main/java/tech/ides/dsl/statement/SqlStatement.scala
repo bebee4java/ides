@@ -22,3 +22,6 @@ case class SelectSqlStatement(sql:String, tableName:String) extends SqlStatement
 
 // CONNECT format whereExpressions asAsset
 case class ConnectSqlStatement(sql:String, format: String, options: Map[String, String], connectionName:String) extends SqlStatement
+
+// DROP resource=(CONNECTION|FUNCTION) format DOT assetName
+case class DropSqlStatement(sql:String, resource:Int, format:String, assetName:String) extends SqlStatement

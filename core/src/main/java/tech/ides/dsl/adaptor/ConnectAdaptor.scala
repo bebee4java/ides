@@ -38,7 +38,7 @@ case class ConnectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) exte
     val storage = options.getOrElse(EXTERNAL_STORAGE, "false").toBoolean
 
     if (storage && ConnectMetaStore.storage != null) {
-      ConnectMetaStore.storage.saveConfig(connectName, ConnectMetaData, options + ("format" -> format), true)
+      ConnectMetaStore.storage.saveConfig(ConnectMappingKey(format, connectName).toString, ConnectMetaData, options + ("format" -> format), true)
     }
 
     scriptQueryExecListener.setLastTableName(null)

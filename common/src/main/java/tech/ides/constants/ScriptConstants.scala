@@ -45,5 +45,7 @@ object ScriptConstants {
 
   val __SESSION__ = "__session__"
 
+  val RESOURCE = "resource"
+
 
 }

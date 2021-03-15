@@ -21,9 +21,13 @@ trait ExternalStorage {
 
   def saveConfig(configId:String, storageInfo:StorageInfo, configMap:Map[String,String], overwrite:Boolean):Unit
 
+  def dropConfig(configId:String, storageInfo:StorageInfo):Boolean
+
   def readAsTable(tableName:String):DataFrame
 
   def saveAsTable(tableName:String, table:DataFrame, overwrite:Boolean):Unit
+
+  def dropTable(tableName:String):Boolean
 
 }
 
