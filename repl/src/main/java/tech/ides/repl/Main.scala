@@ -65,14 +65,14 @@ object Main extends Logging {
 
   // Visible for testing
   private[repl] def doMain(args: Array[String], _interp: IdesILoop): Unit = {
-    import scala.collection.JavaConverters._
-    val argsArray = new util.ArrayList[String](args.toList.asJava)
-    for (x <- args.zipWithIndex) {
-      if (x._1.startsWith("-ides.")) {
-        argsArray.remove(x._2)
-        argsArray.remove(x._2)
-      }
+    val optionsOfIdes = new mutable.ArrayBuffer[String]()
+    args.zipWithIndex.filter(_._1.startsWith("-ides.")).foreach{
+      it =>
+        optionsOfIdes += args(it._2)
+        optionsOfIdes += args(it._2 + 1)
     }
+
+    val optionsOfRepl = args diff optionsOfIdes
 
     interp = _interp
     val jars = "" // getLocalUserJarsForShell
@@ -80,10 +80,10 @@ object Main extends Logging {
       "-Yrepl-class-based",
       "-Yrepl-outdir", s"",
       "-classpath", jars
-    ) ++ argsArray.asScala
+    ) ++ optionsOfRepl
 
     val idesArgs = new mutable.ArrayBuffer[String]()
-    idesArgs ++=  (args diff argsArray.asScala) += s"-${IDES_SHELL_MODE.key}" += isShellSession.toString
+    idesArgs ++= optionsOfIdes += s"-${IDES_SHELL_MODE.key}" += isShellSession.toString
     IdesApp.main(Array(idesArgs:_*))
 
     val settings = new GenericRunnerSettings(scalaOptionError)

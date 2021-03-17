@@ -9,6 +9,7 @@ import tech.sqlclub.common.log.Logging
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import java.util
+import tech.ides.cli.DatalinkedCli
 
 /**
   *
@@ -18,10 +19,28 @@ object IdesSubmit extends Logging {
   private val CLASS_NOT_FOUND_EXIT_STATUS = 101
 
   def main(args: Array[String]): Unit = {
+    val mainApp = args.last
+    val debugOpt = args.zipWithIndex.find(_._1.startsWith("-debug"))
+    if (debugOpt.isDefined) {
+      val debug = debugOpt.get._1
+      val index = debugOpt.get._2
+      // 将debug参数置空
+      if (debug.matches("\\-debug=[0-9]+")){
+        args.update(index, null)
+      } else {
+        args.update(index, null)
+        args.update(index+1, null)
+      }
+    }
+    val options = args.filterNot(null == _).dropRight(1)
+    val cliArgs = if (args.contains(classOf[DatalinkedCli].getName)) {
+      DatalinkedCli.init(options)
+    } else options
+
     import scala.collection.JavaConverters._
-    val argsArray = new util.ArrayList[String](args.toList.asJava)
+    val argsArray = new util.ArrayList[String](cliArgs.toList.asJava)
     val argsBuffer = new ArrayBuffer[String]()
-    for (x <- args) {
+    for (x <- cliArgs) {
       if (x.startsWith("-ides.")) {
         // The config format must be -ides.k=v
         x.split("=", 2).toSeq match {
@@ -31,6 +50,8 @@ object IdesSubmit extends Logging {
         argsArray.remove(x)
       }
     }
+    // 加入 mian app
+    argsArray.add(mainApp)
     lazy val submitArguments = new SparkSubmitArguments(argsArray.asScala) {
       self =>
       override protected def logInfo(msg: => String): Unit = printMessage(msg)

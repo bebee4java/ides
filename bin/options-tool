@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+DEBUG=$(echo "$@" | grep "\-debug")
+if [ -n "${DEBUG}" ]; then
+    PORT=$(echo "$@" | sed 's/.*-debug\([=\n \t\s]*\)\([0-9]*\).*/\2/g')
+    if [ -z "${PORT}" ]; then
+        echo "debug port error. e.g. -debug=8888 or -debug 8888"
+        exit -1
+    fi
+    DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=$PORT"
+    export DEBUG_OPTS
+fi
+
+# 设置driver jvm的最大堆内存
+if [[ "$@" =~ "--driver-memory" ]]; then
+   DRIVER_MEM=$(echo "$@" | sed 's/.*--driver-memory\([=\n \t\s]*\)\([0-9KkBbMmGgTt]*\).*/\2/g' )
+   if [ -z "${DRIVER_MEM}" ]; then
+        echo "driver memory set error. e.g. --driver-memory 2g. default: 1g."
+        exit -1
+   fi
+   export DRIVER_MEM
+fi
+
+if [[ "$@" =~ "spark.driver.memory" ]]; then
+   DRIVER_MEM=$(echo "$@" | sed 's/.*spark.driver.memory=\([0-9KkBbMmGgTt]*\).*/\1/g' )
+   if [ -z "${DRIVER_MEM}" ]; then
+        echo "driver memory set error. e.g. --conf spark.driver.memory=2g. default: 1g."
+        exit -1
+   fi
+   export DRIVER_MEM
+fi

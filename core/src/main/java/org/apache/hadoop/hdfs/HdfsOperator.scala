@@ -75,6 +75,7 @@ object HdfsOperator {
       }
     } finally {
       if (br != null) br.close()
+      if (fs != null) fs.close()
     }
     result.mkString("\n")
   }
@@ -90,6 +91,7 @@ object HdfsOperator {
       byteArrayOut.toByteArray
     } finally {
       if (null != in) in.close()
+      if (fs != null) fs.close()
     }
   }
 

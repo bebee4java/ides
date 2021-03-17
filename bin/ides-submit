@@ -32,20 +32,7 @@ else
   LAUNCH_CLASSPATH="$IDES_JARS_DIR/*"
 fi
 
-DEBUG=$(echo "$@" | grep "\-debug=")
-if [ -n "${DEBUG}" ]; then
-    PORT=$(echo "$@" | sed 's/.*-debug=\([0-9]*\).*/\1/g')
-    DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=$PORT"
-fi
-
-# 设置driver jvm的最大堆内存
-if [[ "$@" =~ "--driver-memory" ]]; then
-   DRIVER_MEM=$(echo "$@" | sed 's/.*--driver-memory\([=\n \t\s]*\)\([0-9KkBbMmGgTt]*\).*/\2/g' )
-fi
-
-if [[ "$@" =~ "spark.driver.memory" ]]; then
-   DRIVER_MEM=$(echo "$@" | sed 's/.*spark.driver.memory=\([0-9KkBbMmGgTt]*\).*/\1/g' )
-fi
+. "${IDES_HOME}"/bin/options-tool "$@"
 
 JAVA_OPTS="-Xmx${DRIVER_MEM:-1g} $DEBUG_OPTS"
 
@@ -60,9 +47,7 @@ build_envs() {
 
 build_command() {
 #  echo "$RUNNER" $JAVA_OPTS -cp "$LAUNCH_CLASSPATH" tech.ides.repl.Main "$@"
-
-  ARGS=$(echo -e $@ | sed 's/-debug=[0-9]*//g')
-  printf "%s\0" $RUNNER $JAVA_OPTS -cp $(build_envs)"$LAUNCH_CLASSPATH" org.apache.spark.deploy.IdesSubmit $ARGS
+  printf "%s\0" $RUNNER $JAVA_OPTS -cp $(build_envs)"$LAUNCH_CLASSPATH" org.apache.spark.deploy.IdesSubmit "$@"
   printf "%d\0" $?
 }
 
