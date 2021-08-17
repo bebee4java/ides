@@ -1,8 +1,11 @@
 IDES(智能数据探索服务)
 ---
-**IDES** is short name of Intelligent Data Exploration Service, *aka DataLinked*.
-![](docs/imgs/introduce.jpg)
+![](docs/imgs/ides.png)
 
+**IDES**(*aka DataLinked*) is an open source project to solve the unified `bigdata + AI` development process. 
+In order to simplify the process of `data processing`, `data analysis`, `data mining`, `machine learning`, etc.
+
+![](docs/imgs/introduce.jpg)
 ## Features
 * Load and save various data sources for data exploration (such as ETL)
 * Support standard SQL for data processing
