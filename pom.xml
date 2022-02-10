@@ -134,6 +134,9 @@
     <profiles>
         <profile>
             <id>scala-2.11</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
 
         <profile>
@@ -173,6 +176,9 @@
 
         <profile>
             <id>spark-2.4.x</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
                 <spark.version>2.4.3</spark.version>
                 <spark.big.version>2.4</spark.big.version>
