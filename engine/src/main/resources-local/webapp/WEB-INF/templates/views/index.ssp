@@ -161,7 +161,7 @@
                     paginationDetailHAlign: 'left',
                     paginationPreText: '&lsaquo;',
                     paginationNextText: '&rsaquo;',
-                    searchOnEnterKey: false,
+                    searchOnEnterKey: true,
                     searchAlign: 'right',
                     selectItemName: 'btSelectItem',
                     //是否显示搜索
