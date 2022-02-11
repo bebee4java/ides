@@ -10,6 +10,7 @@ import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.FileUtils
+import tech.ides.constants.IdesEnvConstants._
 
 /**
   * Ides server
@@ -49,11 +50,18 @@ object IdesServer extends RestServer with Logging {
     if (conf.get(IDES_REQUEST_LOG)) {
       // Configure the access log
       val requestLogHandler = new RequestLogHandler
-      val requestLog = new NCSARequestLog(sys.env.getOrElse("IDES_LOG_DIR",
-        sys.env.getOrElse("IDES_HOME", ".") + "/logs") + "/ides_yyyy_mm_dd.request.log")
+      val requestLog = new NCSARequestLog(sys.env.getOrElse(IDES_LOG_DIR,
+        sys.env.getOrElse(IDES_HOME, ".") + "/logs") + "/ides_yyyy_mm_dd.request.log")
       requestLog.setAppend(true)
-      requestLog.setExtended(false)
+      // 设置时区
       requestLog.setLogTimeZone("GMT+8")
+      // 设置日期格式
+      requestLog.setLogDateFormat("yyyy-MM-dd hh:mm:ss:SSS")
+
+      requestLog.setExtended(false)
+      requestLog.setPreferProxiedForAddress(true)
+      // 请求 延迟时间
+      requestLog.setLogLatency(true)
       requestLog.setRetainDays(conf.get(IdesConf.REQUEST_LOG_RETAIN_DAYS))
       requestLogHandler.setRequestLog(requestLog)
       val logFile = new File(requestLog.getFilename)
