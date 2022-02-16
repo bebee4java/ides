@@ -1,4 +1,4 @@
-// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.7.2
+// Generated from /Users/sgr/develop/ideaProjects/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.9.2
 
     package ides.dsl.parser;
 
@@ -125,6 +125,13 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDrop(IdesParser.DropContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCreate(IdesParser.CreateContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Register}
 	 * labeled alternative in {@link IdesParser#query}.
 	 * @param ctx the parse tree
@@ -132,12 +139,18 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRegister(IdesParser.RegisterContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Create}
+	 * Visit a parse tree produced by the {@code Run}
 	 * labeled alternative in {@link IdesParser#query}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCreate(IdesParser.CreateContext ctx);
+	T visitRun(IdesParser.RunContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesParser#module}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitModule(IdesParser.ModuleContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link IdesParser#format}.
 	 * @param ctx the parse tree

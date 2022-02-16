@@ -33,6 +33,7 @@ FUNCTION: 'function';
 CREATE: 'create';
 DROP: 'drop';
 REGISTER: 'register';
+RUN: 'run';
 //============================
 // End of the keywords list
 //============================

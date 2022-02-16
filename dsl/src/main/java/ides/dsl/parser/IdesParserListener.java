@@ -1,4 +1,4 @@
-// Generated from /Users/sgr/develop/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.7.2
+// Generated from /Users/sgr/develop/ideaProjects/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.9.2
 
     package ides.dsl.parser;
 
@@ -200,6 +200,18 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitDrop(IdesParser.DropContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterCreate(IdesParser.CreateContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Create}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitCreate(IdesParser.CreateContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Register}
 	 * labeled alternative in {@link IdesParser#query}.
 	 * @param ctx the parse tree
@@ -212,17 +224,27 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitRegister(IdesParser.RegisterContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Create}
+	 * Enter a parse tree produced by the {@code Run}
 	 * labeled alternative in {@link IdesParser#query}.
 	 * @param ctx the parse tree
 	 */
-	void enterCreate(IdesParser.CreateContext ctx);
+	void enterRun(IdesParser.RunContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code Create}
+	 * Exit a parse tree produced by the {@code Run}
 	 * labeled alternative in {@link IdesParser#query}.
 	 * @param ctx the parse tree
 	 */
-	void exitCreate(IdesParser.CreateContext ctx);
+	void exitRun(IdesParser.RunContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesParser#module}.
+	 * @param ctx the parse tree
+	 */
+	void enterModule(IdesParser.ModuleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#module}.
+	 * @param ctx the parse tree
+	 */
+	void exitModule(IdesParser.ModuleContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IdesParser#format}.
 	 * @param ctx the parse tree
