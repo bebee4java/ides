@@ -203,4 +203,13 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   override def exitDrop(ctx: IdesParser.DropContext): Unit = {
     DropAdaptor(this).enterContext(ctx)
   }
+
+  /**
+   * run语句的context
+   *
+   * <p>The default implementation does nothing.</p>
+   */
+  override def exitRun(ctx: IdesParser.RunContext): Unit = {
+    RunAdaptor(this).enterContext(ctx)
+  }
 }

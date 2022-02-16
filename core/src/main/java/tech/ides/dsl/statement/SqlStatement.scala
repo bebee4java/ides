@@ -25,3 +25,6 @@ case class ConnectSqlStatement(sql:String, format: String, options: Map[String, 
 
 // DROP resource=(CONNECTION|FUNCTION) format DOT assetName
 case class DropSqlStatement(sql:String, resource:Int, format:String, assetName:String) extends SqlStatement
+
+// RUN module DOT path whereExpressions? asAsset? # Run
+case class RunSqlStatement(sql: String, module: String, path: String, options: Map[String, String], tableName: String) extends SqlStatement

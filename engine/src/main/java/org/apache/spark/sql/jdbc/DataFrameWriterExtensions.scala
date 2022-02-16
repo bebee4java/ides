@@ -87,7 +87,7 @@ object DataFrameWriterExtensions extends Logging {
 
       primaryKeys match {
         case Some(ids) =>
-          logInfo(s"Start to upsert, primaryKeys are ${ids.mkString(",")} ...")
+          logInfo(s"Start to upsert, primaryKeys are [${ids.mkString(",")}].")
           val upsertRow = new MySQLUpsert().preparedStatementSQLRow(upsertReq, isCaseSensitive)
           val getConnection: () => Connection = JdbcUtils.createConnectionFactory(jdbcOptions)
           // 按分区进行插入
