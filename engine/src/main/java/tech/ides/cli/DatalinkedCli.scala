@@ -2,10 +2,10 @@ package tech.ides.cli
 
 import java.io.PrintWriter
 import com.google.common.base.Strings
+import org.apache.hadoop.hdfs.HdfsOperator
 import tech.ides.core.IdesApp
 import tech.ides.exception.IdesException
 import tech.ides.tool.QueryTool
-import tech.ides.utils.FileUtils
 import scala.collection.mutable
 import scala.collection.JavaConverters._
 
@@ -61,7 +61,7 @@ object DatalinkedCli extends OptionsProcessor with QueryTool {
 
   protected def getTextFromFile(opt: Char): String = {
     val filepaths = getValue(opt)
-    filepaths.split(",").map(FileUtils.readFileToString).mkString("\n")
+    filepaths.split(",").map(HdfsOperator.readFileToString).mkString("\n")
   }
 
   def sysOut(mess:String) = {

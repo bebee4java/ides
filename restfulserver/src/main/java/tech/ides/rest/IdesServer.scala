@@ -1,13 +1,12 @@
 package tech.ides.rest
 
 import java.io.File
-
-import org.apache.spark.IdesConf
 import org.eclipse.jetty.server.NCSARequestLog
 import org.eclipse.jetty.server.handler.{HandlerCollection, RequestLogHandler}
 import org.eclipse.jetty.servlet.DefaultServlet
 import org.eclipse.jetty.webapp.WebAppContext
 import org.scalatra.servlet.ScalatraListener
+import tech.ides.conf.IdesConf
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.FileUtils
 import tech.ides.constants.IdesEnvConstants._

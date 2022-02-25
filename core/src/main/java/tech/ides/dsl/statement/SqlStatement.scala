@@ -1,6 +1,6 @@
 package tech.ides.dsl.statement
 
-import org.apache.spark.sql.SaveMode
+import tech.ides.datasource.writer.SaveMode
 
 /**
   *

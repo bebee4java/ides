@@ -1,8 +1,12 @@
 package tech.ides.ets
 
 import org.apache.spark.sql.DataFrame
+import tech.ides.datasource.DataTable
 import tech.ides.doc.{Document, MarkDownDoc}
 import tech.ides.extension.{Action, Analysis, ETPlugin, Extension, PluginType}
+import tech.ides.strategy.PlatformFrameEnum.SPARK
+import tech.ides.strategy.PlatformFrameImpl
+import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
  * 获取表分区数目
@@ -13,14 +17,17 @@ import tech.ides.extension.{Action, Analysis, ETPlugin, Extension, PluginType}
   description = "获取表分区数目",
   sinceVersion = "1.0.0"
 )
+@PlatformFrameImpl(frameName = SPARK)
 class GetPartitionNum extends ETPlugin {
 
-  override def exec(df: DataFrame, path: String, params: Map[String, String]): DataFrame = {
-    val spark = df.sparkSession
-    val partitionNum = df.toJavaRDD.partitions.size()
+  override def exec(dataTable: DataTable, path: String, params: Map[String, String]): DataTable = {
+    val table = dataTable.table[DataFrame].get
+    val partitionNum = table.toJavaRDD.partitions.size()
+    val spark = table.sparkSession
 
     import spark.implicits._
-    Seq(partitionNum).toDF("partitionNum")
+    val df = Seq(partitionNum).toDF("partitionNum")
+    SparkDataTable(df)
   }
 
   /**

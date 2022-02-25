@@ -52,6 +52,12 @@
             <artifactId>hive-exec-${spark.big.version}_${scala.binary.version}</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.36</version>
+        </dependency>
     </dependencies>
 
 

@@ -61,7 +61,7 @@ object HdfsOperator {
     fs.listStatus(new Path(path))
   }
 
-  def readFile(path: String): String = {
+  def readFileToString(path: String): String = {
     val fs = FileSystem.get(hadoopConfiguration)
     var br: BufferedReader = null
     var line: String = null
@@ -80,7 +80,7 @@ object HdfsOperator {
     result.mkString("\n")
   }
 
-  def readBytes(fileName: String): Array[Byte] = {
+  def readFileToBytes(fileName: String): Array[Byte] = {
     val fs = FileSystem.get(hadoopConfiguration)
     val src: Path = new Path(fileName)
     var in: FSDataInputStream = null

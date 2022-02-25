@@ -1,6 +1,6 @@
 package tech.ides.core.platform
 
-import org.apache.spark.IdesConf
+import tech.ides.conf.IdesConf
 
 trait Lifecycle
 

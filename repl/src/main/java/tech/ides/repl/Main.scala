@@ -17,16 +17,17 @@
 
 package tech.ides.repl
 
-import java.util
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
+import tech.ides.conf.IdesConf
 import tech.ides.core.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
-import org.apache.spark.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE}
+import tech.ides.conf.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE}
 import tech.ides.core.IdesApp
 import tech.ides.dsl.listener.ScriptQueryExecListener
+
 import scala.collection.mutable
 
 object Main extends Logging {

@@ -3,7 +3,7 @@ package tech.ides.metastore
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 import tech.ides.core.platform.PlatformManager
-import org.apache.spark.IdesConf.EXTERNAL_STORAGE_IMPL_CLASS_NAME
+import tech.ides.conf.IdesConf.EXTERNAL_STORAGE_IMPL_CLASS_NAME
 import tech.ides.storage.{ExternalStorage, ExternalStorageInfo}
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}

@@ -1,14 +1,19 @@
 package tech.ides.datasource.impl
 
+import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter, Row, SaveMode}
 import java.util.Properties
 import org.apache.spark.sql.execution.datasources.jdbc.JDBCOptions
-import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter, Row}
 import tech.ides.datasource._
 import tech.ides.datasource.DataSource.Method.{SINK, SOURCE}
 import tech.ides.constants.ScriptConstants.{IMPL_CLASS, PRIMARY_KEYS}
+import tech.ides.datasource.reader.{DataReader, Reader}
+import tech.ides.datasource.writer.{DataWriter, Writer}
 import tech.ides.dsl.utils.DslUtil
 import tech.ides.exception.IdesException
 import tech.ides.metastore.{ConnectMappingKey, ConnectMetaStore}
+import tech.ides.strategy.PlatformFrameEnum.SPARK
+import tech.ides.strategy.PlatformFrameImpl
+import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
   * JDBC 数据源
@@ -19,13 +24,15 @@ import tech.ides.metastore.{ConnectMappingKey, ConnectMetaStore}
   name = "jdbc",
   sinceVersion = "1.0.0"
 )
+@PlatformFrameImpl(frameName = SPARK)
 class JDBCDataSource extends DataReader with DataWriter {
   override def pathSeparator: String = "."
 
-  override def load(reader: DataFrameReader, config: DataSourceConfig): DataFrame = {
+  override def load(reader: Reader, config: DataSourceConfig): DataTable = {
     val format = config.config.getOrElse(IMPL_CLASS, fullFormat)
     var dbTable = config.path
     var url = config.config.get("url")
+    val sparkDataReader = reader.getReader[DataFrameReader]
 
     if (config.path.contains(pathSeparator)) {
       val splitPath = "\\."
@@ -34,7 +41,7 @@ class JDBCDataSource extends DataReader with DataWriter {
       if (connectMeta.isEmpty) throw new IdesException(s"Can't find the jdbc mapping of connection name: $db, please re-execute connect")
       dbTable = table
       val options = connectMeta.get
-      reader.options(options)
+      sparkDataReader.options(options)
       url = options.get("url")
     }
     // 字段选择默认全选
@@ -56,22 +63,22 @@ class JDBCDataSource extends DataReader with DataWriter {
         .split(config.config.getOrElse("prePtConditionsDelim", ","))
 
       //使用当前配置覆盖连接信息
-      reader.options(config.config)
-      reader.jdbc(url.get, filterTable, predicates, new Properties())
+      sparkDataReader.options(config.config)
+      sparkDataReader.jdbc(url.get, filterTable, predicates, new Properties())
     } else {
       if (config.config.contains("partitionColumn") && (!config.config.contains("lowerBound") || !config.config.contains("upperBound"))) {
         val partitionColumn = config.config("partitionColumn")
         // 自动查询分区字段的max/min值
         val boundSql = s"(select max($partitionColumn) as upper, min($partitionColumn) as lower from $dbTable $filter) t1"
-        val bound = reader.jdbc(url.get, boundSql, new Properties()).collect()(0)
-        reader.option("partitionColumn", partitionColumn)
-        reader.option("upperBound", bound.getLong(0))
-        reader.option("lowerBound", bound.getLong(1))
+        val bound = sparkDataReader.jdbc(url.get, boundSql, new Properties()).collect()(0)
+        sparkDataReader.option("partitionColumn", partitionColumn)
+        sparkDataReader.option("upperBound", bound.getLong(0))
+        sparkDataReader.option("lowerBound", bound.getLong(1))
       }
-      reader.option("dbtable", filterTable)
+      sparkDataReader.option("dbtable", filterTable)
       //使用当前配置覆盖连接信息
-      reader.options(config.config)
-      reader.format(format).load()
+      sparkDataReader.options(config.config)
+      sparkDataReader.format(format).load()
     }
 
     // 简洁字段名称 使其不带表名
@@ -82,14 +89,15 @@ class JDBCDataSource extends DataReader with DataWriter {
 
     val newDf = table.toDF(columns: _*)
     // todo 使用cache加速
-    newDf
+    SparkDataTable(newDf)
   }
 
-  override def save(writer: DataFrameWriter[Row], config: DataSinkConfig): Unit = {
+  override def save(writer: Writer, config: DataSinkConfig): Unit = {
     val format = config.config.getOrElse(IMPL_CLASS, fullFormat)
     var dbTable = config.path
 
     var options = config.config
+    val sparkDataWriter = writer.getWriter[DataFrameWriter[Row]]
     if (dbTable.contains(pathSeparator)) {
       val splitPath = "\\."
       val Array(db, table) = dbTable.split(splitPath, 2)
@@ -97,22 +105,24 @@ class JDBCDataSource extends DataReader with DataWriter {
       if (connectMeta.isEmpty) throw new IdesException(s"Can't find the jdbc mapping of connection name: $db, please re-execute connect")
       dbTable = table
       val connOptions = connectMeta.get
-      writer.options(connOptions)
+      sparkDataWriter.options(connOptions)
       // 将两个配置合并，并且使用用当前的配置覆盖
       options = connOptions ++ options
     }
+    val saveMode = SaveMode.valueOf(config.mode.name())
 
-    writer.mode(config.mode)
-    writer.option("dbtable", dbTable)
+    sparkDataWriter.mode(saveMode)
+    sparkDataWriter.option("dbtable", dbTable)
     // save configs should overwrite connect configs
-    writer.options(options)
+    sparkDataWriter.options(options)
 
     if (options.contains(PRIMARY_KEYS)) {
       import org.apache.spark.sql.jdbc.DataFrameWriterExtensions._
       val jdbcOptions = new JDBCOptions( Map("dbtable" -> dbTable) ++ options)
-      writer.upsert( config.df.get, jdbcOptions, config.mode, Some(options(PRIMARY_KEYS)) )
+      val df = config.dt.table[DataFrame].get
+      sparkDataWriter.upsert( df, jdbcOptions, saveMode, Some(options(PRIMARY_KEYS)) )
     } else {
-      writer.format(format).save()
+      sparkDataWriter.format(format).save()
     }
   }
 

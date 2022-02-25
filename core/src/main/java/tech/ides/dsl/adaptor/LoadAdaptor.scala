@@ -2,12 +2,16 @@ package tech.ides.dsl.adaptor
 
 import ides.dsl.parser.IdesParser
 import ides.dsl.parser.IdesParser.LoadContext
-import org.apache.spark.sql.{DataFrame, DataFrameReader}
 import tech.ides.core.ScriptQueryExecute
-import tech.ides.datasource.{DataSourceConfig, DataSourceFactory}
+import tech.ides.datasource.DataSource.Method
+import tech.ides.datasource.reader.DataReader
+import tech.ides.datasource.{DataSourceConfig, DataSourceFactory, DataTable}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{LoadSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil._
+import tech.ides.strategy.PlatformStrategyCenter
+import tech.ides.strategy.PlatformFrameEnum.SPARK
+import tech.ides.strategy.PlatformStrategyCenter.{SparkDataReader, SparkDataTable}
 
 /**
   * Load 语法适配器
@@ -35,19 +39,20 @@ case class LoadAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     val LoadSqlStatement(_, format, path, options, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession
     val reader = sparkSession.read
-    var table: DataFrame = null
+    var table:DataTable = null
 
     val owner = options.getOrElse("owner", ScriptQueryExecute.getOrCreateContext().owner)
     val resourcePath = resourceRealPath(scriptQueryExecListener, Option(owner) , cleanStr(path))
 
-    val dsConf = DataSourceConfig(resourcePath, options, Option(sparkSession.emptyDataFrame))
+    val (dataReader, dataTable) = PlatformStrategyCenter.platformFrame match {
+      case SPARK => (SparkDataReader(reader), SparkDataTable(null))
+    }
+    val dsConf = DataSourceConfig(resourcePath, options, dataTable)
 
     // 从工厂获取数据源
-    DataSourceFactory.take(format, options).map {
+    DataSourceFactory.take(format, Method.SOURCE, options).map {
       dataSource =>
-        table = dataSource.asInstanceOf[ {def load(reader: DataFrameReader, config: DataSourceConfig): DataFrame}].
-          load(reader, dsConf)
-
+        table = dataSource.asInstanceOf[DataReader].load(dataReader, dsConf)
         // todo 权限校验
     }.getOrElse{
       // todo 没有匹配做提示

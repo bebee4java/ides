@@ -1,7 +1,10 @@
 package tech.ides.extension
 
-import org.apache.spark.sql.DataFrame
+import tech.ides.datasource.DataTable
 import tech.ides.doc.{Document, TextDoc}
+import tech.ides.exception.IdesException
+import tech.sqlclub.common.reflect.Reflection
+import tech.sqlclub.common.utils.VersionUtils
 
 /**
  * ET插件接口
@@ -9,7 +12,7 @@ import tech.ides.doc.{Document, TextDoc}
  */
 trait ETPlugin {
 
-  def exec(df: DataFrame, path: String, params: Map[String, String]): DataFrame
+  def exec(dataTable: DataTable, path: String, params: Map[String, String]): DataTable
 
   /**
    * 插件类型
@@ -24,6 +27,18 @@ trait ETPlugin {
   /**
    * 版本是否兼容
    */
-  def versionCompatible:Boolean = true
+  def versionCompatible = {
+    import tech.ides.IDES_VERSION
+    val currentVersion = IDES_VERSION
+    val annotation = Reflection.getAnnotation(getClass, classOf[Extension])
+    val sinceVersion = annotation.sinceVersion()
+
+    val compare = VersionUtils.compareVersion(currentVersion, sinceVersion)
+
+    if (compare < 0 ) {
+      throw new IdesException(s"This plugin is not supported in the current version! currentVersion:$currentVersion, plugin sinceVersion:$sinceVersion")
+    }
+
+  }
 
 }

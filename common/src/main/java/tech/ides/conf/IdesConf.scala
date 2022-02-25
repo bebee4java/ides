@@ -1,7 +1,5 @@
-package org.apache.spark
+package tech.ides.conf
 
-import org.apache.spark.internal.config._
-import org.apache.spark.SparkConf.getDeprecatedConfig
 import scala.collection.JavaConverters._
 
 /**
@@ -14,13 +12,11 @@ class IdesConf {
 
   @transient private lazy val reader: ConfigReader = {
     val _reader = new ConfigReader(new IdesConfigProvider(settings))
-    _reader.bindEnv(new ConfigProvider {
-      override def get(key: String): Option[String] = Option(getenv(key))
-    })
+    _reader.bindEnv(new EnvProvider())
     _reader
   }
 
-  private[spark] def getenv(name: String): String = System.getenv(name)
+  private[conf] def getenv(name: String): String = System.getenv(name)
 
   /** Remove a parameter from the configuration */
   def remove(key: String): IdesConf = {
@@ -35,7 +31,7 @@ class IdesConf {
 
   /** Get a parameter as an Option */
   def getOption(key: String): Option[String] = {
-    Option(settings.get(key)).orElse(getDeprecatedConfig(key, settings))
+    Option(settings.get(key))
   }
 
   /** Get a parameter; throws a NoSuchElementException if it's not set */
@@ -92,9 +88,10 @@ object IdesConf {
     def apply(key: String): ConfigBuilder = ConfigBuilder(key).onCreate(register)
   }
 
-  val IDES_RUN_PLATFORM = IdesConfigBuilder("ides.run.platform").doc(
+  import tech.ides.strategy.PlatformFrameEnum.SPARK
+  val IDES_RUN_PLATFORM_FRAME = IdesConfigBuilder("ides.run.platform.frame").doc(
     "ides running platform"
-  ).stringConf.createWithDefault("spark")
+  ).stringConf.createWithDefault(SPARK.frame)
 
   val IDES_SPARK_SERVICE = IdesConfigBuilder("ides.spark.service").doc(
     """
@@ -178,10 +175,10 @@ object IdesConf {
 
 }
 
-private[spark] class IdesConfigProvider(conf: java.util.Map[String, String]) extends ConfigProvider {
+private[conf] class IdesConfigProvider(conf: java.util.Map[String, String]) extends ConfigProvider {
   override def get(key: String): Option[String] = {
     if (key.startsWith("ides.")) {
-      Option(conf.get(key)).orElse(SparkConf.getDeprecatedConfig(key, conf))
+      Option(conf.get(key))
     } else {
       None
     }

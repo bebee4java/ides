@@ -1,10 +1,12 @@
 package tech.ides.datasource
 
-import org.apache.spark.IdesConf
 import tech.ides.core.platform.PlatformLifecycle
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
-import org.apache.spark.IdesConf.IDES_DATASOURCE_PACKAGES
+import tech.ides.conf.IdesConf.IDES_DATASOURCE_PACKAGES
+import tech.ides.conf.IdesConf
 import tech.ides.constants.ScriptConstants
+import tech.ides.datasource.DataSource.Method
+import tech.ides.utils.PlatformUtils
 import tech.sqlclub.common.log.Logging
 
 import scala.collection.JavaConverters._
@@ -39,23 +41,34 @@ object DataSourceFactory extends PlatformLifecycle with Logging {
     logInfo("look for the DataSource plugin from packages: " + scanPackages.mkString(", "))
 
     val allDataSource = Reflection.allClassWithAnnotation(classOf[DataSource], scanPackages:_*)
-    val ds = allDataSource.map {
+    val ds = allDataSource.filter {
+      dataSourceClass =>
+        // 跳过 实现框架不一致的ds
+        PlatformUtils.frameworkEquals(idesConf, dataSourceClass)
+    }.map {
       dataSourceClass =>
         val annotation = Reflection.getAnnotation(dataSourceClass, classOf[DataSource])
         val dataSourceInstace = Reflection(ClassPath.from(dataSourceClass)).instance[BaseDataSource]
         val direct = annotation.directDataSource()
+        val sourceTypes = annotation.types()
 
-        registry.put(DataSourceKey(dataSourceInstace.aliasFormat, direct), dataSourceInstace)
-        registry.put(DataSourceKey(dataSourceInstace.fullFormat, direct), dataSourceInstace)
+        if (sourceTypes != null && sourceTypes.nonEmpty) {
+          sourceTypes.foreach(
+            sourceType => {
+              registry.put(DataSourceKey(dataSourceInstace.aliasFormat,sourceType, direct), dataSourceInstace)
+              registry.put(DataSourceKey(dataSourceInstace.fullFormat, sourceType, direct), dataSourceInstace)
+            }
+          )
+        }
         annotation.name()
     }
 
     logInfo(s"""A total of ${allDataSource.size} dataSource plugins scanned: [${ds.mkString(", ")}].""")
   }
 
-  def take(name:String, options:Map[String,String]=Map()): Option[BaseDataSource] = {
+  def take(name:String, sourceType:Method, options:Map[String,String]=Map()): Option[BaseDataSource] = {
     val direct = options.contains(ScriptConstants.DIRECT_QUERY)
-    val key = DataSourceKey(name, direct)
+    val key = DataSourceKey(name, sourceType, direct)
     if (registry.containsKey(key)) {
       Some(registry.get(key))
     } else {

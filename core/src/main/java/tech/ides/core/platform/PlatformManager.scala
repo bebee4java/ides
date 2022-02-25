@@ -1,16 +1,16 @@
 package tech.ides.core.platform
 
-import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
-
-import org.apache.spark.IdesConf
-import org.apache.spark.IdesConf._
+import tech.ides.conf.IdesConf._
+import tech.ides.conf.IdesConf
 import tech.ides.core.ApplicationSetting
 import tech.ides.exception.IdesException
 import tech.ides.rest.RestServer
 import tech.ides.runtime.SQLRuntime
+import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.sqlclub.common.annotation.Explanation
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
+import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -100,7 +100,7 @@ object PlatformManager {
 
   def getRuntime:SQLRuntime = {
     val conf = getOrCreate.config.get()
-    val platform = conf.get(IDES_RUN_PLATFORM)
+    val platform = conf.get(IDES_RUN_PLATFORM_FRAME)
 
     Class.forName(platformNameMapping(platform)).
       getMethod("getOrCreate", classOf[IdesConf]).
@@ -117,9 +117,7 @@ object PlatformManager {
     }
   }
 
-  def SPARK = "spark"
-
   def platformNameMapping = Map[String, String](
-    SPARK -> "tech.ides.runtime.SparkRuntime"
+    SPARK.frame -> "tech.ides.runtime.SparkRuntime"
   )
 }

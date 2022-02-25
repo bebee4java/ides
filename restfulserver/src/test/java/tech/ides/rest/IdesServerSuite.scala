@@ -1,7 +1,7 @@
 package tech.ides.rest
 
-import org.apache.spark.IdesConf
 import org.scalatest.FunSuite
+import tech.ides.conf.IdesConf
 
 /**
   *

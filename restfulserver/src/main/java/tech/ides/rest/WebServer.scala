@@ -1,12 +1,11 @@
 package tech.ides.rest
 
 import java.net.InetAddress
-
-import org.apache.spark.IdesConf
-import org.apache.spark.IdesConf._
+import tech.ides.conf.IdesConf._
 import org.eclipse.jetty.server.{Handler, _}
 import org.eclipse.jetty.util.ssl.SslContextFactory
 import org.eclipse.jetty.util.thread.QueuedThreadPool
+import tech.ides.conf.IdesConf
 import tech.sqlclub.common.log.Logging
 
 /**

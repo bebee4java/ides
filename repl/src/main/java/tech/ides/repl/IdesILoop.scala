@@ -41,7 +41,7 @@ import scala.tools.nsc.interpreter.StdReplTags.tagOfIMain
 import scala.tools.nsc.util.stringFromStream
 import scala.util.Properties.{javaVersion, javaVmName, versionNumberString, versionString}
 import tech.ides.constants.ScriptConstants.{SHELL_USER, BATCH_JOB}
-import org.apache.spark.IdesConf.{IDES_JOB_RUN_TIMEOUT, IDES_SHELL_REPL_CODE_MULTI_LINE}
+import tech.ides.conf.IdesConf.{IDES_JOB_RUN_TIMEOUT, IDES_SHELL_REPL_CODE_MULTI_LINE}
 import tech.ides.utils.ScriptUtils.readLines
 import org.apache.log4j.{Level, LogManager}
 

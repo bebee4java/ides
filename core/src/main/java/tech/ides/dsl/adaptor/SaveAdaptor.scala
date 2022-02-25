@@ -1,17 +1,20 @@
 package tech.ides.dsl.adaptor
 
 import java.util.UUID
-
 import ides.dsl.parser.IdesParser
 import ides.dsl.parser.IdesParser.SaveContext
-import org.apache.spark.sql._
 import tech.ides.constants.ScriptConstants.PARTITION_BY_COL
 import tech.ides.core.ScriptQueryExecute
+import tech.ides.datasource.DataSource.Method
+import tech.ides.datasource.writer.{DataWriter, SaveMode}
 import tech.ides.datasource.{DataSinkConfig, DataSourceFactory}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SaveSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, parseAssetName, resourceRealPath, whereExpressionsToMap}
 import tech.ides.job.ScriptJobManager
+import tech.ides.strategy.PlatformFrameEnum.SPARK
+import tech.ides.strategy.PlatformStrategyCenter
+import tech.ides.strategy.PlatformStrategyCenter.{SparkDataTable, SparkDataWriter}
 
 import scala.collection.mutable.ListBuffer
 import scala.collection.JavaConverters._
@@ -77,8 +80,12 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     val owner = options.getOrElse("owner", sqec.owner)
     val resourcePath = resourceRealPath(scriptQueryExecListener, Option(owner) , cleanStr(path))
 
+    val (dataWriter, dataTable) = PlatformStrategyCenter.platformFrame match {
+      case SPARK => (SparkDataWriter(write), SparkDataTable(originalTable))
+    }
+
     // 从工厂获取数据源
-    DataSourceFactory.take(format, options).map {
+    DataSourceFactory.take(format, Method.SINK, options).map {
       dataSource =>
         val config = if (partitionByCol.nonEmpty) {
           // 如果需要分区 进行partitionBy
@@ -88,9 +95,8 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
 
           options ++ Map(PARTITION_BY_COL -> partitionByCol.mkString(","))
         } else options
-        val dataSinkConfig = DataSinkConfig(resourcePath, config, saveMode, Option(originalTable))
-        dataSource.asInstanceOf[{ def save(writer: DataFrameWriter[Row], config: DataSinkConfig)}]
-          .save(write, dataSinkConfig)
+        val dataSinkConfig = DataSinkConfig(resourcePath, config, saveMode, dataTable)
+        dataSource.asInstanceOf[DataWriter].save(dataWriter, dataSinkConfig)
 
       // todo 权限校验
     }.getOrElse{

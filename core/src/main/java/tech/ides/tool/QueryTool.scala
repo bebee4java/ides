@@ -1,6 +1,6 @@
 package tech.ides.tool
 
-import org.apache.spark.IdesConf
+import tech.ides.conf.IdesConf
 import tech.ides.core.{ScriptQueryExecute, ScriptQueryExecuteContext}
 import tech.ides.core.platform.PlatformManager
 import tech.ides.dsl.listener.ScriptQueryExecListener

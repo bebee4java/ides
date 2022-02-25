@@ -1,8 +1,9 @@
 package tech.ides.extension
 
-import org.apache.spark.IdesConf
-import org.apache.spark.IdesConf.IDES_PLUGIN_PACKAGES
+import tech.ides.conf.IdesConf.IDES_PLUGIN_PACKAGES
+import tech.ides.conf.IdesConf
 import tech.ides.core.platform.PlatformLifecycle
+import tech.ides.utils.PlatformUtils
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 
@@ -28,7 +29,11 @@ object ETPluginRegister extends PlatformLifecycle with Logging {
     logInfo("look for the et plugin from packages: " + scanPackages.mkString(", "))
 
     val allETs = Reflection.allClassWithAnnotation(classOf[Extension], scanPackages:_*)
-    val ets = allETs.map {
+    val ets = allETs.filter {
+      etClass =>
+        // 跳过 实现框架不一致的et
+        PlatformUtils.frameworkEquals(idesConf, etClass)
+      }.map {
       etClass =>
         val annotation = Reflection.getAnnotation(etClass, classOf[Extension])
         val etInstace = Reflection(ClassPath.from(etClass)).instance[ETPlugin]

@@ -1,6 +1,6 @@
 package tech.ides.rest
 
-import org.apache.spark.IdesConf
+import tech.ides.conf.IdesConf
 
 /**
   *

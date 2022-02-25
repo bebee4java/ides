@@ -3,10 +3,11 @@ package tech.ides.runtime
 import java.util
 import java.util.{Map => JMap}
 import java.util.concurrent.atomic.AtomicReference
-import org.apache.spark.{IdesConf, SparkConf}
-import org.apache.spark.IdesConf._
+import org.apache.spark.SparkConf
+import tech.ides.conf.IdesConf._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.internal.StaticSQLConf.CATALOG_IMPLEMENTATION
+import tech.ides.conf.IdesConf
 import tech.ides.constants.ScriptConstants
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ConfigUtils

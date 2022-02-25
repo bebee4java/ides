@@ -1,15 +1,15 @@
 package tech.ides.core
 
-import org.apache.spark.IdesConf
-import org.apache.spark.IdesConf.{IDES_SHELL_MODE, IDES_SPARK_SERVICE}
+import tech.ides.conf.IdesConf.{IDES_SHELL_MODE, IDES_SPARK_SERVICE}
+import tech.ides.conf.IdesConf
 import tech.ides.core.platform.{PlatformLifecycle, PlatformManager, ServiceLifecycle}
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import tech.sqlclub.common.utils.ParamsUtils
 
 /**
-  *
-  * Created by songgr on 2020/07/14.
-  */
+ *
+ * Created by songgr on 2020/07/14.
+ */
 object IdesApp {
 
   def main(args: Array[String]): Unit = {
@@ -39,7 +39,6 @@ object IdesApp {
     }
 
     PlatformManager.getOrCreate.run(idesConf)
-
 
 
   }

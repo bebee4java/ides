@@ -1,10 +1,10 @@
 package tech.ides.rest
 
 import javax.servlet.ServletContext
-import org.apache.spark.IdesConf
 import org.json4s.{DefaultFormats, Formats}
 import org.scalatra.{LifeCycle, ScalatraServlet}
 import org.scalatra.swagger.{ApiInfo, JacksonSwaggerBase, Swagger}
+import tech.ides.conf.IdesConf
 import tech.ides.core.platform.ServiceLifecycle
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
@@ -58,7 +58,7 @@ object ControlHandlerHook extends ServiceLifecycle with Logging {
   def removeHandler(handlers: Handler*) = handlers.foreach(_handlers.remove)
 
   def registerControllers(idesConf: IdesConf) = {
-    import org.apache.spark.IdesConf.IDES_CONTROLLER_PACKAGES
+    import IdesConf.IDES_CONTROLLER_PACKAGES
     val option = idesConf.get(IDES_CONTROLLER_PACKAGES)
 
     val controllerDefaultPackages = Array("tech.ides.rest")
