@@ -4,5 +4,6 @@ application:
   # platform 生命周期相关类
   platformLifecycles:
     - tech.ides.datasource.DataSourceFactory
+    - tech.ides.extension.ETPluginRegister
   serviceLifecycles:
     - tech.ides.rest.ControlHandlerHook
