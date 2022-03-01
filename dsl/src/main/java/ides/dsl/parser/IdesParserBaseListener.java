@@ -258,6 +258,18 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCommand(IdesParser.CommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCommand(IdesParser.CommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterModule(IdesParser.ModuleContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -378,6 +390,30 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMumericValue(IdesParser.MumericValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMumericValue(IdesParser.MumericValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStringValue(IdesParser.StringValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStringValue(IdesParser.StringValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpression(IdesParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -481,6 +517,18 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOutTable(IdesParser.OutTableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRawCommand(IdesParser.RawCommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRawCommand(IdesParser.RawCommandContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

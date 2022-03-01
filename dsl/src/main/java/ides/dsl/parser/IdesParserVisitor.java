@@ -146,6 +146,13 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRun(IdesParser.RunContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Command}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCommand(IdesParser.CommandContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesParser#module}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -206,6 +213,18 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValueName(IdesParser.ValueNameContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link IdesParser#mumericValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMumericValue(IdesParser.MumericValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesParser#stringValue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStringValue(IdesParser.StringValueContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link IdesParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -259,4 +278,10 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOutTable(IdesParser.OutTableContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesParser#rawCommand}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRawCommand(IdesParser.RawCommandContext ctx);
 }

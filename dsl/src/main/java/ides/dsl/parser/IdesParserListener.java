@@ -236,6 +236,18 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitRun(IdesParser.RunContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Command}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommand(IdesParser.CommandContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Command}
+	 * labeled alternative in {@link IdesParser#query}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommand(IdesParser.CommandContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesParser#module}.
 	 * @param ctx the parse tree
 	 */
@@ -336,6 +348,26 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitValueName(IdesParser.ValueNameContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link IdesParser#mumericValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterMumericValue(IdesParser.MumericValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#mumericValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitMumericValue(IdesParser.MumericValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringValue(IdesParser.StringValueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#stringValue}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringValue(IdesParser.StringValueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesParser#expression}.
 	 * @param ctx the parse tree
 	 */
@@ -425,4 +457,14 @@ public interface IdesParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOutTable(IdesParser.OutTableContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesParser#rawCommand}.
+	 * @param ctx the parse tree
+	 */
+	void enterRawCommand(IdesParser.RawCommandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#rawCommand}.
+	 * @param ctx the parse tree
+	 */
+	void exitRawCommand(IdesParser.RawCommandContext ctx);
 }

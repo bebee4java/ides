@@ -34,9 +34,13 @@ CREATE: 'create';
 DROP: 'drop';
 REGISTER: 'register';
 RUN: 'run';
+EXEC_TOKEN: '!';
 //============================
 // End of the keywords list
 //============================
+
+// symbol of raw command
+COMMAND_SYM: ('_' | '-' | '/' | '>' | '<' | '.' | '~' ) ;
 
 DOT
     : '.'

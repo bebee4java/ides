@@ -53,6 +53,7 @@ query
     | CREATE ~(EOQ)+ # Create
     | REGISTER module DOT path whereExpressions? asAsset? # Register
     | RUN module DOT path whereExpressions? asAsset? # Run
+    | EXEC_TOKEN module rawCommand* # Command
     ;
 
 module
@@ -93,8 +94,16 @@ keyName
     : qualifiedName
     ;
 valueName
+    : mumericValue
+    | stringValue
+    ;
+
+mumericValue
     : MUMERIC
-    | STRING_TEXT
+    ;
+
+stringValue
+    : STRING_TEXT
     | BLOCK_STRING_TEXT
     | QUOTED_TEXT
     ;
@@ -128,3 +137,11 @@ where: OPTIONS|WHERE;
 saveMode: OVERWRITE|APPEND|ERRORIfExists|IGNORE;
 
 outTable : OUT assetName;
+
+rawCommand
+    : COMMAND_SYM
+    | identifier
+    | quotedIdentifier
+    | stringValue
+    | mumericValue
+    ;
