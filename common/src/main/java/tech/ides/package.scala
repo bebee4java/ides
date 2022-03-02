@@ -13,7 +13,10 @@ package object ides {
       ides_revision: String,
       ides_build_user: String,
       ides_repo_url: String,
-      ides_build_date: String) = {
+      ides_build_date: String,
+      ides_srcChecksum:String,
+      ides_protocVersion:String
+      ) = {
 
       val resourceStream = Thread.currentThread().getContextClassLoader.
         getResourceAsStream("ides-version-info.properties")
@@ -31,7 +34,9 @@ package object ides {
           props.getProperty("revision", unknownProp),
           props.getProperty("user", unknownProp),
           props.getProperty("url", unknownProp),
-          props.getProperty("date", unknownProp)
+          props.getProperty("date", unknownProp),
+          props.getProperty("srcChecksum", unknownProp),
+          props.getProperty("protocVersion", unknownProp)
         )
       } catch {
         case e: Exception =>

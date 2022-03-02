@@ -19,7 +19,8 @@
                 <includes>
                     <include>ides-version-info.properties</include>
                 </includes>
-                <filtering>false</filtering>
+                <!--作用参考：https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html-->
+                <filtering>true</filtering>
             </resource>
         </resources>
     </build>
