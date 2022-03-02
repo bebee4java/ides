@@ -40,7 +40,7 @@ EXEC_TOKEN: '!';
 //============================
 
 // symbol of raw command
-COMMAND_SYM: ('_' | '-' | '/' | '>' | '<' | '.' | '~' ) ;
+//COMMAND_SYM: ('_' | '-' | '/' | '>' | '<' | '.' | '~' ) ;
 
 DOT
     : '.'
@@ -54,8 +54,40 @@ COMMA
     : ','
     ;
 
-OUT
+GT
     : '>'
+    ;
+
+LT
+    : '<'
+    ;
+
+HYPHEN
+    : '-'
+    ;
+
+UNDERLINE
+    : '_'
+    ;
+
+SLASH
+    : '/'
+    ;
+
+TILDE
+    : '~'
+    ;
+
+COLON
+    : ':'
+    ;
+
+ASTERISK
+    : '*'
+    ;
+
+VERTICAL_BAR
+    : '|'
     ;
 
 // end of query

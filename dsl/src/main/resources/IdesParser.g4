@@ -145,6 +145,8 @@ quotedIdentifier
 where: OPTIONS|WHERE;
 saveMode: OVERWRITE|APPEND|ERRORIfExists|IGNORE;
 
-outTable : OUT assetName;
+outTable : GT assetName;
 
-commandParam : (COMMAND_SYM | identifier | quotedIdentifier | stringValue | mumericValue)+;
+commandSymbol : (DOT| COMMA | GT | LT | HYPHEN | UNDERLINE | SLASH | TILDE | COLON | ASTERISK | VERTICAL_BAR);
+
+commandParam : (commandSymbol | identifier | quotedIdentifier | stringValue | mumericValue)+;

@@ -458,6 +458,16 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitOutTable(IdesParser.OutTableContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link IdesParser#commandSymbol}.
+	 * @param ctx the parse tree
+	 */
+	void enterCommandSymbol(IdesParser.CommandSymbolContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#commandSymbol}.
+	 * @param ctx the parse tree
+	 */
+	void exitCommandSymbol(IdesParser.CommandSymbolContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link IdesParser#commandParam}.
 	 * @param ctx the parse tree
 	 */
