@@ -1,8 +1,7 @@
 package ides.dsl.parser;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
@@ -19,7 +18,7 @@ public class ListenerTest {
                 "\n" +
                 "load jsonStr.`abc` as table1;\n" +
                 "load hive.`a.abc` as table1;\n" +
-                "save a;";
+                "!hdfs -cp /tmp/abc.txt /tmp/dd;";
         CodePointCharStream cpcs = CharStreams.fromString(expr);
         IdesLexer idesDslLexer = new IdesLexer(cpcs);
 
@@ -45,5 +44,28 @@ class MyListener extends IdesParserBaseListener {
         String text = ctx.format().getText();
         System.out.println("load -----> " + text);
 
+    }
+
+    @Override
+    public void exitCommand(IdesParser.CommandContext ctx) {
+        String text = ctx.commandParam().getText();
+        System.out.println("exec=======>" + text);
+        String commandParam = currentText(ctx.commandParam());
+
+        System.out.println(commandParam);
+        System.out.println(commandParam.split(" "));
+
+        super.exitCommand(ctx);
+    }
+
+    public String currentText(ParserRuleContext ctx) {
+        if ( ctx == null ) return null;
+        IdesLexer lexer = (IdesLexer)ctx.start.getTokenSource();
+        CharStream input = lexer._input;
+
+        int start = ctx.start.getStartIndex();
+        int stop = ctx.stop.getStopIndex();
+        Interval interval = new Interval(start, stop);
+        return input.getText(interval);
     }
 }

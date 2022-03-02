@@ -522,13 +522,13 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRawCommand(IdesParser.RawCommandContext ctx) { }
+	@Override public void enterCommandParam(IdesParser.CommandParamContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRawCommand(IdesParser.RawCommandContext ctx) { }
+	@Override public void exitCommandParam(IdesParser.CommandParamContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

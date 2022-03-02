@@ -279,9 +279,9 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOutTable(IdesParser.OutTableContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link IdesParser#rawCommand}.
+	 * Visit a parse tree produced by {@link IdesParser#commandParam}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRawCommand(IdesParser.RawCommandContext ctx);
+	T visitCommandParam(IdesParser.CommandParamContext ctx);
 }

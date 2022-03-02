@@ -313,5 +313,5 @@ public class IdesParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitRawCommand(IdesParser.RawCommandContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCommandParam(IdesParser.CommandParamContext ctx) { return visitChildren(ctx); }
 }

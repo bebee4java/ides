@@ -53,7 +53,7 @@ query
     | CREATE ~(EOQ)+ # Create
     | REGISTER module DOT path whereExpressions? asAsset? # Register
     | RUN module DOT path whereExpressions? asAsset? # Run
-    | EXEC_TOKEN module rawCommand* # Command
+    | EXEC_TOKEN module commandParam? # Command
     ;
 
 module
@@ -127,6 +127,15 @@ assetName
 
 identifier
     : IDENTIFIER
+    | LOAD
+    | SAVE
+    | SELECT
+    | CONNECT
+    | SET
+    | DROP
+    | CREATE
+    | REGISTER
+    | RUN
     ;
 
 quotedIdentifier
@@ -138,10 +147,4 @@ saveMode: OVERWRITE|APPEND|ERRORIfExists|IGNORE;
 
 outTable : OUT assetName;
 
-rawCommand
-    : COMMAND_SYM
-    | identifier
-    | quotedIdentifier
-    | stringValue
-    | mumericValue
-    ;
+commandParam : (COMMAND_SYM | identifier | quotedIdentifier | stringValue | mumericValue)+;
