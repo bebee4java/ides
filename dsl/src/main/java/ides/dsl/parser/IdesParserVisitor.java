@@ -19,6 +19,12 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatement(IdesParser.StatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link IdesParser#idesScript}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdesScript(IdesParser.IdesScriptContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Iql}
 	 * labeled alternative in {@link IdesParser#script}.
 	 * @param ctx the parse tree

@@ -6,9 +6,9 @@ lexer grammar IdesLexer;
 
 channels { COMMENT }
 
-PY_MODE : '%python'('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(PYTHON_LAN);
+PY_MODE : ('%python'|'%py') ('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(PYTHON_LAN);
 SQL_MODE : '%sql'('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(SQL_LAN);
-SHELL_MODE : '%sh' NL -> pushMode(SHELL_LAN);
+SHELL_MODE : ('%shell'|'%sh') NL -> pushMode(SHELL_LAN);
 
 //============================
 // Start of the keywords list

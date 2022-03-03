@@ -6,9 +6,13 @@ parser grammar IdesParser;
 
 options { tokenVocab=IdesLexer; }
 
-// 一个脚本以0到n条query语句组成
+// 一个脚本以0到n条idesScript语句组成
 statement
-    : script*
+    : idesScript*
+    ;
+
+idesScript
+    : script
     ;
 
 script

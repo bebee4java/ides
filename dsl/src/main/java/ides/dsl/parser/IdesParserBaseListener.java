@@ -30,6 +30,18 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIdesScript(IdesParser.IdesScriptContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdesScript(IdesParser.IdesScriptContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIql(IdesParser.IqlContext ctx) { }
 	/**
 	 * {@inheritDoc}

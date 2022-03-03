@@ -20,6 +20,16 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitStatement(IdesParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link IdesParser#idesScript}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdesScript(IdesParser.IdesScriptContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#idesScript}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdesScript(IdesParser.IdesScriptContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Iql}
 	 * labeled alternative in {@link IdesParser#script}.
 	 * @param ctx the parse tree
