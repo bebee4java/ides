@@ -20,9 +20,9 @@ object ScriptConstants {
 
   val PRIMARY_KEYS = "primaryKeys"
 
-  def PATH_SEPARATOR = File.pathSeparator
+  val PATH_SEPARATOR = File.pathSeparator
 
-  def PATH_SEPARATOR_SIZE = PATH_SEPARATOR.length
+  val PATH_SEPARATOR_SIZE = PATH_SEPARATOR.length
 
   val SHELL_USER = "idesShell"
 
@@ -33,15 +33,13 @@ object ScriptConstants {
   val BATCH_JOB = "batch"
   val STREAM_JOB = "stream"
 
-
-  def KEY_WORDS = TRANSFORM_SET ++ ACTION_SET
-
   // transform 语句关键字
   val TRANSFORM_SET = Set("select", "load", "set", "include", "register", "connect")
 
   // action语句关键字
   val ACTION_SET = Set("save", "insert", "train", "run", "predict", "!")
 
+  val KEY_WORDS = TRANSFORM_SET ++ ACTION_SET
 
   val __SESSION__ = "__session__"
 

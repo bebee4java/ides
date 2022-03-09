@@ -27,7 +27,7 @@ case class ConnectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) exte
     ConnectSqlStatement(sql, format, options, connectName)
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
     val ConnectSqlStatement(_, format, options, connectName) = parse(context)
 
     DataSourceFactory.findBothNames(format).map{

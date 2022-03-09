@@ -1,8 +1,8 @@
 package tech.ides.metastore
 
+import tech.ides.conf.IdesConf
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
-import tech.ides.core.platform.PlatformManager
 import tech.ides.conf.IdesConf.EXTERNAL_STORAGE_IMPL_CLASS_NAME
 import tech.ides.storage.{ExternalStorage, ExternalStorageInfo}
 import tech.sqlclub.common.log.Logging
@@ -36,7 +36,7 @@ object ConnectMetaStore extends Logging {
   def storage = externalStorage.get()
 
   private[this] def initialize = {
-    val conf = PlatformManager.getConf
+    val conf = IdesConf.getOrCreate
     val storageImplClass = conf.get(EXTERNAL_STORAGE_IMPL_CLASS_NAME)
     val externalStorage = Reflection(ClassPath.from(storageImplClass)).instance[ExternalStorage]
     this.externalStorage.set(externalStorage)

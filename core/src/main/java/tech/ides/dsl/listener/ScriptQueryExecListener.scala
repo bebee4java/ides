@@ -22,18 +22,18 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   logInfo(s"create ScriptQueryExecListener for $owner.")
 
   // 整个Script的env变量
-  private val _env = new mutable.HashMap[String, String]()
+  private val _env = new mutable.HashMap[String, Any]()
   // Script stage
   private var _stage: Option[ScriptStage.stage] = None
   // last table name
   private val lastTableName = new AtomicReference[String](null)
 
-  def exportEnv(key:String, value:String) = {
+  def addEnv(key:String, value:Any) = {
     _env(key) = value
     this
   }
 
-  def env = this._env
+  def env = this._env.toMap
 
   def env(key: String) = this._env.get(key)
 
@@ -73,7 +73,7 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   override def exitStatement(ctx: IdesParser.StatementContext): Unit = {}
 
   /**
-    * python 代码的context
+    * 执行python 代码的context
     *
     * example:
     * %python
@@ -112,7 +112,7 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   }
 
   /**
-    * sql脚本（jdbc语句）的context
+    * 执行sql脚本（jdbc语句）的context
     * example:
     * %sql
     * # use table
@@ -148,7 +148,7 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
 
 
   /**
-    * shell脚本的context
+    * 执行shell脚本的context
     * example:
     * %sh
     * # test
@@ -170,46 +170,51 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
   }
 
   /**
-    * load语句的context
+    * 执行load语句的context
     */
   override def exitLoad(ctx: IdesParser.LoadContext): Unit = {
-    LoadAdaptor(this).enterContext(ctx)
+    LoadAdaptor(this).execute(ctx)
   }
 
   /**
-    * select语句的context
+    * 执行select语句的context
     */
   override def exitSelect(ctx: IdesParser.SelectContext): Unit = {
-    SelectAdaptor(this).enterContext(ctx)
+    SelectAdaptor(this).execute(ctx)
   }
 
   /**
-    * save语句的context
+    * 执行save语句的context
     */
   override def exitSave(ctx: IdesParser.SaveContext): Unit = {
-    SaveAdaptor(this).enterContext(ctx)
+    SaveAdaptor(this).execute(ctx)
   }
 
   /**
-    * connect语句的context
+    * 执行connect语句的context
     */
   override def exitConnect(ctx: IdesParser.ConnectContext): Unit = {
-    ConnectAdaptor(this).enterContext(ctx)
+    ConnectAdaptor(this).execute(ctx)
   }
 
   /**
-    * drop语句的context
+    * 执行drop语句的context
     */
   override def exitDrop(ctx: IdesParser.DropContext): Unit = {
-    DropAdaptor(this).enterContext(ctx)
+    DropAdaptor(this).execute(ctx)
   }
 
   /**
-   * run语句的context
-   *
-   * <p>The default implementation does nothing.</p>
+   * 执行run语句的context
    */
   override def exitRun(ctx: IdesParser.RunContext): Unit = {
-    RunAdaptor(this).enterContext(ctx)
+    RunAdaptor(this).execute(ctx)
+  }
+
+  /**
+   * 执行command语句的context
+   */
+  override def exitCommand(ctx: IdesParser.CommandContext): Unit = {
+    CommandAdaptor(this).execute(ctx)
   }
 }

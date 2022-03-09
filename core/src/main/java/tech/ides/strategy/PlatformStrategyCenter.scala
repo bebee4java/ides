@@ -3,7 +3,7 @@ package tech.ides.strategy
 import org.apache.commons.lang3.StringUtils
 import tech.ides.conf.IdesConf.IDES_RUN_PLATFORM_FRAME
 import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter, Row}
-import tech.ides.core.platform.PlatformManager
+import tech.ides.conf.IdesConf
 import tech.ides.datasource.{AnyDataTable, DataTable}
 import tech.ides.datasource.reader.Reader
 import tech.ides.datasource.writer.Writer
@@ -65,7 +65,7 @@ object PlatformStrategyCenter {
    * @return
    */
   def platformFrame = {
-    val platformFrame = PlatformManager.getConf.get(IDES_RUN_PLATFORM_FRAME)
+    val platformFrame = IdesConf.getOrCreate.get(IDES_RUN_PLATFORM_FRAME)
     platformFrame match {
       case _ if StringUtils.equalsIgnoreCase(SPARK.frame, platformFrame) => SPARK
       case _ => SPARK

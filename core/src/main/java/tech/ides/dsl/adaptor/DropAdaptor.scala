@@ -27,7 +27,7 @@ case class DropAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     DropSqlStatement(sql, resource, format, assetName)
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
     val DropSqlStatement(_, resource, format, assetName) = parse(context)
 
     val res = resource match {

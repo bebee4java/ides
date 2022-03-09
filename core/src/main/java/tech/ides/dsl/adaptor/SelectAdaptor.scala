@@ -21,7 +21,7 @@ case class SelectAdaptor(scriptQueryExecListener: ScriptQueryExecListener) exten
     SelectSqlStatement(sql, tableName)
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
 
     val SelectSqlStatement(_sql, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession

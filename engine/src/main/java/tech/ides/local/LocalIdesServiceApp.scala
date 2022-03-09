@@ -18,6 +18,7 @@ object LocalIdesServiceApp {
       "-ides.spark.service", "true",
       "-ides.server.port", "9009",
       "-ides.server.request-log.enable", "true",
+      "-ides.script.default.date.format", "yyyyMMdd",
       "-ides.enableHiveSupport", "true"
     ))
   }

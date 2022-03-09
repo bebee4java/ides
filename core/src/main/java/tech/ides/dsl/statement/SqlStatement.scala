@@ -11,6 +11,8 @@ sealed trait SqlStatement {
   def sql:String
 }
 
+case class QuerySqlStatement(sql:String) extends SqlStatement
+
 // LOAD format DOT path whereExpressions? asAsset
 case class LoadSqlStatement(sql: String, format: String, path: String, options: Map[String, String], tableName: String) extends SqlStatement
 
@@ -28,3 +30,9 @@ case class DropSqlStatement(sql:String, resource:Int, format:String, assetName:S
 
 // RUN module DOT path whereExpressions? asAsset? # Run
 case class RunSqlStatement(sql: String, module: String, path: String, options: Map[String, String], tableName: String) extends SqlStatement
+
+// EXEC_TOKEN module commandParam? # Command
+case class CommandSqlStatement(sql: String, module: String, rawCommand: String, parameters:Array[String]) extends SqlStatement
+
+// SET expression whereExpressions? # Set
+case class SetSqlStatement(sql: String, key: String, value:Any, options: Map[String, String]) extends SqlStatement

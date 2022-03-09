@@ -3,7 +3,7 @@ package tech.ides.core
 import ides.dsl.parser._
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import org.antlr.v4.runtime.CommonTokenStream
-import tech.ides.dsl.listener.ScriptQueryExecListener
+import tech.ides.dsl.listener.{PreProcessListener, ScriptQueryExecListener}
 import tech.sqlclub.common.log.Logging
 import tech.ides.constants.ScriptConstants._
 import tech.ides.dsl.{CaseChangeCharStream, SyntaxErrorListener}
@@ -50,6 +50,8 @@ object ScriptQueryExecute extends Logging {
           ) = {
 
 
+    var querySQL = script
+
     // include stage
     if ( !skipInclude ) {
       // todo 实现include功能
@@ -57,6 +59,19 @@ object ScriptQueryExecute extends Logging {
 
     // set replace stage
     // todo 实现set语法替换
+
+    val preProcessListener = new PreProcessListener(listener)
+
+    listener.setStage(ScriptStage.preProcess)
+    parse(querySQL, preProcessListener)
+
+    // 预处理完的sql
+    querySQL = preProcessListener.toScript
+
+    println("======预处理结束========")
+    println(querySQL)
+
+
 
     // grammar validate stage
     if ( !skipGrammarValidate ) {
@@ -71,7 +86,7 @@ object ScriptQueryExecute extends Logging {
     // physical job stage
     if ( !skipPhysicalJob ) {
       listener.setStage(ScriptStage.physical)
-      parse(script, listener)
+      parse(querySQL, listener)
     }
 
   }

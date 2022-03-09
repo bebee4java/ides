@@ -61,7 +61,7 @@ case class SaveAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
 
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
     val SaveSqlStatement(_, inputTableName, saveMode, format, path, options, partitionByCol) = parse(context)
 
     val spark = scriptQueryExecListener.sparkSession

@@ -10,10 +10,23 @@ import tech.ides.dsl.statement.SqlStatement
   */
 trait ScriptDslAdaptor {
 
+  /**
+   * 脚本执行监听类
+   * @return
+   */
   def scriptQueryExecListener:ScriptQueryExecListener
 
+  /**
+   * 脚本解析
+   * @param context 脚本上下文
+   * @return
+   */
   def parse(context: QueryContext): SqlStatement
 
-  def enterContext(context: QueryContext)
+  /**
+   * 脚本执行
+   * @param context 脚本上下文
+   */
+  def execute(context: QueryContext)
 
 }

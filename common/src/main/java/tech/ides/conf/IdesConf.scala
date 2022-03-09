@@ -1,5 +1,6 @@
 package tech.ides.conf
 
+import java.util.concurrent.atomic.AtomicReference
 import scala.collection.JavaConverters._
 
 /**
@@ -76,6 +77,16 @@ class IdesConf {
 }
 
 object IdesConf {
+  // ides conf 单例
+  @transient private val idesConf = new AtomicReference[IdesConf]()
+  def getOrCreate: IdesConf = {
+    this.synchronized {
+      if (idesConf.get() == null) {
+        idesConf.set(new IdesConf())
+      }
+    }
+    idesConf.get()
+  }
   private[this] val entries = new java.util.HashMap[String, ConfigEntry[_]]()
 
   private[this] def register(entry: ConfigEntry[_]): Unit = {
@@ -172,6 +183,11 @@ object IdesConf {
     .doc("ides external storage implementation class name")
     .stringConf
     .createWithDefault("tech.ides.storage.impl.ParquetExternalStorage")
+
+  val SCRIPT_DEFAULT_DATEFORMAT = IdesConfigBuilder("ides.script.default.date.format")
+    .doc("ides script default dateFormat")
+    .stringConf
+    .createWithDefault("yyyy-MM-dd")
 
 }
 

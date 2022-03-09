@@ -107,16 +107,6 @@ object PlatformManager {
       invoke(null, conf).asInstanceOf[SQLRuntime]
   }
 
-  @Explanation(attention = "available after executed platformManager run method")
-  def getConf = {
-    val conf = getOrCreate.config
-    if (conf.get() == null) {
-      new IdesConf()
-    } else {
-      conf.get()
-    }
-  }
-
   def platformNameMapping = Map[String, String](
     SPARK.frame -> "tech.ides.runtime.SparkRuntime"
   )

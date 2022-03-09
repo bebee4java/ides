@@ -31,7 +31,7 @@ case class RunAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends 
     RunSqlStatement(sql, module, path, options, tableName)
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
 
     val RunSqlStatement(_, module, path, options, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession

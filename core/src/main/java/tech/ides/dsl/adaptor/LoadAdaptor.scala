@@ -35,7 +35,7 @@ case class LoadAdaptor(scriptQueryExecListener: ScriptQueryExecListener) extends
     LoadSqlStatement(sql, format, path, options, tableName)
   }
 
-  override def enterContext(context: IdesParser.QueryContext): Unit = {
+  override def execute(context: IdesParser.QueryContext): Unit = {
     val LoadSqlStatement(_, format, path, options, tableName) = parse(context)
     val sparkSession = scriptQueryExecListener.sparkSession
     val reader = sparkSession.read
