@@ -164,6 +164,12 @@
                         <groupId>org.apache.spark</groupId>
                         <artifactId>spark-sql_${scala.binary.version}</artifactId>
                         <version>${spark.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>antlr4-runtime</artifactId>
+                                <groupId>org.antlr</groupId>
+                            </exclusion>
+                        </exclusions>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.spark</groupId>
@@ -194,6 +200,12 @@
                         <groupId>org.apache.spark</groupId>
                         <artifactId>spark-sql_${scala.binary.version}</artifactId>
                         <version>${spark.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <artifactId>antlr4-runtime</artifactId>
+                                <groupId>org.antlr</groupId>
+                            </exclusion>
+                        </exclusions>
                     </dependency>
                     <dependency>
                         <groupId>org.apache.spark</groupId>

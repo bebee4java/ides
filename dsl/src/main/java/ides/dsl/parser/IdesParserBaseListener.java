@@ -1,6 +1,5 @@
-// Generated from /Users/sgr/develop/ideaProjects/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.9.2
-
-    package ides.dsl.parser;
+// Generated from IdesParser.g4 by ANTLR 4.7.1
+package ides.dsl.parser;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -54,6 +53,18 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterScala(IdesParser.ScalaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitScala(IdesParser.ScalaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterPy(IdesParser.PyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -85,6 +96,30 @@ public class IdesParserBaseListener implements IdesParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSh(IdesParser.ShContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterScalaCode(IdesParser.ScalaCodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitScalaCode(IdesParser.ScalaCodeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterScalaStatement(IdesParser.ScalaStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitScalaStatement(IdesParser.ScalaStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

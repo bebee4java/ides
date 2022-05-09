@@ -72,6 +72,21 @@ class ScriptQueryExecListener(val sparkSession: SparkSession, val defaultPathPre
     */
   override def exitStatement(ctx: IdesParser.StatementContext): Unit = {}
 
+
+  /**
+   * 执行scala 代码的context
+   * example:
+   * %scala
+   * val a = 1+2;
+   * val strLen = (s: String) => if (s == null) 0 else s.length();
+   * %
+   */
+  override def exitScala(ctx: IdesParser.ScalaContext): Unit = {
+    val context = ctx.scalaCode()
+    val s = DslUtil.currentText(context)
+    println("scala: \n" + s)
+  }
+
   /**
     * 执行python 代码的context
     *

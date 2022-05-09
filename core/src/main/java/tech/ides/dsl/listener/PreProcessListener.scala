@@ -30,8 +30,8 @@ class PreProcessListener(sqel: ScriptQueryExecListener) extends IdesParserBaseLi
    */
   override def exitCommand(ctx: IdesParser.CommandContext): Unit = {
     val statement = CommandAdaptor(sqel).parse(ctx)
-    println("Command=============>")
-    println(statement.sql)
+//    println("Command=============>")
+//    println(statement.sql)
   }
 
 
@@ -56,9 +56,16 @@ class PreProcessListener(sqel: ScriptQueryExecListener) extends IdesParserBaseLi
 
   /**
    * 单个ides语句
-   * 包含 iql基本语法、python/shell原始语法、sql原始语句
+   * 包含 iql基本语法、python/shell/scala原始语法、sql原始语句
    */
-  override def exitIdesScript(ctx: IdesParser.IdesScriptContext): Unit = { }
+  override def exitIdesScript(ctx: IdesParser.IdesScriptContext): Unit = {
+    val script = currentText(ctx)
+
+    val statement = QuerySqlStatement(script)
+    if ( !statements.contains(statement) ) {
+      addStatement(statement)
+    }
+  }
 
   /**
    * 整个脚本

@@ -17,9 +17,18 @@ idesScript
 
 script
     : query EOQ # Iql
+    | SCALA_MODE scalaCode EXIT_SCALA NL? # Scala
     | PY_MODE pythonCode EXIT_PY NL? outTable? # Py
     | SQL_MODE sqlCode EXIT_SQL NL? outTable? # Sql
     | SHELL_MODE shellCode EXIT_SH NL? outTable? # Sh
+    ;
+
+scalaCode
+    : scalaStatement*
+    ;
+
+scalaStatement
+    : SCALA_TEXT
     ;
 
 pythonCode

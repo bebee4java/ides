@@ -68,8 +68,8 @@ object ScriptQueryExecute extends Logging {
     // 预处理完的sql
     querySQL = preProcessListener.toScript
 
-    println("======预处理结束========")
-    println(querySQL)
+//    println("======预处理结束========")
+//    println(querySQL)
 
 
 

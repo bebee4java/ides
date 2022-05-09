@@ -6,8 +6,9 @@ lexer grammar IdesLexer;
 
 channels { COMMENT }
 
+SCALA_MODE : '%scala' NL -> pushMode(SCALA_LAN);
 PY_MODE : ('%python'|'%py') ('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(PYTHON_LAN);
-SQL_MODE : '%sql'('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(SQL_LAN);
+SQL_MODE : '%sql' ('(' (IDENTIFIER|QUOTED_TEXT)? ')')? NL -> pushMode(SQL_LAN);
 SHELL_MODE : ('%shell'|'%sh') NL -> pushMode(SHELL_LAN);
 
 //============================
@@ -131,6 +132,21 @@ LETTER
     : [a-zA-Z]    // 定义字母
     ;
 
+fragment
+UPPER_LETTER
+    : [A-Z]    // 定义大写字母
+    ;
+
+fragment
+LOWER_LETTER
+    : [a-z]    // 定义小写字母
+    ;
+
+VARIABLE
+    : LETTER(DIGIT | LETTER | '_')*
+    | '_'(DIGIT | LETTER | '_')+
+    ;
+
 WS  : (' '|'\r'|'\t'|'\n') -> channel(HIDDEN)
     ;
 
@@ -146,7 +162,7 @@ BLOCK_COMMENT
 // match both UNIX and Windows newLines
 NL
     : '\n'
-    | '\r\n'
+    | '\r' '\n'?
     ;
 
 // channel(HIDDEN) 隐藏通道会 忽略却保留 匹配的词法符号
@@ -160,6 +176,79 @@ NL
 UNRECOGNIZED
     : .
     ;
+
+//============================
+// Start of the scala mode
+//============================
+mode SCALA_LAN;
+
+EXIT_SCALA : '%' -> popMode;
+IGNORE_SCALA : . -> more ;
+
+SCALA_RETURN
+    : '\n'
+    | '\r\n'
+    ;
+
+SCALA_STRING
+    : '"""' .*? '"""'
+    | '"' ( ~('"'|'\\') | ('\\' .) )*? '"'
+    ;
+
+// % 打头认为end
+SCALA_NonEnd
+    : ~[ \r\n\t]+ ( [ \t]* '%' [ \t]* ~[ \r\n\t]+ )+
+    ;
+
+// scala import
+SCALA_IMPORT
+    : [ \t]* 'import' [ \t]* ~[ \r\n\t]+ NL
+    ;
+
+// Scala 类片段
+// Abc ( a: Int, b: Int)
+// ABC
+// Abc_1
+SCALA_CLASS_SEGMENT
+    : [ \t]* (UPPER_LETTER+VARIABLE*) [ \t]* ('(' ~[()]* ')')? [ \t]*
+    ;
+
+SCALA_METHOD_SEGMENT
+    : [ \t]*  (LOWER_LETTER+VARIABLE*) [ \t]* ('(' ~[()]* ')')? [ \t]*
+    ;
+
+SCALA_BLOCK_BODY
+    : [ \t]* '{' ~[\r\n]*? '}' [ \t]*
+    ;
+
+// scala 方法
+SCALA_METHOD
+    : [ \t]* 'def' SCALA_METHOD_SEGMENT  (':'[ \t]*LETTER+)? [ \t]* '='? SCALA_BLOCK_BODY?
+    ;
+
+// 定义Scala 类 对象 接口
+SCALA_CLASS
+    : [ \t]* ('object'|'class'|'trait')  SCALA_CLASS_SEGMENT  ('extends' SCALA_CLASS_SEGMENT  )* SCALA_BLOCK_BODY?
+    ;
+
+SCALA_TEXT
+    : (~('/'|'*'|'%'|'"'|'\''|';'|'\r'|'\n') | SCALA_STRING | SCALA_IMPORT | SCALA_METHOD | SCALA_CLASS | SCALA_NonEnd)+ ';'? SCALA_RETURN*
+    ;
+
+SCALA_COMMENT
+    : '//'+ ~('/'|'\r'|'\n')* -> channel(COMMENT)
+    ;
+
+SCALA_COMMENT_BLOCK
+    : '/*' .*? '*/' -> channel(COMMENT)
+    ;
+
+SCALA_WS
+    : [ \r\n\t]+ -> skip
+    ;
+//============================
+// End of the scala mode
+//============================
 
 
 //============================
@@ -180,11 +269,6 @@ PY_STRING
     | '"""' .*? '"""'
     | '\'' ( ~('\''|'\\') | ('\\' .) )*? '\''
     | '"' ( ~('"'|'\\') | ('\\' .) )*? '"'
-    ;
-
-VARIABLE
-    : LETTER(DIGIT | LETTER | '_')*
-    | '_'(DIGIT | LETTER | '_')+
     ;
 
 VariableRef

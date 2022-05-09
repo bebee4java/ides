@@ -1,6 +1,5 @@
-// Generated from /Users/sgr/develop/ideaProjects/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.9.2
-
-    package ides.dsl.parser;
+// Generated from IdesParser.g4 by ANTLR 4.7.1
+package ides.dsl.parser;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -42,6 +41,18 @@ public interface IdesParserListener extends ParseTreeListener {
 	 */
 	void exitIql(IdesParser.IqlContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Scala}
+	 * labeled alternative in {@link IdesParser#script}.
+	 * @param ctx the parse tree
+	 */
+	void enterScala(IdesParser.ScalaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Scala}
+	 * labeled alternative in {@link IdesParser#script}.
+	 * @param ctx the parse tree
+	 */
+	void exitScala(IdesParser.ScalaContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Py}
 	 * labeled alternative in {@link IdesParser#script}.
 	 * @param ctx the parse tree
@@ -77,6 +88,26 @@ public interface IdesParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSh(IdesParser.ShContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesParser#scalaCode}.
+	 * @param ctx the parse tree
+	 */
+	void enterScalaCode(IdesParser.ScalaCodeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#scalaCode}.
+	 * @param ctx the parse tree
+	 */
+	void exitScalaCode(IdesParser.ScalaCodeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link IdesParser#scalaStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterScalaStatement(IdesParser.ScalaStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link IdesParser#scalaStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitScalaStatement(IdesParser.ScalaStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link IdesParser#pythonCode}.
 	 * @param ctx the parse tree

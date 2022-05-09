@@ -1,6 +1,5 @@
-// Generated from /Users/sgr/develop/ideaProjects/github/ides/dsl/src/main/resources/IdesParser.g4 by ANTLR 4.9.2
-
-    package ides.dsl.parser;
+// Generated from IdesParser.g4 by ANTLR 4.7.1
+package ides.dsl.parser;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -32,6 +31,13 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIql(IdesParser.IqlContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Scala}
+	 * labeled alternative in {@link IdesParser#script}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitScala(IdesParser.ScalaContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Py}
 	 * labeled alternative in {@link IdesParser#script}.
 	 * @param ctx the parse tree
@@ -52,6 +58,18 @@ public interface IdesParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSh(IdesParser.ShContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesParser#scalaCode}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitScalaCode(IdesParser.ScalaCodeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link IdesParser#scalaStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitScalaStatement(IdesParser.ScalaStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link IdesParser#pythonCode}.
 	 * @param ctx the parse tree

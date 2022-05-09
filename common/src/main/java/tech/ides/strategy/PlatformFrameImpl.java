@@ -16,5 +16,5 @@ public @interface PlatformFrameImpl {
      * 实现的框架类型
      * @return PlatformFrameEnum
      */
-    PlatformFrameEnum frameName();
+    PlatformFrameEnum frameName() default PlatformFrameEnum.SPARK;
 }
