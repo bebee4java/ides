@@ -34,7 +34,7 @@ fi
 
 . "${IDES_HOME}"/bin/options-tool "$@"
 
-JAVA_OPTS="-Xmx${DRIVER_MEM:-1g} $DEBUG_OPTS"
+JAVA_OPTS="-Xmx${DRIVER_MEM:-1g} -Dscala.usejavacp=true $DEBUG_OPTS"
 
 build_envs() {
     export HADOOP_CONF_DIR="${HADOOP_CONF_DIR:-""}"

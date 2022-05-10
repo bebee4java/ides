@@ -7,7 +7,6 @@ import tech.ides.exception.IdesException
 import tech.ides.rest.RestServer
 import tech.ides.runtime.SQLRuntime
 import tech.ides.strategy.PlatformFrameEnum.SPARK
-import tech.sqlclub.common.annotation.Explanation
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.reflect.{ClassPath, Reflection}
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}

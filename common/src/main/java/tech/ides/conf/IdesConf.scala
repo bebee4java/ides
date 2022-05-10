@@ -80,9 +80,11 @@ object IdesConf {
   // ides conf 单例
   @transient private val idesConf = new AtomicReference[IdesConf]()
   def getOrCreate: IdesConf = {
-    this.synchronized {
-      if (idesConf.get() == null) {
-        idesConf.set(new IdesConf())
+    if (idesConf.get() == null) {
+      this.synchronized {
+        if (idesConf.get() == null) {
+          idesConf.set(new IdesConf())
+        }
       }
     }
     idesConf.get()
@@ -113,6 +115,11 @@ object IdesConf {
     """
       |Run IDES as shell Repl.
     """.stripMargin).booleanConf.createWithDefault(false)
+
+  val IDES_REPL_CLASS_DIR = IdesConfigBuilder("ides.repl.classdir").doc(
+    """
+      |IDES shell Repl class dir.
+    """.stripMargin).stringConf.createOptional
 
   val IDES_SERVICE_RUNTIME_AWAITTERMINATION = IdesConfigBuilder("ides.service.runtime.awaitTermination").doc(
     """

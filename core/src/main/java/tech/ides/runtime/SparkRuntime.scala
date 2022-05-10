@@ -8,7 +8,8 @@ import tech.ides.conf.IdesConf._
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.internal.StaticSQLConf.CATALOG_IMPLEMENTATION
 import tech.ides.conf.IdesConf
-import tech.ides.constants.ScriptConstants
+import tech.ides.constants.IdesEnvConstants.SPARK_HOME
+import tech.ides.constants.{IdesEnvConstants, ScriptConstants}
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.ConfigUtils
 
@@ -43,7 +44,13 @@ class SparkRuntime(conf: IdesConf, _params:JMap[Any,Any]= new util.HashMap[Any,A
     _conf.filter(_._1.startsWith("spark.")).foreach { f =>
       sparkConf.set(f._1, f._2)
     }
-
+    if (System.getenv(IdesEnvConstants.SPARK_HOME) != null) {
+      sparkConf.setSparkHome(System.getenv(SPARK_HOME))
+    }
+    // 设置repl class dir
+    if ( conf.get(IDES_SHELL_MODE) && conf.get(IDES_REPL_CLASS_DIR).isDefined ){
+      sparkConf.set("spark.repl.class.outputDir", conf.get(IDES_REPL_CLASS_DIR).get)
+    }
     val sparkSession = SparkSession.builder().config(sparkConf)
 
     if (conf.get(IDES_ENABLE_HIVE_SUPPORT)) {
@@ -55,7 +62,10 @@ class SparkRuntime(conf: IdesConf, _params:JMap[Any,Any]= new util.HashMap[Any,A
 
     val session = sparkSession.getOrCreate()
 
-    if (_conf.nonEmpty) ConfigUtils.showConf(_conf)
+    if (_conf.nonEmpty) {
+      // IDES_REPL_CLASS_DIR is too long
+      ConfigUtils.showConf(_conf - IDES_REPL_CLASS_DIR.key)
+    }
 
     session
   }
