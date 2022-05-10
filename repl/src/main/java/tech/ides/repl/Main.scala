@@ -17,6 +17,7 @@
 
 package tech.ides.repl
 
+import org.apache.hadoop.fs.FileUtil
 import scala.tools.nsc.GenericRunnerSettings
 import org.apache.spark._
 import org.apache.spark.sql.SparkSession
@@ -24,19 +25,22 @@ import tech.ides.conf.IdesConf
 import tech.ides.core.platform.PlatformManager
 import tech.ides.runtime.SparkRuntime
 import tech.sqlclub.common.log.Logging
-import tech.ides.conf.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE}
+import tech.ides.conf.IdesConf.{IDES_SHELL_MODE, IDES_SHELL_REPL_CODE_MULTI_LINE, IDES_REPL_CLASS_DIR}
+import tech.ides.constants.IdesEnvConstants.IDES_HOME
 import tech.ides.core.IdesApp
 import tech.ides.dsl.listener.ScriptQueryExecListener
-
+import java.io.File
+import java.net.URI
 import scala.collection.mutable
+import org.apache.spark.repl.Utils
 
 object Main extends Logging {
 
 //  initializeLogIfNecessary(true)
   Signaling.cancelOnInterrupt()
-  val idesConf = new IdesConf()
-//  val rootDir = conf.getOption("ides.repl.classdir").getOrElse(Utils.getLocalDir(conf))
-//  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
+  val idesConf = IdesConf.getOrCreate
+  val rootDir = idesConf.get(IDES_REPL_CLASS_DIR).getOrElse(Utils.getLocalDir(new SparkConf()))
+  val outputDir = Utils.createTempDir(root = rootDir, namePrefix = "repl")
 
   // ides script query exec listener
   var listener:ScriptQueryExecListener = _
@@ -67,7 +71,7 @@ object Main extends Logging {
   // Visible for testing
   private[repl] def doMain(args: Array[String], _interp: IdesILoop): Unit = {
     val optionsOfIdes = new mutable.ArrayBuffer[String]()
-    args.zipWithIndex.filter(_._1.startsWith("-ides.")).foreach{
+    args.zipWithIndex.filter(_._1.startsWith("-")).foreach{
       it =>
         optionsOfIdes += args(it._2)
         optionsOfIdes += args(it._2 + 1)
@@ -76,10 +80,21 @@ object Main extends Logging {
     val optionsOfRepl = args diff optionsOfIdes
 
     interp = _interp
-    val jars = "" // getLocalUserJarsForShell
+
+    var jars = "" // getLocalUserJarsForShell
+    val idesHomePath = sys.env.getOrElse(IDES_HOME, null)
+    if (idesHomePath != null) {
+      jars = FileUtil.listFiles(new File(idesHomePath , "jars")).map(f => f.getAbsolutePath)
+        .map { x => if (x.startsWith("file:")) new File(new URI(x)).getPath else x }
+        .mkString(File.pathSeparator)
+    }
+
+    val replClassOutputDir = outputDir.getAbsolutePath
+    idesConf.set(IDES_REPL_CLASS_DIR, replClassOutputDir)
+    log.info("ides repl class outputDir: " + replClassOutputDir)
     val interpArguments = List(
       "-Yrepl-class-based",
-      "-Yrepl-outdir", s"",
+      "-Yrepl-outdir", replClassOutputDir,
       "-classpath", jars
     ) ++ optionsOfRepl
 

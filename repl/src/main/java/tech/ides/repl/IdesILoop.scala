@@ -123,6 +123,10 @@ class IdesILoop(in0: Option[BufferedReader], out: JPrintWriter)
         println("Ides ScriptQueryExecListener available as 'listener'.")
         listener
     """,
+    """
+      println("Ides shell support registration UDF use scala code，you can use it like this: UDF.register(fun_name, func)!")
+      @transient val UDF = spark.udf
+    """,
     "import org.apache.spark.SparkContext._",
     "import spark.implicits._",
     "import spark.sql",

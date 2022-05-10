@@ -53,6 +53,7 @@
         <common-utils-version>1.0.4</common-utils-version>
         <project.root.dir>${basedir}</project.root.dir> <!--注意不是项目的根路径，在子模块下就是当前模块的根路径-->
         <session.root.dir>${user.dir}</session.root.dir> <!--用户执行mvn的session根路径，在项目根路径下执行mvn命令该值就是项目根路径，用于多模块下定位项目的根路径使用-->
+        <maven-antrun.version>1.8</maven-antrun.version>
         <hadoop.client.version>2.7.4</hadoop.client.version>
         <hadoop.big.version>2.7</hadoop.big.version>
         <spark.version>2.4.3</spark.version>
@@ -127,6 +128,12 @@
                         <groupId>com.google.guava</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>14.0.1</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -250,7 +257,9 @@
                         </executions>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId> <!-- 拷贝jar插件 -->
+                        <version>${maven-antrun.version}</version>
                         <executions>
                             <execution>
                                 <id>copy</id>
@@ -285,7 +294,8 @@
     </profiles>
 
     <build>
-        <sourceDirectory>src/main/java/</sourceDirectory>
+        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/resources-${mode}</directory>
@@ -331,6 +341,7 @@
 
             <!--   要将源码放上去，需要加入这个插件    -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
@@ -349,6 +360,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
