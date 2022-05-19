@@ -7,3 +7,11 @@ application:
     - tech.ides.extension.ETPluginRegister
   serviceLifecycles:
     - tech.ides.rest.ControlHandlerHook
+
+  # 数据库注册信息
+  connectMetaData:
+    - name: test
+      url: jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false
+      driver: com.mysql.jdbc.Driver
+      user: test
+      password: test

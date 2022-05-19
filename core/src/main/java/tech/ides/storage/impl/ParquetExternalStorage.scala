@@ -29,8 +29,8 @@ class ParquetExternalStorage extends ExternalStorage {
     * +---------+---------------+------+---------------------+
     * |configId |storageInfo    |key   |value                |
     * +---------+---------------+------+---------------------+
-    * |test.test|connectMetaData|driver|com.mysql.jdbc.Driver|
-    * |test.test|connectMetaData|user  |root                 |
+    * |jdbc.test|connectMetaData|driver|com.mysql.jdbc.Driver|
+    * |jdbc.test|connectMetaData|user  |root                 |
     * +---------+---------------+------+---------------------+
     */
   lazy val schema = StructType(Seq(
@@ -110,26 +110,6 @@ class ParquetExternalStorage extends ExternalStorage {
 
   override def dropConfig(configId: String, storageInfo: StorageInfo): Boolean = {
     val realPath = PathUtils() / rootPath / spark.sparkContext.appName / storageInfo.toString / configId
-    val realPathStr = realPath.toPath
-    if (!HdfsOperator.fileExists(realPathStr)) {
-      return true
-    }
-    HdfsOperator.deleteDir(realPathStr)
-  }
-
-  override def readAsTable(tableName: String): DataFrame = {
-    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
-    spark.read.parquet(realPath.toPath)
-  }
-
-  override def saveAsTable(tableName: String, table: DataFrame, overwrite: Boolean): Unit = {
-    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
-    val mode = if (overwrite) SaveMode.Overwrite else SaveMode.Append
-    table.coalesce(1).write.mode(mode).parquet(realPath.toPath)
-  }
-
-  override def dropTable(tableName: String): Boolean = {
-    val realPath = PathUtils() / rootPath / spark.sparkContext.appName / tableName
     val realPathStr = realPath.toPath
     if (!HdfsOperator.fileExists(realPathStr)) {
       return true

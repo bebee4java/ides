@@ -32,6 +32,7 @@
     <activeProfiles/>
     <profiles>
         <profile>
+            <id>maven_central</id>
             <repositories>
                 <repository>
                     <id>aliyunmaven</id>

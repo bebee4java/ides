@@ -189,7 +189,7 @@ object IdesConf {
   val EXTERNAL_STORAGE_IMPL_CLASS_NAME = IdesConfigBuilder("ides.external.storage.impl.class.name")
     .doc("ides external storage implementation class name")
     .stringConf
-    .createWithDefault("tech.ides.storage.impl.ParquetExternalStorage")
+    .createWithDefault("tech.ides.storage.impl.YamlFileExternalStorage")
 
   val SCRIPT_DEFAULT_DATEFORMAT = IdesConfigBuilder("ides.script.default.date.format")
     .doc("ides script default dateFormat")
