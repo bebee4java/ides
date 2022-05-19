@@ -30,6 +30,7 @@ class YamlFileExternalStorage extends ExternalStorage {
    */
   override def readConfig(storageInfo: StorageInfo): Map[String, Map[String, String]] = {
     ApplicationSetting.getList(storageInfo.toString).map(item => {
+      Assert.isTrue(item.contains("format"), "config format is not defined")
       Assert.isTrue(item.contains("name"), "config name is not defined")
       val name = item("name").asInstanceOf[String]
       val m = item - "name"
