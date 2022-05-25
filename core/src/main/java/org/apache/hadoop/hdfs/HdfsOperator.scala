@@ -6,7 +6,6 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FSDataInputStream, FileStatus, FileSystem, Path}
 import org.apache.hadoop.io.IOUtils
 import org.apache.spark.deploy.SparkHadoopUtil
-import java.net.URI
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -22,18 +21,27 @@ object HdfsOperator {
     } else new Configuration()
   }
 
+  def getFileSystem(path:String):FileSystem = {
+    val _path = new Path(path)
+    getFileSystem(_path)
+  }
+
+  def getFileSystem(path: Path):FileSystem = {
+    FileSystem.get(path.toUri, hadoopConfiguration)
+  }
+
   def isDir(path: String):Boolean = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.isDirectory(new Path(path))
   }
 
   def isFile(path: String):Boolean = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.isFile(new Path(path))
   }
 
   def fileExists(path: Path):Boolean = {
-    val fs = FileSystem.get(path.toUri, hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.exists(path)
   }
 
@@ -42,28 +50,28 @@ object HdfsOperator {
   }
 
   def createDir(path: String):Boolean = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.mkdirs(new Path(path))
   }
 
   def deleteDir(path: String) = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.delete(new Path(path), true)
   }
 
   def getFileStatus(path: String):FileStatus = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     val file = fs.getFileStatus(new Path(path))
     file
   }
 
   def listFiles(path: String): Seq[FileStatus] = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     fs.globStatus(new Path(path)).toSeq
   }
 
   def readFileToString(path: String): String = {
-    val fs = FileSystem.get(URI.create(path), hadoopConfiguration)
+    val fs = getFileSystem(path)
     var br: BufferedReader = null
     var line: String = null
     val result = new ArrayBuffer[String]()
@@ -82,7 +90,7 @@ object HdfsOperator {
   }
 
   def readFileToBytes(fileName: String): Array[Byte] = {
-    val fs = FileSystem.get(URI.create(fileName), hadoopConfiguration)
+    val fs = getFileSystem(fileName)
     val src: Path = new Path(fileName)
     var in: FSDataInputStream = null
     try {
