@@ -7,7 +7,7 @@
     <groupId>tech.ides</groupId>
     <artifactId>DataLinked</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>${env.project.version}</version>
 
     <name>IDES Parent POM</name>
     <url>https://github.com/bebee4java/ides</url>
@@ -41,6 +41,7 @@
 
 
     <properties>
+        <env.project.version>1.0.0</env.project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -139,6 +140,23 @@
     </dependencyManagement>
 
     <profiles>
+        <!-- 项目版本控制 -->
+        <profile>
+            <id>dev-version</id>
+            <properties>
+                <env.project.version>1.0.0-dev</env.project.version>
+            </properties>
+        </profile>
+        <profile>
+            <id>publish-version</id>
+            <properties>
+                <env.project.version>1.0.0</env.project.version>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
         <profile>
             <id>scala-2.11</id>
             <activation>

@@ -14,6 +14,7 @@ function package_2.4 {
   -Pscala-2.11 \
   -Pspark-2.4.x \
   -Prestful-server \
+  -Ppublish-version \
   -Pshade
 }
 
@@ -24,6 +25,7 @@ function package_2.3 {
   -Pscala-2.11 \
   -Pspark-2.3.x \
   -Prestful-server \
+  -Ppublish-version \
   -Pshade
 }
 
