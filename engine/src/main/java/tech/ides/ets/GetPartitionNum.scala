@@ -1,12 +1,11 @@
 package tech.ides.ets
 
 import org.apache.spark.sql.DataFrame
-import tech.ides.datasource.DataTable
+import tech.ides.datasource.{DataTable, SparkDataTable}
 import tech.ides.doc.{Document, MarkDownDoc}
 import tech.ides.extension.{Action, Analysis, ETPlugin, Extension, PluginType}
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformFrameImpl
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
  * 获取表分区数目

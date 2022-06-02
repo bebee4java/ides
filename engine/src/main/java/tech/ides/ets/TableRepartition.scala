@@ -1,12 +1,11 @@
 package tech.ides.ets
 
 import org.apache.spark.sql.DataFrame
-import tech.ides.datasource.DataTable
+import tech.ides.datasource.{DataTable, SparkDataTable}
 import tech.ides.exception.IdesException
 import tech.ides.extension.{ETL, ETPlugin, Extension, PluginType, Transform}
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformFrameImpl
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
  * 对表进行重新分区

@@ -7,14 +7,14 @@ import tech.ides.constants.ScriptConstants.PARTITION_BY_COL
 import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.DataSource.Method
 import tech.ides.datasource.writer.{DataWriter, SaveMode}
-import tech.ides.datasource.{DataSinkConfig, DataSourceFactory}
+import tech.ides.datasource.{DataSinkConfig, DataSourceFactory, SparkDataTable}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{SaveSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil.{cleanStr, currentText, parseAssetName, resourceRealPath, whereExpressionsToMap}
 import tech.ides.job.ScriptJobManager
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformStrategyCenter
-import tech.ides.strategy.PlatformStrategyCenter.{SparkDataTable, SparkDataWriter}
+import tech.ides.strategy.PlatformStrategyCenter.SparkDataWriter
 
 import scala.collection.mutable.ListBuffer
 import scala.collection.JavaConverters._

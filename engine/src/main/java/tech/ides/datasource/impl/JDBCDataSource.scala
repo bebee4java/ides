@@ -13,7 +13,6 @@ import tech.ides.exception.IdesException
 import tech.ides.metastore.{ConnectMappingKey, ConnectMetaStore}
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformFrameImpl
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
   * JDBC 数据源

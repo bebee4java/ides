@@ -4,12 +4,11 @@ import org.apache.hadoop.hdfs.HdfsOperator
 import org.apache.spark.sql.{DataFrame, DataFrameReader}
 import tech.ides.constants.ScriptConstants.IMPL_CLASS
 import tech.ides.core.ScriptQueryExecute
-import tech.ides.datasource.{BaseFileDataSource, DataSource, DataSourceConfig, DataTable}
+import tech.ides.datasource.{BaseFileDataSource, DataSource, DataSourceConfig, DataTable, SparkDataTable}
 import tech.ides.datasource.DataSource.Method._
 import tech.ides.datasource.reader.Reader
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformFrameImpl
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 import tech.sqlclub.common.log.Logging
 import tech.sqlclub.common.utils.Assert
 import scala.collection.mutable.ListBuffer

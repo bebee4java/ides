@@ -2,14 +2,13 @@ package tech.ides.dsl.adaptor
 
 import ides.dsl.parser.IdesParser
 import ides.dsl.parser.IdesParser.RunContext
-import tech.ides.datasource.DataTable
+import tech.ides.datasource.{DataTable, SparkDataTable}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{RunSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil.{currentText, parseAssetName, whereExpressionsToMap}
 import tech.ides.extension.ETPluginRegister
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformStrategyCenter
-import tech.ides.strategy.PlatformStrategyCenter.{SparkDataReader, SparkDataTable}
 
 /**
  * Run 语法适配器

@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils
 import tech.ides.conf.IdesConf.IDES_RUN_PLATFORM_FRAME
 import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter, Row}
 import tech.ides.conf.IdesConf
-import tech.ides.datasource.{AnyDataTable, DataTable}
 import tech.ides.datasource.reader.Reader
 import tech.ides.datasource.writer.Writer
 import tech.ides.strategy.PlatformFrameEnum.SPARK
@@ -41,22 +40,6 @@ object PlatformStrategyCenter {
       Assert.isTrue(manifest[DataFrameWriter[Row]].equals(manifest[T]),
         "the generic type must be DataFrameWriter[Row] when using spark to write data!")
       writer.asInstanceOf[T]
-    }
-  }
-
-  /**
-   * 数据表 spark实现
-   *
-   * @param df {@link DataFrame}
-   */
-  case class SparkDataTable(df: DataFrame) extends DataTable(SPARK) {
-    override def createOrReplaceTempView(viewName: String): Unit =
-      df.createOrReplaceTempView(viewName)
-
-    override def table[T:Manifest]: Option[T] = {
-      Assert.isTrue(manifest[DataFrame].equals(manifest[T]),
-        "the generic type must be DataFrame when using spark to get the data table!")
-      Option(df).map(_.asInstanceOf[T])
     }
   }
 

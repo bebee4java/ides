@@ -5,13 +5,13 @@ import ides.dsl.parser.IdesParser.LoadContext
 import tech.ides.core.ScriptQueryExecute
 import tech.ides.datasource.DataSource.Method
 import tech.ides.datasource.reader.DataReader
-import tech.ides.datasource.{DataSourceConfig, DataSourceFactory, DataTable}
+import tech.ides.datasource.{DataSourceConfig, DataSourceFactory, DataTable, SparkDataTable}
 import tech.ides.dsl.listener.ScriptQueryExecListener
 import tech.ides.dsl.statement.{LoadSqlStatement, SqlStatement}
 import tech.ides.dsl.utils.DslUtil._
 import tech.ides.strategy.PlatformStrategyCenter
 import tech.ides.strategy.PlatformFrameEnum.SPARK
-import tech.ides.strategy.PlatformStrategyCenter.{SparkDataReader, SparkDataTable}
+import tech.ides.strategy.PlatformStrategyCenter.SparkDataReader
 
 /**
   * Load 语法适配器

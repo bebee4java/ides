@@ -6,7 +6,6 @@ import tech.ides.datasource.reader.{DataReader, Reader}
 import tech.ides.datasource.writer.{DataWriter, Writer}
 import tech.ides.strategy.PlatformFrameImpl
 import tech.ides.strategy.PlatformFrameEnum.{FLINK, SPARK}
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
   * 文件基本类型数据

@@ -14,7 +14,6 @@ import tech.ides.exception.IdesException
 import tech.ides.strategy.PlatformFrameImpl
 import tech.sqlclub.common.utils.StringEscapeUtils
 import tech.ides.strategy.PlatformFrameEnum.{FLINK, SPARK}
-import tech.ides.strategy.PlatformStrategyCenter.SparkDataTable
 
 /**
   * Hive 数据源

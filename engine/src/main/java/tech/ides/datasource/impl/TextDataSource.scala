@@ -2,7 +2,7 @@ package tech.ides.datasource.impl
 
 import org.apache.spark.sql.types.StringType
 import tech.ides.datasource.DataSource.Method._
-import tech.ides.datasource.{BaseFileDataSource, DataSinkConfig, DataSource, DataSourceConfig, DataTable}
+import tech.ides.datasource.{BaseFileDataSource, DataSinkConfig, DataSource, DataSourceConfig, DataTable, SparkDataTable}
 import tech.ides.constants.ScriptConstants.IMPL_CLASS
 import org.apache.spark.sql.{DataFrame, DataFrameReader, DataFrameWriter, Row, SaveMode, functions => F}
 import tech.ides.datasource.reader.Reader
@@ -10,7 +10,6 @@ import tech.ides.datasource.writer.Writer
 import tech.ides.exception.IdesException
 import tech.ides.strategy.PlatformFrameEnum.SPARK
 import tech.ides.strategy.PlatformFrameImpl
-import tech.ides.strategy.PlatformStrategyCenter.{SparkDataTable, SparkDataWriter}
 
 /**
   * CSV 文件数据源
