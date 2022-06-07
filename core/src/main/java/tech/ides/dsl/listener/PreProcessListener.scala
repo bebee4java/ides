@@ -51,7 +51,7 @@ class PreProcessListener(sqel: ScriptQueryExecListener) extends IdesParserBaseLi
     val sql = currentText(ctx)
     // 进行变量渲染
     val script = ScriptTemplate.merge(sql, sqel.env)
-    addStatement(QuerySqlStatement(script))
+    addStatement(QuerySqlStatement(script, sql))
   }
 
   /**
@@ -61,8 +61,9 @@ class PreProcessListener(sqel: ScriptQueryExecListener) extends IdesParserBaseLi
   override def exitIdesScript(ctx: IdesParser.IdesScriptContext): Unit = {
     val script = currentText(ctx)
 
-    val statement = QuerySqlStatement(script)
-    if ( !statements.contains(statement) ) {
+    val statement = QuerySqlStatement(script, script)
+    if ( !statements.map(_.originalSQL).exists(_.equals(statement.originalSQL)) ) {
+      log.debug(s"add sqlStatement: ${statement.originalSQL}")
       addStatement(statement)
     }
   }

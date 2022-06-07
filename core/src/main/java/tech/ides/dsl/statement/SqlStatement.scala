@@ -9,9 +9,10 @@ import tech.ides.datasource.writer.SaveMode
 
 sealed trait SqlStatement {
   def sql:String
+  def originalSQL:String = sql
 }
 
-case class QuerySqlStatement(sql:String) extends SqlStatement
+case class QuerySqlStatement(sql:String, override val originalSQL:String) extends SqlStatement
 
 // LOAD format DOT path whereExpressions? asAsset
 case class LoadSqlStatement(sql: String, format: String, path: String, options: Map[String, String], tableName: String) extends SqlStatement
