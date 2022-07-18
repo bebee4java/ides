@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# 为了让容器不退出， 将entrypoint换成daemon
+tail -f /dev/null
