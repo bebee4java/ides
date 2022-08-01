@@ -42,3 +42,10 @@ Contact us if you are looking for implementation tasks that fit your skills.
 
 If you plan to contribute to this repository, we recommend you to create an issue at our [Issue page](https://github.com/bebee4java/ides/issues) first, 
 then commit your source code or other topic (e.g., documentation, new idea and proposal).
+<br/>
+<br/>
+
+<img align="left" src="docs/imgs/slack_icon.png"/><font size="4"><b>Slack</b></font>
+
+You can also join us and become part of our family by slack, to redefine the way we build data + ai pipelines today.
+[Join discussion group >>](https://join.slack.com/t/data-linked/shared_invite/zt-1dmksuk35-uiYrpUrWhQHPomqBHLd72w)
